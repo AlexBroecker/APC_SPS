@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SEWView Name="Netzwerk">
+  <Comment />
+  <CreationTime>29.08.2018 00:13:54</CreationTime>
+  <LastWriteTime>29.08.2018 00:41:14</LastWriteTime>
+  <MMSVersion>6.2.0.1</MMSVersion>
+  <SyntaxVersion>4.0</SyntaxVersion>
+  <OSVersion>Microsoft Windows NT 6.1.7601 Service Pack 1</OSVersion>
+  <Nodes>
+    <RootNode Expand="true" Name="Netzwerk">
+      <MediumNode Expand="true" MediumType="Serial">
+        <DeviceNode Expand="false">
+          <State>
+            <Flags>NotInProject InitiallySelected</Flags>
+          </State>
+          <Gateway>
+            <Value>false</Value>
+          </Gateway>
+          <Device Name="" Signature="">
+            <TciDeviceRef />
+            <Type>MC07B</Type>
+            <FirmwarePart>1822 563 2</FirmwarePart>
+            <FirmwareStatus>16</FirmwareStatus>
+            <Label>MC07B0005-5A3</Label>
+          </Device>
+          <RoutingInfo Channel="UseChannel1">
+            <Address>0</Address>
+            <AddressType>ByteAddress</AddressType>
+            <AddressData adr0="0" adr1="0" adr2="0" ch1="0" ch2="0" />
+          </RoutingInfo>
+          <Topology>
+            <Subchannels />
+            <EntryCount>0</EntryCount>
+            <Valid>false</Valid>
+            <Flat>false</Flat>
+          </Topology>
+        </DeviceNode>
+        <RoutingInfo Channel="UseChannel1">
+          <Address>0</Address>
+          <AddressType>ByteAddress</AddressType>
+          <AddressData adr0="0" adr1="0" adr2="0" ch1="0" ch2="0" />
+        </RoutingInfo>
+        <BusNumber>0</BusNumber>
+      </MediumNode>
+    </RootNode>
+  </Nodes>
+  <CommunicationPlugs>
+    <Serial>
+      <Medium>etSerial</Medium>
+      <Active>true</Active>
+      <Open>true</Open>
+      <COM>8</COM>
+      <Baudrate>KB_9600</Baudrate>
+      <ParameterTimeout>100</ParameterTimeout>
+      <ParameterRetry>3</ParameterRetry>
+      <MultibyteTimeout>350</MultibyteTimeout>
+      <MultibyteRetry>3</MultibyteRetry>
+      <IsUsb>true</IsUsb>
+    </Serial>
+    <None />
+    <None />
+    <None />
+  </CommunicationPlugs>
+  <CommunicationParams>
+    <Serial>
+      <AutoDetectionEnabled>false</AutoDetectionEnabled>
+      <PeerToPeerScan>true</PeerToPeerScan>
+    </Serial>
+    <None />
+    <None />
+    <None />
+  </CommunicationParams>
+  <SMLPAddressTable>
+    <List />
+  </SMLPAddressTable>
+  <EthercatAddressTable>
+    <List />
+  </EthercatAddressTable>
+  <KLinkAddressTable>
+    <List />
+  </KLinkAddressTable>
+</SEWView>

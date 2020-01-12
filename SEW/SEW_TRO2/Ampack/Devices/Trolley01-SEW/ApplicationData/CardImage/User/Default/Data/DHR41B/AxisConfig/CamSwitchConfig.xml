@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CamSwitchConfig>
+  <Activate>FALSE</Activate>
+  <CamSwitchV10xCompatible>FALSE</CamSwitchV10xCompatible>
+  <NumberOfTracks>0</NumberOfTracks>
+</CamSwitchConfig>

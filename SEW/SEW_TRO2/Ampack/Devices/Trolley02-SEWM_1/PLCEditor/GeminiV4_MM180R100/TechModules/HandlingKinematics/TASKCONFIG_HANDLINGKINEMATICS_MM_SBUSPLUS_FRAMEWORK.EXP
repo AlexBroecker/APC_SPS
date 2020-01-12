@@ -1,0 +1,47 @@
+
+RESOURCE
+
+TASK TaskMain (PRIORITY := 7);
+  PRG_Start_MultiMotion();
+  PLC_Start_TechModule_AxisGroupControl_HandlingKin();
+  MC_FieldbusHandlerIN( Enable := TRUE );
+  MC_MoviPlcHandlerIN( Enable := TRUE );
+  MC_FieldbusMappingIN_HandlingKin_StandardProf(Enable:=TRUE);
+  PRG_UserMapping_IN();
+     PRG_TaskMain_Framework();
+     PRG_TaskMain_HandlingKinematics_MultiMotion();
+     AxisHandler_Main_MultiMotion();
+     AxisHandler_BasicMotion();
+     CamSwitchHandler_Main();
+  PRG_UserMapping_OUT();
+  MC_FieldbusMappingOUT_HandlingKin_StandardProf(Enable:= TRUE);
+  MC_MoviPlcHandlerOUT( Enable := TRUE );
+  MC_FieldbusHandlerOUT( Enable := TRUE );
+{Additional_info : 2,1,10000,0,1,4294967295}
+END_TASK
+
+TASK TaskPriority (PRIORITY := 2, INTERVAL := T#10ms);
+MC_SyncManager_EtherCAT();
+  PRG_TaskPriority_Framework();
+  PRG_TaskPriority_Kinematics();
+  AxisHandler_Priority_MultiMotion();
+  TraceHandler();
+MC_CommunicationTask_EtherCAT();
+{Additional_info : 1,0,0,0,1,4294967295}
+END_TASK
+
+TASK TaskLowPriority (PRIORITY := 8, INTERVAL := T#100ms);
+  PRG_Simu3D_DataExchange_Kinematics();
+  AxisGroupControl_HandlingKin_Simu3D_UserCoordSys();
+  MC_MsgHandler();	
+{Additional_info : 1,0,0,0,1,4294967295}
+END_TASK
+{event_task : 'start','Called when program starts','','(* ATTENTION: The name of the systemevent must start with $'callback$' e.g. $'callbackSystemEventStart$'! *)$R$NFUNCTION systemevent : DWORD$R$NVAR_INPUT$R$N$TdwEvent: DWORD;$R$N$TdwFilter: DWORD;$R$N$TdwOwner: DWORD;$R$NEND_VAR$R$NVAR$R$N$T(* WARNING: Do not modify this interface. You are not allowed to use local variables here! *)$R$NEND_VAR$R$N'}{event_task_info : 0,1,24382}
+{event_task : 'stop','Called when program stops','','(* ATTENTION: The name of the systemevent must start with $'callback$' e.g. $'callbackSystemEventStop$'! *)$R$NFUNCTION systemevent : DWORD$R$NVAR_INPUT$R$N$TdwEvent: DWORD;$R$N$TdwFilter: DWORD;$R$N$TdwOwner: DWORD;$R$NEND_VAR$R$NVAR$R$N$T(* WARNING: Do not modify this interface. You are not allowed to use local variables here! *)$R$NEND_VAR$R$N'}{event_task_info : 0,2,24382}
+{event_task : 'before_reset','Called before reset takes place','','(* ATTENTION: The name of the systemevent must start with $'callback$' e.g. $'callbackSystemEventBeforeReset$'! *)$R$NFUNCTION systemevent : DWORD$R$NVAR_INPUT$R$N$TdwEvent: DWORD;$R$N$TdwFilter: DWORD;$R$N$TdwOwner: DWORD;$R$NEND_VAR$R$NVAR$R$N$T(* WARNING: Do not modify this interface. You are not allowed to use local variables here! *)$R$NEND_VAR$R$N'}{event_task_info : 0,3,24382}
+{event_task : 'after_reset','Called after reset took place','','(* ATTENTION: The name of the systemevent must start with $'callback$' e.g. $'callbackSystemEventAfterReset$'! *)$R$NFUNCTION systemevent : DWORD$R$NVAR_INPUT$R$N$TdwEvent: DWORD;$R$N$TdwFilter: DWORD;$R$N$TdwOwner: DWORD;$R$NEND_VAR$R$NVAR$R$N$T(* WARNING: Do not modify this interface. You are not allowed to use local variables here! *)$R$NEND_VAR$R$N'}{event_task_info : 0,4,24382}
+{event_task : 'shutdown','Called before shutdown is performed','','(* ATTENTION: The name of the systemevent must start with $'callback$' e.g. $'callbackSystemEventShutdown$'! *)$R$NFUNCTION systemevent : DWORD$R$NVAR_INPUT$R$N$TdwEvent: DWORD;$R$N$TdwFilter: DWORD;$R$N$TdwOwner: DWORD;$R$NEND_VAR$R$NVAR$R$N$T(* WARNING: Do not modify this interface. You are not allowed to use local variables here! *)$R$NEND_VAR$R$N'}{event_task_info : 0,5,24382}
+{event_task : 'excpt_cycletime_overflow','Called when a cycletime overflow happened','','(* ATTENTION: The name of the systemevent must start with $'callback$' e.g. $'callbackSystemEventExcptCycletimeOverflow$'! *)$R$NFUNCTION systemevent : DWORD$R$NVAR_INPUT$R$N$TdwEvent: DWORD;$R$N$TdwFilter: DWORD;$R$N$TdwOwner: DWORD;$R$NEND_VAR$R$NVAR$R$N$T(* WARNING: Do not modify this interface. You are not allowed to use local variables here! *)$R$NEND_VAR$R$N'}{event_task_info : 0,6,24382}
+{event_task : 'excpt_watchdog','Software watchdog of IEC-task expired','','(* ATTENTION: The name of the systemevent must start with $'callback$' e.g. $'callbackSystemEventExcptWatchdog$'! *)$R$NFUNCTION systemevent : DWORD$R$NVAR_INPUT$R$N$TdwEvent: DWORD;$R$N$TdwFilter: DWORD;$R$N$TdwOwner: DWORD;$R$NEND_VAR$R$NVAR$R$N$T(* WARNING: Do not modify this interface. You are not allowed to use local variables here! *)$R$NEND_VAR$R$N'}{event_task_info : 0,7,24382}
+
+END_RESOURCE

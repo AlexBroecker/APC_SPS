@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<externalConfiguration>
+  <hidden>false</hidden>
+  <id>c4a4a2de-c0da-4855-af1b-bca70aba4907</id>
+  <syntaxVersion>2.1</syntaxVersion>
+  <languageDescriptor languageID="DE">
+    <deviceDescriptor deviceID="MoviGearLTB">
+      <title>TabellenPosiDRC</title>
+      <titleKey />
+      <commentKey />
+      <type>PlugIn</type>
+      <file>TabellenPosi.dll</file>
+      <class>AppBuilder.NET.Monitor_TabellenPositionierung_Bauer_PlugInStartWindow</class>
+      <handles>0</handles>
+      <icon>AppBuilder.ico</icon>
+      <ranking>
+        <group>1000</group>
+        <id>0</id>
+        <caption>ApplicationBuilder</caption>
+        <captionKey />
+        <ranking>
+          <group>0</group>
+          <id>0</id>
+          <caption />
+          <captionKey />
+        </ranking>
+      </ranking>
+      <option optionID="PLCHIDDEN">
+        <optionValue>false</optionValue>
+      </option>
+      <addition additionID="USERLEVEL">
+        <additionValue>0</additionValue>
+      </addition>
+    </deviceDescriptor>
+    <deviceDescriptor deviceID="DrcLT">
+      <title>TabellenPosiDRC</title>
+      <titleKey />
+      <commentKey />
+      <type>PlugIn</type>
+      <file>TabellenPosi.dll</file>
+      <class>AppBuilder.NET.Monitor_TabellenPositionierung_Bauer_PlugInStartWindow</class>
+      <handles>0</handles>
+      <icon>AppBuilder.ico</icon>
+      <ranking>
+        <group>1000</group>
+        <id>0</id>
+        <caption>ApplicationBuilder</caption>
+        <captionKey />
+        <ranking>
+          <group>0</group>
+          <id>0</id>
+          <caption />
+          <captionKey />
+        </ranking>
+      </ranking>
+      <option optionID="PLCHIDDEN">
+        <optionValue>false</optionValue>
+      </option>
+      <addition additionID="USERLEVEL">
+        <additionValue>0</additionValue>
+      </addition>
+    </deviceDescriptor>
+  </languageDescriptor>
+  <languageDescriptor languageID="EN">
+    <deviceDescriptor deviceID="MoviGearLTB">
+      <title>TabellenPosiDRC</title>
+      <titleKey />
+      <commentKey />
+      <type>PlugIn</type>
+      <file>TabellenPosi.dll</file>
+      <class>AppBuilder.NET.Monitor_TabellenPositionierung_Bauer_PlugInStartWindow</class>
+      <handles>0</handles>
+      <icon>AppBuilder.ico</icon>
+      <ranking>
+        <group>1000</group>
+        <id>0</id>
+        <caption>ApplicationBuilder</caption>
+        <captionKey />
+        <ranking>
+          <group>0</group>
+          <id>0</id>
+          <caption />
+          <captionKey />
+        </ranking>
+      </ranking>
+      <option optionID="PLCHIDDEN">
+        <optionValue>false</optionValue>
+      </option>
+      <addition additionID="USERLEVEL">
+        <additionValue>0</additionValue>
+      </addition>
+    </deviceDescriptor>
+    <deviceDescriptor deviceID="DrcLT">
+      <title>TabellenPosiDRC</title>
+      <titleKey />
+      <commentKey />
+      <type>PlugIn</type>
+      <file>TabellenPosi.dll</file>
+      <class>AppBuilder.NET.Monitor_TabellenPositionierung_Bauer_PlugInStartWindow</class>
+      <handles>0</handles>
+      <icon>AppBuilder.ico</icon>
+      <ranking>
+        <group>1000</group>
+        <id>0</id>
+        <caption>ApplicationBuilder</caption>
+        <captionKey />
+        <ranking>
+          <group>0</group>
+          <id>0</id>
+          <caption />
+          <captionKey />
+        </ranking>
+      </ranking>
+      <option optionID="PLCHIDDEN">
+        <optionValue>false</optionValue>
+      </option>
+      <addition additionID="USERLEVEL">
+        <additionValue>0</additionValue>
+      </addition>
+    </deviceDescriptor>
+  </languageDescriptor>
+  <languageDescriptor languageID="FR">
+    <deviceDescriptor deviceID="MoviGearLTB">
+      <title>TabellenPosiDRC</title>
+      <titleKey />
+      <commentKey />
+      <type>PlugIn</type>
+      <file>TabellenPosi.dll</file>
+      <class>AppBuilder.NET.Monitor_TabellenPositionierung_Bauer_PlugInStartWindow</class>
+      <handles>0</handles>
+      <icon>AppBuilder.ico</icon>
+      <ranking>
+        <group>1000</group>
+        <id>0</id>
+        <caption>ApplicationBuilder</caption>
+        <captionKey />
+        <ranking>
+          <group>0</group>
+          <id>0</id>
+          <caption />
+          <captionKey />
+        </ranking>
+      </ranking>
+      <option optionID="PLCHIDDEN">
+        <optionValue>false</optionValue>
+      </option>
+      <addition additionID="USERLEVEL">
+        <additionValue>0</additionValue>
+      </addition>
+    </deviceDescriptor>
+    <deviceDescriptor deviceID="DrcLT">
+      <title>TabellenPosiDRC</title>
+      <titleKey />
+      <commentKey />
+      <type>PlugIn</type>
+      <file>TabellenPosi.dll</file>
+      <class>AppBuilder.NET.Monitor_TabellenPositionierung_Bauer_PlugInStartWindow</class>
+      <handles>0</handles>
+      <icon>AppBuilder.ico</icon>
+      <ranking>
+        <group>1000</group>
+        <id>0</id>
+        <caption>ApplicationBuilder</caption>
+        <captionKey />
+        <ranking>
+          <group>0</group>
+          <id>0</id>
+          <caption />
+          <captionKey />
+        </ranking>
+      </ranking>
+      <option optionID="PLCHIDDEN">
+        <optionValue>false</optionValue>
+      </option>
+      <addition additionID="USERLEVEL">
+        <additionValue>0</additionValue>
+      </addition>
+    </deviceDescriptor>
+  </languageDescriptor>
+</externalConfiguration>

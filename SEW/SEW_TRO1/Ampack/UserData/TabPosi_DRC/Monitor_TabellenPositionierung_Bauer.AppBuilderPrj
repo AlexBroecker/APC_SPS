@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<AppBuilderProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <AppBuilderInfo>
+    <Firm>SEW Eurodrive GmbH &amp; Co. KG</Firm>
+    <DateTime>2018-06-12T11:48:19.0752415+02:00</DateTime>
+    <Author>Reichle</Author>
+    <OSInfo>Microsoft Windows NT 6.1.7601 Service Pack 1</OSInfo>
+  </AppBuilderInfo>
+  <AssemblyInfoLines>
+    <ReferencedAssemblies>System.Reflection</ReferencedAssemblies>
+    <ReferencedAssemblies>System.Runtime.InteropServices</ReferencedAssemblies>
+    <ReferencedAssemblies>System.Runtime.CompilerServices</ReferencedAssemblies>
+    <AssemblyInfoLines Name="AssemblyTitle" ValueType="AssemblyTitle" StringValue="TabellenPosi.dll" BoolValue="false" />
+    <AssemblyInfoLines Name="AssemblyDescription" ValueType="AssemblyDescription" StringValue="Fügen Sie Ihren Kommentar hier ein..." BoolValue="false" />
+    <AssemblyInfoLines Name="AssemblyConfiguration" ValueType="String" StringValue="" BoolValue="false" />
+    <AssemblyInfoLines Name="AssemblyCompany" ValueType="String" StringValue="" BoolValue="false" />
+    <AssemblyInfoLines Name="AssemblyProduct" ValueType="AssemblyProduct" StringValue="TabellenPosi.dll" BoolValue="false" />
+    <AssemblyInfoLines Name="AssemblyCopyright" ValueType="String" StringValue="SEW Eurodrive" BoolValue="false" />
+    <AssemblyInfoLines Name="AssemblyTrademark" ValueType="String" StringValue="" BoolValue="false" />
+    <AssemblyInfoLines Name="AssemblyCulture" ValueType="String" StringValue="" BoolValue="false" />
+    <AssemblyInfoLines Name="ComVisible" ValueType="Bool" StringValue="" BoolValue="false" />
+    <AssemblyInfoLines Name="Guid" ValueType="Guid" StringValue="c4a4a2de-c0da-4855-af1b-bca70aba4907" BoolValue="false" />
+    <AssemblyInfoLines Name="AssemblyVersion" ValueType="AssemblyVersion" StringValue="1.0.0.0" BoolValue="false" />
+    <AssemblyInfoLines Name="AssemblyFileVersion" ValueType="AssemblyFileVersion" StringValue="1.0.0.0" BoolValue="false" />
+  </AssemblyInfoLines>
+  <ProjectSettings>
+    <CreateDateTime>2018-06-12T11:48:19.2662606+02:00</CreateDateTime>
+    <Author>DEWALKAT</Author>
+    <Comment>Fügen Sie Ihren Kommentar hier ein...</Comment>
+    <OutputType>MotionStudioPlugIn</OutputType>
+    <AssemblyName>TabellenPosi.dll</AssemblyName>
+    <OutputPath>C:\Users\DEWALKAT\Desktop\TabellenPositionierung Bauer</OutputPath>
+    <ProgramGuid>c4a4a2de-c0da-4855-af1b-bca70aba4907</ProgramGuid>
+    <AdditionalConfigurationPath>AppBuilderProjects\c4a4a2de-c0da-4855-af1b-bca70aba4907</AdditionalConfigurationPath>
+    <ProgramLanguage>CSharp</ProgramLanguage>
+    <UsedDevices>MoviGearLTB</UsedDevices>
+    <UsedDevices>DrcLT</UsedDevices>
+    <TitleGerman>TabellenPosiDRC</TitleGerman>
+    <TitleEnglish>TabellenPosiDRC</TitleEnglish>
+    <TitleFrancaise>TabellenPosiDRC</TitleFrancaise>
+  </ProjectSettings>
+  <ProjectGroup>
+    <Item ProjectGroup="ProjectFile" Security="false" OutputType="WindowsUserControl" MainControl="false" PictureFileName="">
+      <NodeName>TabellenPosi.AppBuilderPrj</NodeName>
+      <FileName>TabellenPosi.AppBuilderPrj</FileName>
+      <CanDelete>false</CanDelete>
+      <ClassName />
+      <Item ProjectGroup="Properties" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+        <NodeName>Project properties</NodeName>
+        <FileName />
+        <CanDelete>false</CanDelete>
+        <ClassName />
+      </Item>
+      <Item ProjectGroup="UserAccess" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+        <NodeName>User access</NodeName>
+        <FileName />
+        <CanDelete>false</CanDelete>
+        <ClassName />
+      </Item>
+      <Item ProjectGroup="ImportExport" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+        <NodeName>Package</NodeName>
+        <FileName />
+        <CanDelete>false</CanDelete>
+        <ClassName />
+      </Item>
+      <Item ProjectGroup="Browser" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+        <NodeName>Browser</NodeName>
+        <FileName />
+        <CanDelete>false</CanDelete>
+        <ClassName />
+      </Item>
+      <Item ProjectGroup="Properties" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+        <NodeName>Properties</NodeName>
+        <FileName />
+        <CanDelete>false</CanDelete>
+        <ClassName />
+        <Item ProjectGroup="CodeFileSecure" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>AssemblyInfo.cs</NodeName>
+          <FileName>AssemblyInfo.cs</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+      </Item>
+      <Item ProjectGroup="ReferenceFolder" Security="false" OutputType="Undefined" MainControl="false" PictureFileName="">
+        <NodeName>References</NodeName>
+        <FileName />
+        <CanDelete>false</CanDelete>
+        <ClassName />
+        <Item ProjectGroup="Reference" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>System</NodeName>
+          <FileName>System.dll</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Reference" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>System.Drawing</NodeName>
+          <FileName>System.Drawing.dll</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Reference" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>System.Data</NodeName>
+          <FileName>System.Data.dll</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Reference" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>System.Xml</NodeName>
+          <FileName>System.Xml.dll</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Reference" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>System.Windows.Forms</NodeName>
+          <FileName>System.Windows.Forms.dll</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Reference" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>AppBuilderExtender</NodeName>
+          <FileName>%AppBuilderPath%\AppBuilderExtender.dll</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Reference" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>AppBuilderDeviceAdapter</NodeName>
+          <FileName>%AppBuilderPath%\AppBuilderDeviceAdapter.dll</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Reference" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>SEW_XMLDataServer</NodeName>
+          <FileName>%AppBuilderPath%\SEW_XMLDataServer.dll</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Reference" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>CacheDataPool</NodeName>
+          <FileName>%AppBuilderPath%\CacheDataPool.dll</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Reference" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>SEWDefines</NodeName>
+          <FileName>%AppBuilderPath%\SEWDefines.dll</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Reference" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>DataClient</NodeName>
+          <FileName>%AppBuilderPath%\DataClient.dll</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Reference" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>PlugInDefines</NodeName>
+          <FileName>%AppBuilderPath%\PlugInDefines.dll</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Reference" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>TechEditorBasis</NodeName>
+          <FileName>%AppBuilderPath%\TechEditorBasis.dll</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Reference" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>SEWControls</NodeName>
+          <FileName>%AppBuilderPath%\SEWControls.dll</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Reference" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>SewPlcHandler</NodeName>
+          <FileName>%AppBuilderPath%\SewPlcHandler.dll</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Reference" Security="true" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>GraphLib</NodeName>
+          <FileName>%AppBuilderPath%\GraphLib.dll</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+      </Item>
+      <Item ProjectGroup="UserControl" Security="true" OutputType="MotionStudioPlugIn" MainControl="true" PictureFileName="PlugInUserControl.designer.jpg">
+        <NodeName>PlugInUserControl.designer.xml</NodeName>
+        <FileName>PlugInUserControl.designer.xml</FileName>
+        <CanDelete>false</CanDelete>
+        <ClassName>AppBuilder.NET.PlugInUserControl</ClassName>
+        <Item ProjectGroup="CodeFileInit" Security="true" OutputType="MotionStudioPlugIn" MainControl="false" PictureFileName="">
+          <NodeName>PlugInUserControl.init.cs</NodeName>
+          <FileName>PlugInUserControl.init.cs</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="CodeFileGeneral" Security="true" OutputType="MotionStudioPlugIn" MainControl="false" PictureFileName="">
+          <NodeName>PlugInUserControl.general.cs</NodeName>
+          <FileName>PlugInUserControl.general.cs</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="CodeFileEvent" Security="false" OutputType="MotionStudioPlugIn" MainControl="false" PictureFileName="">
+          <NodeName>PlugInUserControl.event.cs</NodeName>
+          <FileName>PlugInUserControl.event.cs</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Alarm" Security="false" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>Alarm and Events</NodeName>
+          <FileName />
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="Recipe" Security="false" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>Recipes</NodeName>
+          <FileName />
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="TimeManagement" Security="false" OutputType="Undefined" MainControl="false" PictureFileName="">
+          <NodeName>Time management</NodeName>
+          <FileName />
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+        <Item ProjectGroup="ResourceFile" Security="true" OutputType="MotionStudioPlugIn" MainControl="false" PictureFileName="">
+          <NodeName>Resource</NodeName>
+          <FileName>AppBuilder.NET.PlugInUserControl.resources</FileName>
+          <CanDelete>false</CanDelete>
+          <ClassName />
+        </Item>
+      </Item>
+      <Item ProjectGroup="CodeFileSecure" Security="true" OutputType="MotionStudioPlugIn" MainControl="false" PictureFileName="">
+        <NodeName>PlugInStartWindow.cs</NodeName>
+        <FileName>PlugInStartWindow.cs</FileName>
+        <CanDelete>false</CanDelete>
+        <ClassName />
+      </Item>
+    </Item>
+  </ProjectGroup>
+  <ProjectStorage />
+</AppBuilderProject>

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SEWView Name="Overview">
+  <CreationTime>10.07.2018 09:05:11</CreationTime>
+  <LastWriteTime>05.12.2019 00:03:52</LastWriteTime>
+  <MMSVersion>6.2.0.1</MMSVersion>
+  <SyntaxVersion>4.0</SyntaxVersion>
+  <OSVersion>Microsoft Windows NT 6.2.9200.0</OSVersion>
+  <Nodes>
+    <ProjectNode Expand="true" Name="Ampack">
+      <DeviceNode Expand="false" Signature="Trolley02-SEWM_1">
+        <State>
+          <Flags>InitiallySelected</Flags>
+        </State>
+      </DeviceNode>
+      <DeviceNode Expand="false" Signature="Trolley" />
+      <DeviceNode Expand="false" Signature="Lift" />
+      <DeviceNode Expand="true" Signature="Teleskop">
+        <DeviceNode Expand="false" Signature="Teleskop - Leistun_1">
+          <State>
+            <Flags>NoRouting</Flags>
+          </State>
+        </DeviceNode>
+        <State>
+          <Flags>NoRouting</Flags>
+        </State>
+      </DeviceNode>
+    </ProjectNode>
+  </Nodes>
+</SEWView>

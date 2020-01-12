@@ -1,0 +1,429 @@
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_effiSRS' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+PROGRAM PRG_FieldbusMappingIN_TechModule_effiSRS
+VAR_INPUT
+	Enable			: BOOL;
+END_VAR
+VAR
+	nPIDataStart	: UINT;
+	bTimeOutControlSource : BOOL;
+END_VAR
+
+(* @END_DECLARATION := '0' *)
+(***************************************************************************************************************
+*
+*    PRG_FieldbusMappingIN_TechModule_effiSRS
+*
+*    This is an example for the FieldbusMapping of the technology module effiSRS.
+*
+*    Call this program in the task configuration after "MC_FieldbusHandlerIN".
+*
+****************************************************************************************************************)
+IF Enable AND AxisGroupeffiSRS.Config.General.ConfigDone THEN
+
+	IF AxisGroupControl.HMI.HMIControl AND AxisGroupControl.HMI.WatchDogTimeout THEN
+		AxisGroupeffiSRS.In.Energy.ControlWord.Enable_RapidStop := FALSE;
+		AxisGroupeffiSRS.In.X.Axis.ControlWord.Enable_RapidStop := FALSE;
+		AxisGroupeffiSRS.In.Y.Axis.ControlWord.Enable_RapidStop := FALSE;
+	END_IF
+
+	IF NOT AxisGroupControl.HMI.HMIControl AND NOT AxisGroupeffiSRS.Config.General.DisableFieldbusMapping THEN
+
+		nPIDataStart	:= AxisGroupeffiSRS.Config.General.PDStart;
+
+		bTimeOutControlSource	:= Fieldbus.Status.FieldbusTimeOut OR AxisGroupControl.HMI.WatchDogTimeout;
+
+
+		IF AxisGroupeffiSRS.Config.General.Processdataprofile = 1 THEN
+
+			(* Standard PD profile *)
+
+			(* Energy ControlWord *)
+			AxisGroupeffiSRS.In.Energy.ControlWord.ControllerInhibit_Enable := Fieldbus.IN[nPIDataStart].0;
+			AxisGroupeffiSRS.In.Energy.ControlWord.Enable_RapidStop 		:= Fieldbus.IN[nPIDataStart].1 AND NOT bTimeOutControlSource;
+			AxisGroupeffiSRS.In.Energy.ControlWord.Enable_Stop				:= Fieldbus.IN[nPIDataStart].2;
+			AxisGroupeffiSRS.In.Energy.ControlWord.FaultReset 				:= Fieldbus.IN[nPIDataStart].6;
+			AxisGroupeffiSRS.In.Energy.ControlWord.Start 					:= Fieldbus.IN[nPIDataStart].8;
+			AxisGroupeffiSRS.In.Energy.ControlWord.Mode 					:= WORD_TO_INT( SHR( Fieldbus.IN[nPIDataStart], 11 ) AND 2#111 );
+
+			(* X-AxisGroup ControlWord *)
+			AxisGroupeffiSRS.In.X.Group.ControlWord.ActivateAxis1 					:= TRUE;
+			AxisGroupeffiSRS.In.X.Group.ControlWord.ActivateAxis2 					:= FALSE;
+
+			(* X-Axis ControlWord *)
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.ControllerInhibit_Enable 		:= Fieldbus.IN[nPIDataStart+1].0;
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.Enable_RapidStop 				:= Fieldbus.IN[nPIDataStart+1].1 AND NOT bTimeOutControlSource;
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.Enable_Stop						:= Fieldbus.IN[nPIDataStart+1].2;
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.FaultReset 						:= Fieldbus.IN[nPIDataStart+1].6;
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.Start 							:= Fieldbus.IN[nPIDataStart+1].8;
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.JogPlus 							:= Fieldbus.IN[nPIDataStart+1].9;
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.JogMinus 						:= Fieldbus.IN[nPIDataStart+1].10;
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.Mode 							:= WORD_TO_INT( SHR( Fieldbus.IN[nPIDataStart+1], 11 ) AND 2#11 );
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.DisableExternalEncoder 			:= Fieldbus.IN[nPIDataStart+1].14;
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.DisableSoftwareLimitSwitches 	:= Fieldbus.IN[nPIDataStart+1].15;
+
+			AxisGroupeffiSRS.In.X.Axis.TargetPosition								:= DINT_TO_LREAL( n32SetLowHighToLong( u16Low := Fieldbus.IN[nPIDataStart+3], n16High := Fieldbus.IN[nPIDataStart+2] ));
+			AxisGroupeffiSRS.In.X.Axis.SetpointSpeed 								:= INT_TO_LREAL( WORD_TO_INT( Fieldbus.IN[nPIDataStart+4] ));
+			AxisGroupeffiSRS.In.X.Axis.Acceleration 								:= WORD_TO_LREAL( Fieldbus.IN[nPIDataStart+5] );
+			AxisGroupeffiSRS.In.X.Axis.Deceleration 								:= WORD_TO_LREAL( Fieldbus.IN[nPIDataStart+6] );
+
+			(* Y-AxisGroup ControlWord *)
+			AxisGroupeffiSRS.In.Y.Group.ControlWord.ActivateAxis1 					:= TRUE;
+			AxisGroupeffiSRS.In.Y.Group.ControlWord.ActivateAxis2 					:= FALSE;
+
+			(* Y-Axis ControlWord *)
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.ControllerInhibit_Enable 		:= Fieldbus.IN[nPIDataStart+7].0;
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.Enable_RapidStop 				:= Fieldbus.IN[nPIDataStart+7].1 AND NOT bTimeOutControlSource;
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.Enable_Stop 						:= Fieldbus.IN[nPIDataStart+7].2;
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.FaultReset 						:= Fieldbus.IN[nPIDataStart+7].6;
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.Start					 		:= Fieldbus.IN[nPIDataStart+7].8;
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.JogPlus 							:= Fieldbus.IN[nPIDataStart+7].9;
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.JogMinus 						:= Fieldbus.IN[nPIDataStart+7].10;
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.Mode 							:= WORD_TO_INT( SHR( Fieldbus.IN[nPIDataStart+7], 11 ) AND 2#11 );
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.DisableExternalEncoder 			:= Fieldbus.IN[nPIDataStart+7].14;
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.DisableSoftwareLimitSwitches 	:= Fieldbus.IN[nPIDataStart+7].15;
+
+			AxisGroupeffiSRS.In.Y.Axis.TargetPosition 								:= DINT_TO_LREAL( n32SetLowHighToLong( u16Low := Fieldbus.IN[nPIDataStart+9], n16High := Fieldbus.IN[nPIDataStart+8] ));
+			AxisGroupeffiSRS.In.Y.Axis.SetpointSpeed 								:= INT_TO_LREAL( WORD_TO_INT( Fieldbus.IN[nPIDataStart+10] ));
+			AxisGroupeffiSRS.In.Y.Axis.Acceleration 								:= WORD_TO_LREAL( Fieldbus.IN[nPIDataStart+11] );
+			AxisGroupeffiSRS.In.Y.Axis.Deceleration 								:= WORD_TO_LREAL( Fieldbus.IN[nPIDataStart+12] );
+
+			IF AxisGroupeffiSRS.Config.General.UseRegenerativePowerModule THEN
+				(* RegenerativePowerModule ControlWord *)
+				AxisGroupeffiSRS.In.RePower.ControlWord.Enable_Stop 				:= Fieldbus.IN[nPIDataStart+13].2;
+				AxisGroupeffiSRS.In.RePower.ControlWord.FaultReset 					:= Fieldbus.IN[nPIDataStart+13].6;
+			END_IF
+
+		ELSE
+			(* Extended PD profile *)
+
+			(* Energy ControlWord *)
+			AxisGroupeffiSRS.In.Energy.ControlWord.ControllerInhibit_Enable 		:= Fieldbus.IN[nPIDataStart].0;
+			AxisGroupeffiSRS.In.Energy.ControlWord.Enable_RapidStop 				:= Fieldbus.IN[nPIDataStart].1 AND NOT bTimeOutControlSource;
+			AxisGroupeffiSRS.In.Energy.ControlWord.Enable_Stop						:= Fieldbus.IN[nPIDataStart].2;
+			AxisGroupeffiSRS.In.Energy.ControlWord.FaultReset 						:= Fieldbus.IN[nPIDataStart].6;
+			AxisGroupeffiSRS.In.Energy.ControlWord.Start 							:= Fieldbus.IN[nPIDataStart].8;
+			AxisGroupeffiSRS.In.Energy.ControlWord.Mode 							:= WORD_TO_INT( SHR( Fieldbus.IN[nPIDataStart], 11 ) AND 2#111 );
+
+			(* X-AxisGroup ControlWord *)
+			AxisGroupeffiSRS.In.X.Group.ControlWord.ActivateAxis1 					:= Fieldbus.IN[nPIDataStart+2].0;
+			AxisGroupeffiSRS.In.X.Group.ControlWord.ActivateAxis2 					:= Fieldbus.IN[nPIDataStart+2].1;
+	
+			(* X-Axis ControlWord *)
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.ControllerInhibit_Enable 		:= Fieldbus.IN[nPIDataStart+4].0;
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.Enable_RapidStop 				:= Fieldbus.IN[nPIDataStart+4].1 AND NOT bTimeOutControlSource;
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.Enable_Stop						:= Fieldbus.IN[nPIDataStart+4].2;
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.FaultReset 						:= Fieldbus.IN[nPIDataStart+4].6;
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.Start 							:= Fieldbus.IN[nPIDataStart+4].8;
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.JogPlus 							:= Fieldbus.IN[nPIDataStart+4].9;
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.JogMinus 						:= Fieldbus.IN[nPIDataStart+4].10;
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.Mode 							:= WORD_TO_INT( SHR( Fieldbus.IN[nPIDataStart+4], 11 ) AND 2#11 );
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.DisableExternalEncoder 			:= Fieldbus.IN[nPIDataStart+4].14;
+			AxisGroupeffiSRS.In.X.Axis.ControlWord.DisableSoftwareLimitSwitches 	:= Fieldbus.IN[nPIDataStart+4].15;
+
+			AxisGroupeffiSRS.In.X.Axis.TargetPosition								:= DINT_TO_LREAL( n32SetLowHighToLong( u16Low := Fieldbus.IN[nPIDataStart+6], n16High := Fieldbus.IN[nPIDataStart+5] ));
+			AxisGroupeffiSRS.In.X.Axis.SetpointSpeed 								:= INT_TO_LREAL( WORD_TO_INT( Fieldbus.IN[nPIDataStart+7] ));
+			AxisGroupeffiSRS.In.X.Axis.Acceleration 								:= WORD_TO_LREAL( Fieldbus.IN[nPIDataStart+8] );
+			AxisGroupeffiSRS.In.X.Axis.Deceleration 								:= WORD_TO_LREAL( Fieldbus.IN[nPIDataStart+9] );
+
+			(* Y-AxisGroup ControlWord *)
+			AxisGroupeffiSRS.In.Y.Group.ControlWord.ActivateAxis1 					:= Fieldbus.IN[nPIDataStart+10].0;
+			AxisGroupeffiSRS.In.Y.Group.ControlWord.ActivateAxis2 					:= Fieldbus.IN[nPIDataStart+10].1;
+
+			(* Y-Axis ControlWord *)
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.ControllerInhibit_Enable 		:= Fieldbus.IN[nPIDataStart+12].0;
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.Enable_RapidStop 				:= Fieldbus.IN[nPIDataStart+12].1 AND NOT bTimeOutControlSource;
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.Enable_Stop 						:= Fieldbus.IN[nPIDataStart+12].2;
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.FaultReset 						:= Fieldbus.IN[nPIDataStart+12].6;
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.Start					 		:= Fieldbus.IN[nPIDataStart+12].8;
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.JogPlus 							:= Fieldbus.IN[nPIDataStart+12].9;
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.JogMinus 						:= Fieldbus.IN[nPIDataStart+12].10;
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.Mode 							:= WORD_TO_INT( SHR( Fieldbus.IN[nPIDataStart+12], 11 ) AND 2#11 );
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.DisableExternalEncoder 			:= Fieldbus.IN[nPIDataStart+12].14;
+			AxisGroupeffiSRS.In.Y.Axis.ControlWord.DisableSoftwareLimitSwitches 	:= Fieldbus.IN[nPIDataStart+12].15;
+
+			AxisGroupeffiSRS.In.Y.Axis.TargetPosition 								:= DINT_TO_LREAL( n32SetLowHighToLong( u16Low := Fieldbus.IN[nPIDataStart+14], n16High := Fieldbus.IN[nPIDataStart+13] ));
+			AxisGroupeffiSRS.In.Y.Axis.SetpointSpeed 								:= INT_TO_LREAL( WORD_TO_INT( Fieldbus.IN[nPIDataStart+15] ));
+			AxisGroupeffiSRS.In.Y.Axis.Acceleration 								:= WORD_TO_LREAL( Fieldbus.IN[nPIDataStart+16] );
+			AxisGroupeffiSRS.In.Y.Axis.Deceleration 								:= WORD_TO_LREAL( Fieldbus.IN[nPIDataStart+17] );
+
+			IF AxisGroupeffiSRS.Config.General.UseRegenerativePowerModule THEN
+
+				(* RegenerativePowerModule ControlWord *)
+				AxisGroupeffiSRS.In.RePower.ControlWord.Enable_Stop 			:= Fieldbus.IN[nPIDataStart+18].2;
+				AxisGroupeffiSRS.In.RePower.ControlWord.FaultReset 				:= Fieldbus.IN[nPIDataStart+18].6;
+
+			END_IF
+		END_IF
+
+
+	END_IF
+END_IF
+END_PROGRAM
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_effiSRS' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+PROGRAM PRG_FieldbusMappingOUT_TechModule_effiSRS
+
+VAR_INPUT
+	Enable: BOOL;
+END_VAR
+
+VAR
+	nPIDataStart: UINT;
+END_VAR
+
+(* @END_DECLARATION := '0' *)
+(***************************************************************************************************************
+*
+*    PRG_FieldbusMappingOUT_TechModule_effiSRS
+*
+*    This is an example for the FieldbusMapping of the technology module effiSRS.
+*
+*    Call this program in the task configuration before "MC_FieldbusHandlerOUT".
+*
+****************************************************************************************************************)
+
+IF Enable AND AxisGroupeffiSRS.Config.General.ConfigDone THEN(*ID117503*)
+
+	IF  NOT AxisGroupeffiSRS.Config.General.DisableFieldbusMapping THEN
+
+		nPIDataStart	:= AxisGroupeffiSRS.Config.General.PDStart;
+
+		IF AxisGroupeffiSRS.Config.General.Processdataprofile = 1 THEN
+			(* Standard PD profile *)
+
+			(* Energy StatusWord *)
+			Fieldbus.OUT[nPIDataStart]	 := SHL( UDINT_TO_WORD( AxisGroupeffiSRS.Out.Energy.StatusWord.ErrorCode ), 8 );
+			Fieldbus.OUT[nPIDataStart].0 := AxisGroupeffiSRS.Out.Energy.StatusWord.InMotion;
+			Fieldbus.OUT[nPIDataStart].3 := AxisGroupeffiSRS.Out.Energy.StatusWord.TargetPositionReached;
+			Fieldbus.OUT[nPIDataStart].5 := AxisGroupeffiSRS.Out.Energy.StatusWord.ApplicationError;
+
+			(* X1-Axis StatusWord *)
+			Fieldbus.OUT[nPIDataStart+1] := SEL(AxisGroupeffiSRS.Out.X1.StatusWord.AppError,SHL( BYTE_TO_WORD( AxisGroupeffiSRS.Out.X1.StatusWord.InverterErrorID ), 8 ),SHL( DWORD_TO_WORD( AxisGroupeffiSRS.Out.X1.StatusWord.AppErrorID ), 8 ));
+			Fieldbus.OUT[nPIDataStart+1].0 := AxisGroupeffiSRS.Out.X1.StatusWord.MotorTurning;
+			Fieldbus.OUT[nPIDataStart+1].1 := AxisGroupeffiSRS.Out.X1.StatusWord.InverterReady;
+			Fieldbus.OUT[nPIDataStart+1].2 := AxisGroupeffiSRS.Out.X1.StatusWord.DriveReferenced;
+			Fieldbus.OUT[nPIDataStart+1].3 := AxisGroupeffiSRS.Out.X1.StatusWord.TargetPositionReached;
+			Fieldbus.OUT[nPIDataStart+1].4 := AxisGroupeffiSRS.Out.X1.StatusWord.BrakeReleased;
+			Fieldbus.OUT[nPIDataStart+1].5 := AxisGroupeffiSRS.Out.X1.StatusWord.InverterError ;
+			Fieldbus.OUT[nPIDataStart+1].6 := FALSE;
+			Fieldbus.OUT[nPIDataStart+1].7 := AxisGroupeffiSRS.Out.X1.StatusWord.AppError;
+
+			Fieldbus.OUT[nPIDataStart+2] := INT_TO_WORD( n16GetHighFromLong( n32Value := LREAL_TO_DINT( AxisGroupeffiSRS.Out.X1.ActualPosition )));
+			Fieldbus.OUT[nPIDataStart+3] := UINT_TO_WORD( u16GetLowFromLong( n32Value := LREAL_TO_DINT( AxisGroupeffiSRS.Out.X1.ActualPosition )));
+			Fieldbus.OUT[nPIDataStart+4] := LREAL_TO_WORD( AxisGroupeffiSRS.Out.X1.ActualSpeed );
+
+			(* Y1-Axis StatusWord *)
+			Fieldbus.OUT[nPIDataStart+7] := SEL(AxisGroupeffiSRS.Out.Y1.StatusWord.AppError,SHL( BYTE_TO_WORD( AxisGroupeffiSRS.Out.Y1.StatusWord.InverterErrorID ), 8 ),SHL( DWORD_TO_WORD( AxisGroupeffiSRS.Out.Y1.StatusWord.AppErrorID ), 8 ));
+			Fieldbus.OUT[nPIDataStart+7].0 := AxisGroupeffiSRS.Out.Y1.StatusWord.MotorTurning;
+			Fieldbus.OUT[nPIDataStart+7].1 := AxisGroupeffiSRS.Out.Y1.StatusWord.InverterReady;
+			Fieldbus.OUT[nPIDataStart+7].2 := AxisGroupeffiSRS.Out.Y1.StatusWord.DriveReferenced;
+			Fieldbus.OUT[nPIDataStart+7].3 := AxisGroupeffiSRS.Out.Y1.StatusWord.TargetPositionReached;
+			Fieldbus.OUT[nPIDataStart+7].4 := AxisGroupeffiSRS.Out.Y1.StatusWord.BrakeReleased;
+			Fieldbus.OUT[nPIDataStart+7].5 := AxisGroupeffiSRS.Out.Y1.StatusWord.InverterError;
+			Fieldbus.OUT[nPIDataStart+7].6 := FALSE;
+			Fieldbus.OUT[nPIDataStart+7].7 := AxisGroupeffiSRS.Out.Y1.StatusWord.AppError;
+
+			Fieldbus.OUT[nPIDataStart+8] := INT_TO_WORD( n16GetHighFromLong( n32Value := LREAL_TO_DINT( AxisGroupeffiSRS.Out.Y1.ActualPosition )));
+			Fieldbus.OUT[nPIDataStart+9] := UINT_TO_WORD( u16GetLowFromLong( n32Value := LREAL_TO_DINT( AxisGroupeffiSRS.Out.Y1.ActualPosition )));
+			Fieldbus.OUT[nPIDataStart+10] := LREAL_TO_WORD( AxisGroupeffiSRS.Out.Y1.ActualSpeed );
+
+			IF AxisGroupeffiSRS.Config.General.UseRegenerativePowerModule THEN
+				(* RegenerativePowerModule StatusWord *)
+				Fieldbus.OUT[nPIDataStart+13] := SHL( BYTE_TO_WORD( AxisGroupeffiSRS.Out.RePower.StatusWord.StatusCode_ErrorCode ), 8 );
+				Fieldbus.OUT[nPIDataStart+13].1 := AxisGroupeffiSRS.Out.RePower.StatusWord.Ready;
+				Fieldbus.OUT[nPIDataStart+13].2 := AxisGroupeffiSRS.Out.RePower.StatusWord.ReadyForPower;
+				Fieldbus.OUT[nPIDataStart+13].4 := AxisGroupeffiSRS.Out.RePower.StatusWord.OutputStageOn;
+				Fieldbus.OUT[nPIDataStart+13].6 := AxisGroupeffiSRS.Out.RePower.StatusWord.Error;
+			END_IF
+
+		ELSE
+			(* Extended PD profile *)
+
+			(* Energy StatusWord *)
+			Fieldbus.OUT[nPIDataStart]	 := SHL( UDINT_TO_WORD( AxisGroupeffiSRS.Out.Energy.StatusWord.ErrorCode ), 8 );
+			Fieldbus.OUT[nPIDataStart].0 := AxisGroupeffiSRS.Out.Energy.StatusWord.InMotion;
+			Fieldbus.OUT[nPIDataStart].3 := AxisGroupeffiSRS.Out.Energy.StatusWord.TargetPositionReached;
+			Fieldbus.OUT[nPIDataStart].5 := AxisGroupeffiSRS.Out.Energy.StatusWord.ApplicationError;
+
+			(* X1-Axis StatusWord *)
+			Fieldbus.OUT[nPIDataStart+2] := SEL(AxisGroupeffiSRS.Out.X1.StatusWord.AppError,SHL( BYTE_TO_WORD( AxisGroupeffiSRS.Out.X1.StatusWord.InverterErrorID ), 8 ),SHL( DWORD_TO_WORD( AxisGroupeffiSRS.Out.X1.StatusWord.AppErrorID ), 8 ));
+			Fieldbus.OUT[nPIDataStart+2].0 := AxisGroupeffiSRS.Out.X1.StatusWord.MotorTurning;
+			Fieldbus.OUT[nPIDataStart+2].1 := AxisGroupeffiSRS.Out.X1.StatusWord.InverterReady;
+			Fieldbus.OUT[nPIDataStart+2].2 := AxisGroupeffiSRS.Out.X1.StatusWord.DriveReferenced;
+			Fieldbus.OUT[nPIDataStart+2].3 := AxisGroupeffiSRS.Out.X1.StatusWord.TargetPositionReached;
+			Fieldbus.OUT[nPIDataStart+2].4 := AxisGroupeffiSRS.Out.X1.StatusWord.BrakeReleased;
+			Fieldbus.OUT[nPIDataStart+2].5 := AxisGroupeffiSRS.Out.X1.StatusWord.InverterError ;
+			Fieldbus.OUT[nPIDataStart+2].6 := FALSE;
+			Fieldbus.OUT[nPIDataStart+2].7 := AxisGroupeffiSRS.Out.X1.StatusWord.AppError;
+
+			Fieldbus.OUT[nPIDataStart+3] := INT_TO_WORD( n16GetHighFromLong( n32Value := LREAL_TO_DINT( AxisGroupeffiSRS.Out.X1.ActualPosition )));
+			Fieldbus.OUT[nPIDataStart+4] := UINT_TO_WORD( u16GetLowFromLong( n32Value := LREAL_TO_DINT( AxisGroupeffiSRS.Out.X1.ActualPosition )));
+			Fieldbus.OUT[nPIDataStart+5] := LREAL_TO_WORD( AxisGroupeffiSRS.Out.X1.ActualSpeed );
+
+			(* X2-Axis StatusWord *)
+			Fieldbus.OUT[nPIDataStart+6] := SEL(AxisGroupeffiSRS.Out.X2.StatusWord.AppError,SHL( BYTE_TO_WORD( AxisGroupeffiSRS.Out.X2.StatusWord.InverterErrorID ), 8 ),SHL( DWORD_TO_WORD( AxisGroupeffiSRS.Out.X2.StatusWord.AppErrorID ), 8 ));
+			Fieldbus.OUT[nPIDataStart+6].0 := AxisGroupeffiSRS.Out.X2.StatusWord.MotorTurning;
+			Fieldbus.OUT[nPIDataStart+6].1 := AxisGroupeffiSRS.Out.X2.StatusWord.InverterReady;
+			Fieldbus.OUT[nPIDataStart+6].2 := AxisGroupeffiSRS.Out.X2.StatusWord.DriveReferenced;
+			Fieldbus.OUT[nPIDataStart+6].3 := AxisGroupeffiSRS.Out.X2.StatusWord.TargetPositionReached;
+			Fieldbus.OUT[nPIDataStart+6].4 := AxisGroupeffiSRS.Out.X2.StatusWord.BrakeReleased;
+			Fieldbus.OUT[nPIDataStart+6].5 := AxisGroupeffiSRS.Out.X2.StatusWord.InverterError;
+			Fieldbus.OUT[nPIDataStart+6].6 := FALSE;
+			Fieldbus.OUT[nPIDataStart+6].7 := AxisGroupeffiSRS.Out.X2.StatusWord.AppError;
+			
+			Fieldbus.OUT[nPIDataStart+7] := INT_TO_WORD( n16GetHighFromLong( n32Value := LREAL_TO_DINT( AxisGroupeffiSRS.Out.X2.ActualPosition )));
+			Fieldbus.OUT[nPIDataStart+8] := UINT_TO_WORD( u16GetLowFromLong( n32Value := LREAL_TO_DINT( AxisGroupeffiSRS.Out.X2.ActualPosition )));
+			Fieldbus.OUT[nPIDataStart+9] := LREAL_TO_WORD( AxisGroupeffiSRS.Out.X2.ActualSpeed );
+
+			(* Y1-Axis StatusWord *)
+			Fieldbus.OUT[nPIDataStart+10] := SEL(AxisGroupeffiSRS.Out.Y1.StatusWord.AppError,SHL( BYTE_TO_WORD( AxisGroupeffiSRS.Out.Y1.StatusWord.InverterErrorID ), 8 ),SHL( DWORD_TO_WORD( AxisGroupeffiSRS.Out.Y1.StatusWord.AppErrorID ), 8 ));
+			Fieldbus.OUT[nPIDataStart+10].0 := AxisGroupeffiSRS.Out.Y1.StatusWord.MotorTurning;
+			Fieldbus.OUT[nPIDataStart+10].1 := AxisGroupeffiSRS.Out.Y1.StatusWord.InverterReady;
+			Fieldbus.OUT[nPIDataStart+10].2 := AxisGroupeffiSRS.Out.Y1.StatusWord.DriveReferenced;
+			Fieldbus.OUT[nPIDataStart+10].3 := AxisGroupeffiSRS.Out.Y1.StatusWord.TargetPositionReached;
+			Fieldbus.OUT[nPIDataStart+10].4 := AxisGroupeffiSRS.Out.Y1.StatusWord.BrakeReleased;
+			Fieldbus.OUT[nPIDataStart+10].5 := AxisGroupeffiSRS.Out.Y1.StatusWord.InverterError;
+			Fieldbus.OUT[nPIDataStart+10].6 := FALSE;
+			Fieldbus.OUT[nPIDataStart+10].7 := AxisGroupeffiSRS.Out.Y1.StatusWord.AppError;
+			
+			Fieldbus.OUT[nPIDataStart+11] := INT_TO_WORD( n16GetHighFromLong( n32Value := LREAL_TO_DINT( AxisGroupeffiSRS.Out.Y1.ActualPosition )));
+			Fieldbus.OUT[nPIDataStart+12] := UINT_TO_WORD( u16GetLowFromLong( n32Value := LREAL_TO_DINT( AxisGroupeffiSRS.Out.Y1.ActualPosition )));
+			Fieldbus.OUT[nPIDataStart+13] := LREAL_TO_WORD( AxisGroupeffiSRS.Out.Y1.ActualSpeed );
+
+			(* Y2-Axis StatusWord *)
+			Fieldbus.OUT[nPIDataStart+14] := SEL(AxisGroupeffiSRS.Out.Y2.StatusWord.AppError,SHL( BYTE_TO_WORD( AxisGroupeffiSRS.Out.Y2.StatusWord.InverterErrorID ), 8 ),SHL( DWORD_TO_WORD( AxisGroupeffiSRS.Out.Y2.StatusWord.AppErrorID ), 8 ));
+			Fieldbus.OUT[nPIDataStart+14].0 := AxisGroupeffiSRS.Out.Y2.StatusWord.MotorTurning;
+			Fieldbus.OUT[nPIDataStart+14].1 := AxisGroupeffiSRS.Out.Y2.StatusWord.InverterReady;
+			Fieldbus.OUT[nPIDataStart+14].2 := AxisGroupeffiSRS.Out.Y2.StatusWord.DriveReferenced;
+			Fieldbus.OUT[nPIDataStart+14].3 := AxisGroupeffiSRS.Out.Y2.StatusWord.TargetPositionReached;
+			Fieldbus.OUT[nPIDataStart+14].4 := AxisGroupeffiSRS.Out.Y2.StatusWord.BrakeReleased;
+			Fieldbus.OUT[nPIDataStart+14].5 := AxisGroupeffiSRS.Out.Y2.StatusWord.InverterError;
+			Fieldbus.OUT[nPIDataStart+14].6 := FALSE;
+			Fieldbus.OUT[nPIDataStart+14].7 := AxisGroupeffiSRS.Out.Y2.StatusWord.AppError;
+
+			Fieldbus.OUT[nPIDataStart+15] := INT_TO_WORD( n16GetHighFromLong( n32Value := LREAL_TO_DINT( AxisGroupeffiSRS.Out.Y2.ActualPosition )));
+			Fieldbus.OUT[nPIDataStart+16] := UINT_TO_WORD( u16GetLowFromLong( n32Value := LREAL_TO_DINT( AxisGroupeffiSRS.Out.Y2.ActualPosition )));
+			Fieldbus.OUT[nPIDataStart+17] := LREAL_TO_WORD( AxisGroupeffiSRS.Out.Y2.ActualSpeed );
+
+			IF AxisGroupeffiSRS.Config.General.UseRegenerativePowerModule THEN
+				(* RegenerativePowerModule StatusWord *)
+				Fieldbus.OUT[nPIDataStart+18] := SHL( BYTE_TO_WORD( AxisGroupeffiSRS.Out.RePower.StatusWord.StatusCode_ErrorCode ), 8 );
+				Fieldbus.OUT[nPIDataStart+18].1 := AxisGroupeffiSRS.Out.RePower.StatusWord.Ready;
+				Fieldbus.OUT[nPIDataStart+18].2 := AxisGroupeffiSRS.Out.RePower.StatusWord.ReadyForPower;
+				Fieldbus.OUT[nPIDataStart+18].4 := AxisGroupeffiSRS.Out.RePower.StatusWord.OutputStageOn;
+				Fieldbus.OUT[nPIDataStart+18].5 := AxisGroupeffiSRS.Out.RePower.StatusWord.Error;
+			END_IF
+		
+		END_IF
+
+	END_IF
+	
+END_IF (*ID117503*)
+END_PROGRAM
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @GLOBAL_VARIABLE_LIST := 'GlobalVar_TechModule_effiSRS' *)
+(* @PATH := '\/AxisGroupControl_effiSRS' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+VAR_GLOBAL
+	{flag extrasymbolexport on}
+		AxisGroupeffiSRS : ST_AxisGroupeffiSRS;
+	{flag off}
+END_VAR
+
+(* @OBJECT_END := 'GlobalVar_TechModule_effiSRS' *)
+(* @CONNECTIONS := GlobalVar_TechModule_effiSRS
+FILENAME : ''
+FILETIME : 0
+EXPORT : 0
+NUMOFCONNECTIONS : 0
+*)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @GLOBAL_VARIABLE_LIST := 'Version_AxisGroupControl_effiSRS' *)
+(* @PATH := '\/AxisGroupControl_effiSRS' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+VAR_GLOBAL
+
+	VERSION_AXISGROUPCONTROL_EFFISRS : DWORD := 180;
+	RELEASE_AXISGROUPCONTROL_EFFISRS : DWORD := 100;
+
+END_VAR
+
+(* @OBJECT_END := 'Version_AxisGroupControl_effiSRS' *)
+(* @CONNECTIONS := Version_AxisGroupControl_effiSRS
+FILENAME : ''
+FILETIME : 0
+EXPORT : 0
+NUMOFCONNECTIONS : 0
+*)
+
+
+LIBRARY
+03_ApplicationModules\MPLCAxisGroupControl_effiSRS.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 20
+AxisControl_effiSRS: 2048
+AxisControl_effiSRS.acDefaultMode: 2048
+AxisControl_effiSRS.acEncoderMonitoring: 2048
+AxisControl_effiSRS.acEncoderSource: 2048
+AxisControl_effiSRS.acEnergyStatusWord: 2048
+AxisControl_effiSRS.acGroupControl: 2048
+AxisControl_effiSRS.acGroupControlEnergyOptimizationType1: 2048
+AxisControl_effiSRS.acGroupControlVelocitySwitch: 2048
+AxisControl_effiSRS.acRePower: 2048
+AxisControl_effiSRS.acSingleAxisControl: 2048
+AxisControl_effiSRS.acTargetPosMonitoring: 2048
+AxisControl_Priority_effiSRS: 2048
+AxisGroupControl_effiSRS: 2048
+FB_AutoRefExtEncoder_MDX: 2048
+FB_AutoRefExtEncoder_MX: 2048
+FB_EncoderSource_MDX: 2048
+FB_EncoderSource_MX: 2048
+FB_ReadeffiSRS_ApplicationSettings: 2048
+MC_FieldbusMappingIN_effiSRS: 2048
+MC_FieldbusMappingOUT_effiSRS: 2048
+NumOfGVLs: 3
+GlobalVar_AxisGroupControl_effiSRS: 2048
+Version_MPLCAxisGroupControl_effiSRS: 2048
+VersionPartNumber_MPLCAxisGroupControl_effiSRS: 2048
+END_LIBRARY
+
+LIBRARY
+11_System\MPLCTechFct_ProfGenSpeedCam.lib 27.1.17 13:50:06
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 7
+ProfGenSpeedCam: 2048
+ProfGenSpeedCam.Calc_Ye: 2048
+ProfGenSpeedCam.ChangeCam0: 2048
+ProfGenSpeedCam.ChangeCam1: 2048
+ProfGenSpeedCam.ChangeCam2: 2048
+ProfGenSpeedCam.ChangeCam3: 2048
+ProfGenSpeedCam.ChangeCam4: 2048
+NumOfGVLs: 2
+Globale_Variablen: 2048
+Version_MPLCTechFct_ProfGenSpeedCam: 2048
+END_LIBRARY
+
+LIBRARY
+11_System\MPLCTechFct_ProfGenXYOptV2.lib 27.1.17 13:50:07
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 3
+ProfGenXYOptV2: 2048
+ProfGenXYOptV2.CalcDecTime: 2048
+ProfGenXYOptV2.ExtendProfile: 2048
+NumOfGVLs: 2
+Globale_Variablen: 2048
+Version_MPLCTechFct_ProfGenXYOptV2: 2048
+END_LIBRARY

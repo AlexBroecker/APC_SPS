@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AppConfigA5>
+  <FixedSpeeds.Speed1>750</FixedSpeeds.Speed1>
+  <FixedSpeeds.Speed2>1500</FixedSpeeds.Speed2>
+  <FixedSpeeds.Speed3>2500</FixedSpeeds.Speed3>
+  <FixedSpeeds.Speed4>5000</FixedSpeeds.Speed4>
+  <FixedSpeeds.Speed5>7500</FixedSpeeds.Speed5>
+  <FixedSpeeds.Speed6>10000</FixedSpeeds.Speed6>
+  <Ramps.RampDown1>1000</Ramps.RampDown1>
+  <Ramps.RampDown2>2000</Ramps.RampDown2>
+  <Ramps.RampDown3>3000</Ramps.RampDown3>
+  <Ramps.RampDown4>4000</Ramps.RampDown4>
+  <Ramps.RampUp1>1000</Ramps.RampUp1>
+  <Ramps.RampUp2>2000</Ramps.RampUp2>
+  <Ramps.RampUp3>3000</Ramps.RampUp3>
+  <Ramps.RampUp4>4000</Ramps.RampUp4>
+  <Velocity.ConfigEnableStop>0</Velocity.ConfigEnableStop>
+  <Velocity.MaxAcceleration>2000</Velocity.MaxAcceleration>
+  <Velocity.MaxDeceleration>2000</Velocity.MaxDeceleration>
+  <Velocity.MaxVelocity>1500</Velocity.MaxVelocity>
+  <Velocity.UseLimits>FALSE</Velocity.UseLimits>
+  <Vers>122.0</Vers>
+</AppConfigA5>

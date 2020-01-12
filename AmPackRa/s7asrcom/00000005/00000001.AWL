@@ -1,0 +1,244 @@
+TYPE UDT 160
+TITLE = "Robot	UR_8_O2T_Robot"
+
+
+  STRUCT 	
+   SSM_Spd_slider_frac_mask : BOOL ;	
+   Reserved_1 : BOOL ;	
+   Reserved_2 : BOOL ;	
+   Reserved_3 : BOOL ;	
+   Reserved_4 : BOOL ;	
+   Reserved_5 : BOOL ;	
+   Reserved_6 : BOOL ;	
+   Reserved_7 : BOOL ;	
+   Reserved_8_15 : BYTE ;	
+   Reserved_16_31 : INT ;	
+   Speed_slider_fraction : REAL ;	
+  END_STRUCT ;	
+END_TYPE
+
+
+TYPE UDT 161
+TITLE = "Outputs	UR_8_O2T_Outputs"
+
+  STRUCT 	
+   Standard_DO_mask : BYTE ;	
+   Configurable_DO_mask : BYTE ;	
+   Standard_DO : BYTE ;	
+   Configurable_DO : BYTE ;	
+   AOM_AO_mask : BYTE ;	
+   AOT_AO_types : BYTE ;	
+   Tool_DO_mask :byte;
+   Tool_DO :byte;
+   Standard_AO : ARRAY  [0 .. 1 ] OF REAL ;	
+  END_STRUCT ;	
+END_TYPE
+
+
+TYPE UDT 162
+TITLE = "Bit input	UR_9_BitRegisters "  
+
+
+  STRUCT 	
+   Register : ARRAY  [0 .. 31 ] OF BOOL ;	
+  END_STRUCT ;	
+END_TYPE
+
+TYPE UDT 163
+TITLE = "Bit input	UR_9_IntRegisters "  
+
+
+  STRUCT 	
+   Register : ARRAY  [0 .. 11 ] OF DINT ;	
+  END_STRUCT ;	
+END_TYPE
+
+TYPE UDT 164
+TITLE = "Float input	UR_9_FloatRegisters "
+
+
+  STRUCT 	
+   Register : ARRAY  [0 .. 11 ] OF REAL ;	
+  END_STRUCT ;	
+END_TYPE
+
+TYPE UDT 165
+TITLE = "Bit input	UR_10_BitRegisters "  
+
+
+  STRUCT 	
+   Register : ARRAY  [0 .. 31 ] OF BOOL ;	
+  END_STRUCT ;	
+END_TYPE
+
+TYPE UDT 166
+TITLE = "Bit input	UR_10_IntRegisters "  
+
+
+  STRUCT 	
+   Register : ARRAY  [0 .. 11 ] OF DINT ;	
+  END_STRUCT ;	
+END_TYPE
+
+TYPE UDT 167
+TITLE = "Float input	UR_10_FloatRegisters "
+
+
+  STRUCT 	
+   Register : ARRAY  [0 .. 11 ] OF REAL ;	
+  END_STRUCT ;	
+END_TYPE
+
+
+DATA_BLOCK DB101
+TITLE = "UR_T2O"
+VERSION : 0.1
+
+
+  STRUCT 	
+   UR_O2T_Robot : UDT 160;	//Robot
+   UR_O2T_Outputs : UDT 161;	//Outputs
+   UR_BitRegisters_1 : UDT 162;	//Bit input
+   UR_IntRegisters_1 : UDT 163;	//Int input
+   UR_FloatRegisters_1 : UDT 164;	//Float input
+   UR_BitRegisters_2 : UDT 165;	//Bit input 
+   UR_IntRegisters_2 : UDT 166;	//Int input
+   UR_FloatRegisters_2 : UDT 167;	//Float input
+
+  END_STRUCT ;	
+BEGIN
+   UR_O2T_Robot.SSM_Spd_slider_frac_mask := FALSE; 
+   UR_O2T_Robot.Reserved_1 := FALSE; 
+   UR_O2T_Robot.Reserved_2 := FALSE; 
+   UR_O2T_Robot.Reserved_3 := FALSE; 
+   UR_O2T_Robot.Reserved_4 := FALSE; 
+   UR_O2T_Robot.Reserved_5 := FALSE; 
+   UR_O2T_Robot.Reserved_6 := FALSE; 
+   UR_O2T_Robot.Reserved_7 := FALSE; 
+   UR_O2T_Robot.Reserved_8_15 := B#16#0; 
+   UR_O2T_Robot.Reserved_16_31 := 0; 
+   UR_O2T_Robot.Speed_slider_fraction := 0.000000e+000; 
+   UR_O2T_Outputs.Standard_DO_mask := B#16#0; 
+   UR_O2T_Outputs.Configurable_DO_mask := B#16#0; 
+   UR_O2T_Outputs.Standard_DO := B#16#0; 
+   UR_O2T_Outputs.Configurable_DO := B#16#0; 
+   UR_O2T_Outputs.AOM_AO_mask := B#16#0; 
+   UR_O2T_Outputs.AOT_AO_types := B#16#0; 
+   UR_O2T_Outputs.Tool_DO_mask := B#16#0;
+   UR_O2T_Outputs.Tool_DO_mask := B#16#0;
+   UR_O2T_Outputs.Standard_AO[0] := 0.000000e+000; 
+   UR_O2T_Outputs.Standard_AO[1] := 0.000000e+000; 
+   UR_BitRegisters_1.Register[0] := FALSE; 
+   UR_BitRegisters_1.Register[1] := FALSE; 
+   UR_BitRegisters_1.Register[2] := FALSE; 
+   UR_BitRegisters_1.Register[3] := FALSE; 
+   UR_BitRegisters_1.Register[4] := FALSE; 
+   UR_BitRegisters_1.Register[5] := FALSE; 
+   UR_BitRegisters_1.Register[6] := FALSE; 
+   UR_BitRegisters_1.Register[7] := FALSE; 
+   UR_BitRegisters_1.Register[8] := FALSE; 
+   UR_BitRegisters_1.Register[9] := FALSE; 
+   UR_BitRegisters_1.Register[10] := FALSE; 
+   UR_BitRegisters_1.Register[11] := FALSE; 
+   UR_BitRegisters_1.Register[12] := FALSE; 
+   UR_BitRegisters_1.Register[13] := FALSE; 
+   UR_BitRegisters_1.Register[14] := FALSE; 
+   UR_BitRegisters_1.Register[15] := FALSE; 
+   UR_BitRegisters_1.Register[16] := FALSE; 
+   UR_BitRegisters_1.Register[17] := FALSE; 
+   UR_BitRegisters_1.Register[18] := FALSE; 
+   UR_BitRegisters_1.Register[19] := FALSE; 
+   UR_BitRegisters_1.Register[20] := FALSE; 
+   UR_BitRegisters_1.Register[21] := FALSE; 
+   UR_BitRegisters_1.Register[22] := FALSE; 
+   UR_BitRegisters_1.Register[23] := FALSE; 
+   UR_BitRegisters_1.Register[24] := FALSE; 
+   UR_BitRegisters_1.Register[25] := FALSE; 
+   UR_BitRegisters_1.Register[26] := FALSE; 
+   UR_BitRegisters_1.Register[27] := FALSE; 
+   UR_BitRegisters_1.Register[28] := FALSE; 
+   UR_BitRegisters_1.Register[29] := FALSE; 
+   UR_BitRegisters_1.Register[30] := FALSE; 
+   UR_BitRegisters_1.Register[31] := FALSE;  
+   UR_IntRegisters_1.Register[0] := L#0; 
+   UR_IntRegisters_1.Register[1] := L#0; 
+   UR_IntRegisters_1.Register[2] := L#0; 
+   UR_IntRegisters_1.Register[3] := L#0; 
+   UR_IntRegisters_1.Register[4] := L#0; 
+   UR_IntRegisters_1.Register[5] := L#0; 
+   UR_IntRegisters_1.Register[6] := L#0; 
+   UR_IntRegisters_1.Register[7] := L#0; 
+   UR_IntRegisters_1.Register[8] := L#0; 
+   UR_IntRegisters_1.Register[9] := L#0; 
+   UR_IntRegisters_1.Register[10] := L#0; 
+   UR_IntRegisters_1.Register[11] := L#0; 
+   UR_FloatRegisters_1.Register[0] := 0.000000e+000; 
+   UR_FloatRegisters_1.Register[1] := 0.000000e+000; 
+   UR_FloatRegisters_1.Register[2] := 0.000000e+000; 
+   UR_FloatRegisters_1.Register[3] := 0.000000e+000; 
+   UR_FloatRegisters_1.Register[4] := 0.000000e+000; 
+   UR_FloatRegisters_1.Register[5] := 0.000000e+000; 
+   UR_FloatRegisters_1.Register[6] := 0.000000e+000; 
+   UR_FloatRegisters_1.Register[7] := 0.000000e+000; 
+   UR_FloatRegisters_1.Register[8] := 0.000000e+000; 
+   UR_FloatRegisters_1.Register[9] := 0.000000e+000; 
+   UR_FloatRegisters_1.Register[10] := 0.000000e+000; 
+   UR_FloatRegisters_1.Register[11] := 0.000000e+000; 
+   UR_BitRegisters_2.Register[0] := FALSE; 
+   UR_BitRegisters_2.Register[1] := FALSE; 
+   UR_BitRegisters_2.Register[2] := FALSE; 
+   UR_BitRegisters_2.Register[3] := FALSE; 
+   UR_BitRegisters_2.Register[4] := FALSE; 
+   UR_BitRegisters_2.Register[5] := FALSE; 
+   UR_BitRegisters_2.Register[6] := FALSE; 
+   UR_BitRegisters_2.Register[7] := FALSE; 
+   UR_BitRegisters_2.Register[8] := FALSE; 
+   UR_BitRegisters_2.Register[9] := FALSE; 
+   UR_BitRegisters_2.Register[10] := FALSE; 
+   UR_BitRegisters_2.Register[11] := FALSE; 
+   UR_BitRegisters_2.Register[12] := FALSE; 
+   UR_BitRegisters_2.Register[13] := FALSE; 
+   UR_BitRegisters_2.Register[14] := FALSE; 
+   UR_BitRegisters_2.Register[15] := FALSE; 
+   UR_BitRegisters_2.Register[16] := FALSE; 
+   UR_BitRegisters_2.Register[17] := FALSE; 
+   UR_BitRegisters_2.Register[18] := FALSE; 
+   UR_BitRegisters_2.Register[19] := FALSE; 
+   UR_BitRegisters_2.Register[20] := FALSE; 
+   UR_BitRegisters_2.Register[21] := FALSE; 
+   UR_BitRegisters_2.Register[22] := FALSE; 
+   UR_BitRegisters_2.Register[23] := FALSE; 
+   UR_BitRegisters_2.Register[24] := FALSE; 
+   UR_BitRegisters_2.Register[25] := FALSE; 
+   UR_BitRegisters_2.Register[26] := FALSE; 
+   UR_BitRegisters_2.Register[27] := FALSE; 
+   UR_BitRegisters_2.Register[28] := FALSE; 
+   UR_BitRegisters_2.Register[29] := FALSE; 
+   UR_BitRegisters_2.Register[30] := FALSE; 
+   UR_BitRegisters_2.Register[31] := FALSE;  
+   UR_IntRegisters_2.Register[0] := L#0; 
+   UR_IntRegisters_2.Register[1] := L#0; 
+   UR_IntRegisters_2.Register[2] := L#0; 
+   UR_IntRegisters_2.Register[3] := L#0; 
+   UR_IntRegisters_2.Register[4] := L#0; 
+   UR_IntRegisters_2.Register[5] := L#0; 
+   UR_IntRegisters_2.Register[6] := L#0; 
+   UR_IntRegisters_2.Register[7] := L#0; 
+   UR_IntRegisters_2.Register[8] := L#0; 
+   UR_IntRegisters_2.Register[9] := L#0; 
+   UR_IntRegisters_2.Register[10] := L#0; 
+   UR_IntRegisters_2.Register[11] := L#0; 
+   UR_FloatRegisters_2.Register[0] := 0.000000e+000; 
+   UR_FloatRegisters_2.Register[1] := 0.000000e+000; 
+   UR_FloatRegisters_2.Register[2] := 0.000000e+000; 
+   UR_FloatRegisters_2.Register[3] := 0.000000e+000; 
+   UR_FloatRegisters_2.Register[4] := 0.000000e+000; 
+   UR_FloatRegisters_2.Register[5] := 0.000000e+000; 
+   UR_FloatRegisters_2.Register[6] := 0.000000e+000; 
+   UR_FloatRegisters_2.Register[7] := 0.000000e+000; 
+   UR_FloatRegisters_2.Register[8] := 0.000000e+000; 
+   UR_FloatRegisters_2.Register[9] := 0.000000e+000; 
+   UR_FloatRegisters_2.Register[10] := 0.000000e+000; 
+   UR_FloatRegisters_2.Register[11] := 0.000000e+000; 
+END_DATA_BLOCK
+

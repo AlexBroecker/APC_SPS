@@ -1,0 +1,5779 @@
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+PROGRAM HandlingKin_Examples
+(*##############################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	Name:	HandlingKin_Examples
+	Job:	This program is an example for programming the AxisGroupHandlingKin interface.
+			After all the conditions for starting the sequence are fullfilled, two HandlingKin programs ("Pick" and "Place") are executed alternately in a loop (see step "PickAndPlace").
+			The path of the example programs can only be executed by a kinematics modell which has the degrees of freedom X, Y , Z and A.
+			The segements/positions of the 2 programs are defined in the Init step.
+			The example uses program number 4 (selected in step "Select_Program_Mode").
+			The example also shows, how a disruption of the program sequence can be handled. 
+			-> 	When a disruption is recognized (ApplicationReady = FALSE), the step "Disruption" is selected. 
+				When ApplicationReady becomes TRUE again, it is defferentiated, whether BackToPath is necessary or the program can start again directly.
+			Control Variables:
+				bEnable: Start the sequqence
+				iOverride: Scale the velocity for all motions
+				bContinueAfterDisruption: Must be set to true, to continue the program after a disruption. If it is kept true constantly, the program is resumed automatically.
+				bUseTouchProbe_Motion: TouchProbe_Motion_ is executed in the last segment of the Pick program.
+				bUseTouchProbe_Measure: TouchProbe_Measure_ is executed in the first segment of the Pick program.
+################################################################################################################*)
+VAR_INPUT
+END_VAR
+VAR
+	bEnable : BOOL;
+	iOverride : INT := 10;
+	bContinueAfterDisruption 	: BOOL;
+	bUseTouchProbe_Motion		: BOOL;
+	bUseTouchProbe_Measure		: BOOL;
+
+	bDone : BOOL;
+	iState : INT;
+	iStateBackToPath : INT;
+
+	aSegments_HandlingKin_Example_PickProgram	: ARRAY[1..gcHandlingKin_MaxNumberOfSegments] OF ST_AxisGroupHandlingKin_IN_StandardProf_Segments;
+	aSegments_HandlingKin_Example_PlaceProgram	: ARRAY[1..gcHandlingKin_MaxNumberOfSegments] OF ST_AxisGroupHandlingKin_IN_StandardProf_Segments;
+
+END_VAR
+(* @END_DECLARATION := '0' *)
+
+INITIAL_STEP Init:
+
+	aSegments_HandlingKin_Example_PickProgram[1].Position[1] := 400;	(* X *)
+	aSegments_HandlingKin_Example_PickProgram[1].Position[2] := -300;	(* Y *)
+	aSegments_HandlingKin_Example_PickProgram[1].Position[3] := 400;	(* Z *)
+	aSegments_HandlingKin_Example_PickProgram[1].Position[4] := -90;	(* A, rotation around Z *)
+	aSegments_HandlingKin_Example_PickProgram[1].Position[5] := 0;		(* B, rotation around Y *)
+	aSegments_HandlingKin_Example_PickProgram[1].Position[6] := 0;		(* C, rotation around X *)
+	aSegments_HandlingKin_Example_PickProgram[1].SegmentParaRecNo := 1;	(* Select between record 1.. 8 *)
+	aSegments_HandlingKin_Example_PickProgram[1].BlendingDistance := 0;	(* No blending used *)
+
+	aSegments_HandlingKin_Example_PickProgram[2].Position[1] := 250;
+	aSegments_HandlingKin_Example_PickProgram[2].Position[2] := 300;
+	aSegments_HandlingKin_Example_PickProgram[2].Position[3] := 400;
+	aSegments_HandlingKin_Example_PickProgram[2].Position[4] := 0;
+	aSegments_HandlingKin_Example_PickProgram[2].Position[5] := 0;
+	aSegments_HandlingKin_Example_PickProgram[2].Position[6] := 0;
+	aSegments_HandlingKin_Example_PickProgram[2].SegmentParaRecNo := 1;
+	aSegments_HandlingKin_Example_PickProgram[2].BlendingDistance := 50;(* Blending radius for motion TO point 2, thus around point 1 *)
+
+	aSegments_HandlingKin_Example_PickProgram[3].Position[1] := 250;
+	aSegments_HandlingKin_Example_PickProgram[3].Position[2] := 300;
+	aSegments_HandlingKin_Example_PickProgram[3].Position[3] := 100;
+	aSegments_HandlingKin_Example_PickProgram[3].Position[4] := 0;
+	aSegments_HandlingKin_Example_PickProgram[3].Position[5] := 0;
+	aSegments_HandlingKin_Example_PickProgram[3].Position[6] := 0;
+	aSegments_HandlingKin_Example_PickProgram[3].SegmentParaRecNo := 1;
+	aSegments_HandlingKin_Example_PickProgram[3].BlendingDistance := 50;
+
+
+
+	aSegments_HandlingKin_Example_PlaceProgram[1].Position[1] := 250;
+	aSegments_HandlingKin_Example_PlaceProgram[1].Position[2] := 300;
+	aSegments_HandlingKin_Example_PlaceProgram[1].Position[3] := 400;
+	aSegments_HandlingKin_Example_PlaceProgram[1].Position[4] := 0;
+	aSegments_HandlingKin_Example_PlaceProgram[1].Position[5] := 0;
+	aSegments_HandlingKin_Example_PlaceProgram[1].Position[6] := 0;
+	aSegments_HandlingKin_Example_PlaceProgram[1].SegmentParaRecNo := 1;
+	aSegments_HandlingKin_Example_PlaceProgram[1].BlendingDistance := 0;
+
+	aSegments_HandlingKin_Example_PlaceProgram[2].Position[1] := 400;
+	aSegments_HandlingKin_Example_PlaceProgram[2].Position[2] := -300;
+	aSegments_HandlingKin_Example_PlaceProgram[2].Position[3] := 400;
+	aSegments_HandlingKin_Example_PlaceProgram[2].Position[4] := -90;
+	aSegments_HandlingKin_Example_PlaceProgram[2].Position[5] := 0;
+	aSegments_HandlingKin_Example_PlaceProgram[2].Position[6] := 0;
+	aSegments_HandlingKin_Example_PlaceProgram[2].SegmentParaRecNo := 1;
+	aSegments_HandlingKin_Example_PlaceProgram[2].BlendingDistance := 50;
+
+	aSegments_HandlingKin_Example_PlaceProgram[3].Position[1] := 400;
+	aSegments_HandlingKin_Example_PlaceProgram[3].Position[2] := -300;
+	aSegments_HandlingKin_Example_PlaceProgram[3].Position[3] := 100;
+	aSegments_HandlingKin_Example_PlaceProgram[3].Position[4] := -90;
+	aSegments_HandlingKin_Example_PlaceProgram[3].Position[5] := 0;
+	aSegments_HandlingKin_Example_PlaceProgram[3].Position[6] := 0;
+	aSegments_HandlingKin_Example_PlaceProgram[3].SegmentParaRecNo := 1;
+	aSegments_HandlingKin_Example_PlaceProgram[3].BlendingDistance := 50;
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION Start Example FROM Init TO Start:= 
+AxisGroupHandlingKin.ConfigDataAvailable
+AND
+bEnable
+
+END_TRANSITION
+STEP Start:
+
+AxisGroupHandlingKin.Inst[1].In.Control.Enable_RapidStop := TRUE;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION FROM Start TO Select_Program_Mode:= 
+AxisGroupHandlingKin.Inst[1].Out.Status.AllPowerAmplifiersEnabled
+
+
+END_TRANSITION
+STEP Select_Program_Mode:
+AxisGroupHandlingKin.Inst[1].In.PrgNo := 4; (* Select ProgramNumber before switching to mode ProgramAuto. Otherwise the error 'ProgNumber 0 not valid' will occur. *)
+AxisGroupHandlingKin.Inst[1].In.Mode := HANDLING_KIN_PROGRAM_AUTO;
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION Ready FROM Select_Program_Mode TO PickAndPlace:= 
+(AxisGroupHandlingKin.Inst[1].Out.Mode = HANDLING_KIN_PROGRAM_AUTO)
+AND
+(AxisGroupHandlingKin.Inst[1].Out.Status.ApplicationReady)
+
+END_TRANSITION
+TRANSITION FROM Start TO Disruption:= 
+FALSE
+
+
+END_TRANSITION
+STEP Disruption:
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION BackToPath required FROM Disruption TO BackToPath:= 
+(* Detect that BackToPath is required *)
+
+AxisGroupHandlingKin.Inst[1].Out.Status.ApplicationReady	(* When the cause for the disruption is gone, ApplicationReady becomes TRUE again   *)
+AND
+AxisGroupHandlingKinProfile.Inst[1].Standard.Out.Kinematics.BackToPathActive
+(* BackToPathActive is TRUE when ApplicationReady becomes TRUE again and BackToPath is required .*)
+
+END_TRANSITION
+TRANSITION Ready again FROM Disruption TO Restart:= 
+(* Detect that NO BackToPath is required *)
+
+AxisGroupHandlingKin.Inst[1].Out.Status.ApplicationReady	 (* When the cause for the disruption is gone, ApplicationReady becomes TRUE again   *)
+AND
+(NOT AxisGroupHandlingKinProfile.Inst[1].Standard.Out.Kinematics.BackToPathActive)
+(* BackToPathActive is TRUE when ApplicationReady becomes TRUE again and BackToPath is required.*)
+
+END_TRANSITION
+STEP Restart:
+IF bContinueAfterDisruption THEN
+
+	AxisGroupHandlingKin.Inst[1].In.PrgControl.Start := TRUE;	(* Rising edge to continue the program *)
+	
+	bDone := TRUE;
+
+END_IF
+
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+
+bDone := FALSE;
+AxisGroupHandlingKin.Inst[1].In.PrgControl.Start := FALSE;
+END_ACTION
+
+EXIT_ACTION	
+
+AxisGroupHandlingKin.Inst[1].In.PrgControl.Start := FALSE;
+
+END_ACTION
+
+TRANSITION FROM Restart TO Start:= 
+bDone
+
+
+END_TRANSITION
+STEP BackToPath:
+IF bContinueAfterDisruption THEN
+
+	CASE iStateBackToPath OF
+		0:
+			AxisGroupHandlingKin.Inst[1].In.PrgControl.Start := TRUE;	(* First rising edge to start BackToPath *)
+			iStateBackToPath := 10;
+
+		10:
+			IF NOT AxisGroupHandlingKinProfile.Inst[1].Standard.Out.Kinematics.BackToPathActive THEN	(* BackToPath motion is finished, when BackToPathActive becomes false. *)
+				AxisGroupHandlingKin.Inst[1].In.PrgControl.Start := FALSE;
+				iStateBackToPath := 20;
+			END_IF
+
+		20:
+			AxisGroupHandlingKin.Inst[1].In.PrgControl.Start := TRUE;	(* Second rising edge to continue program *)
+			iStateBackToPath := 30;
+
+
+		30:
+			AxisGroupHandlingKin.Inst[1].In.PrgControl.Start := FALSE;
+			bDone := TRUE;
+
+	END_CASE
+
+END_IF
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+
+bDone := FALSE;
+iStateBackToPath := 0;
+AxisGroupHandlingKin.Inst[1].In.PrgControl.Start := FALSE;
+END_ACTION
+
+TRANSITION FROM BackToPath TO Start:= 
+bDone
+
+
+END_TRANSITION
+STEP PickAndPlace:
+
+AxisGroupHandlingKin.Inst[1].In.Control.Enable_RapidStop := TRUE;
+AxisGroupHandlingKin.Inst[1].In.Control.FeedEnable := TRUE;
+AxisGroupHandlingKin.Inst[1].In.Override := iOverride;
+
+CASE iState OF
+
+0:
+	AxisGroupHandlingKin.Inst[1].In.PrgControl.Init := FALSE;
+	AxisGroupHandlingKin.Inst[1].In.PrgControl.Stop := FALSE;
+	AxisGroupHandlingKin.Inst[1].In.PrgControl.Start := FALSE;
+
+	iState := 10;
+
+10:
+	AxisGroupHandlingKinProfile.Inst[1].Standard.In.Segments := aSegments_HandlingKin_Example_PickProgram; (* Use the previously defined segments *)
+
+	MC_HandlingKin_SetEndSignal_FUN(iKinInstanceNumber := 1, iNumberOfSegments := 3); (* Set End-Bit 3 -> only 3 segments are processed. *)
+
+	(* Optional: Activate TouchProbe functions in "Pick" program: *)
+	(*	1) TouchProbeMeasure -> Executed in first segment
+							 -> The measured position is displayed in the variable "AxisGroupHandlingKinProfile.Inst[1].Standard.Out.TouchProbeMeasureKCS[1..8]"
+							 -> Example: When moving up, the upper edge of a workpiece can be measured.
+										 That position can be used as the place position in the next cycle.	*)
+	IF bUseTouchProbe_Measure THEN
+		AxisGroupHandlingKinProfile.Inst[1].Standard.In.PrgControlAdditional.TouchProbeMeasure := TRUE;
+	END_IF
+
+	(*	2) TouchProbeMotion	 -> When a TouchProbe signal is detected in the last path segment, a certain remaining distance along the path will be proceeded.
+								 -> Example:	When moving down to pick up a workpiece, the upper edge is detected.
+										 		From the position where the TouchProbe event occured, a defined remainig distance is moved.	*)	
+
+	IF bUseTouchProbe_Motion THEN
+		AxisGroupHandlingKinProfile.Inst[1].Standard.In.PrgControlAdditional.TouchProbeMotion := TRUE;
+		AxisGroupHandlingKinProfile.Inst[1].Standard.In.PrgControlAdditional.RemainingDistancePercentage := 100; (* Scaling in [%] of the RemainingDistance, that is defined in the selected SegmentParameterRecord. *)
+																												  (* Here: 100% * 1mm (default value) = 1mm as remaining distance *)
+	END_IF
+
+
+	AxisGroupHandlingKin.Inst[1].In.PrgControl.Start := TRUE; (* Rising edge at PrgControl.Start starts the program *)
+
+	iState := 20;
+
+20:
+	AxisGroupHandlingKin.Inst[1].In.PrgControl.Start := FALSE;	(* Start can be reset here *)
+
+	IF AxisGroupHandlingKin.Inst[1].Out.PrgStatus.Completed THEN	(* Wait until the program is completed before the next program can be started. *)
+
+		IF AxisGroupHandlingKinProfile.Inst[1].Standard.In.PrgControlAdditional.TouchProbeMeasure THEN
+			(* Use the postion/height that was measured via "TouchProbeMeasure" for the following "Place" program *)
+			 aSegments_HandlingKin_Example_PlaceProgram[3].Position[3] := AxisGroupHandlingKinProfile.Inst[1].Standard.Out.TouchProbeMeasureKCS[3];
+		END_IF
+
+		iState := 30;
+	END_IF
+
+30:
+	AxisGroupHandlingKinProfile.Inst[1].Standard.In.Segments := aSegments_HandlingKin_Example_PlaceProgram;
+
+	MC_HandlingKin_SetEndSignal_FUN(iKinInstanceNumber := 1, iNumberOfSegments := 3);
+
+	(* Optional: Deactivate TouchProbe functions in "Place" program *)
+	IF bUseTouchProbe_Measure THEN
+		AxisGroupHandlingKinProfile.Inst[1].Standard.In.PrgControlAdditional.TouchProbeMeasure := FALSE;
+	END_IF
+	IF bUseTouchProbe_Motion THEN
+		AxisGroupHandlingKinProfile.Inst[1].Standard.In.PrgControlAdditional.TouchProbeMotion := FALSE;
+	END_IF
+
+	AxisGroupHandlingKin.Inst[1].In.PrgControl.Start := TRUE;
+
+	iState := 40;
+
+40:
+	AxisGroupHandlingKin.Inst[1].In.PrgControl.Start := FALSE;
+
+	IF AxisGroupHandlingKin.Inst[1].Out.PrgStatus.Completed THEN
+		iState := 10;
+		bDone := TRUE;
+	END_IF
+
+END_CASE
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+bDone := FALSE;
+END_ACTION
+
+TRANSITION FROM PickAndPlace TO Init:= 
+bDone
+
+
+END_TRANSITION
+TRANSITION Disruption FROM PickAndPlace TO Disruption:= 
+(* A disruption of the program decected by checking ApplicationReady *)
+(* AppicationReady becomes FALSE when:
+	- The kinematics has an error (e.g. workspace left)		
+	- One or all inverters are not enabled anymore (e.g. STO, Enabel_RapidStop = false, Inverter_Inhibit = true, ..)
+ *)
+
+NOT(AxisGroupHandlingKin.Inst[1].Out.Status.ApplicationReady)
+
+END_TRANSITION
+
+END_PROGRAM
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin\/Fieldbus\/IN' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(*##############################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	Name:			MC_FieldbusMappingIN_HandlingKinematics_Application
+	Job:			Mapping the fieldbus values to the HandlingKin interface
+					->	Process data could be adapted to special requirements,
+						e. g.	- higher precision for coordinates (e. g. 2 words)
+								- further coordinates (B/C-orientation, auxiliary axis 7/8)
+								- further control signals and output process data (e. g. inverter current)
+								- less points, instead point management in MOVI-PLC
+								- ...
+	Activation:		see PRG PLC_Start_TechModule_AxisGroupControl_HandlingKin
+
+################################################################################################################*)
+PROGRAM MC_FieldbusMappingIN_HandlingKin_StandardProf
+
+VAR_INPUT
+	Enable	: BOOL;
+END_VAR
+
+VAR_OUTPUT
+	Error	: BOOL;
+	ErrorID	: DWORD;
+END_VAR
+
+VAR
+	nPIDataStart				: UINT;
+	nPDIndex					: UINT;
+	nTelegramNo					: UINT;
+	nCntKin						: UINT;
+	nPositionOffset				: UINT;
+	bPdConsistent				: BOOL;
+	TONbPdNotConsistent			: TON;
+
+	nIndex						: UINT;
+	yTempDWORD					: DWORD;
+	yTempWORD					: WORD;
+	yTempBYTE					: BYTE;
+
+	fDecPlacesFacPos			: LREAL;
+	fDecPlacesFacDyn			: LREAL;
+	fbMC_FieldbusMappingIN_HandlingKinematics:MC_FieldbusMappingIN_HandlingKinematics;
+
+	ModuleName					: STRING(50):='MC_FieldbusMappingIN_HandlingKin_Application';
+	Message						: STRING(128):='MC_FieldbusMappingIN_HandlingKin_Application';
+	nTaskID						: WORD;
+	nTaskPriority				: DINT;
+END_VAR
+(* @END_DECLARATION := '0' *)
+IF NOT Enable THEN
+	RETURN;
+END_IF
+
+IF  NOT AxisGroupHandlingKin.ConfigDataAvailable THEN
+	RETURN;
+END_IF
+
+FOR nCntKin:= 1 TO AxisGroupKin.NumberOfInstances DO
+	IF	(NOT AxisGroupControl.HMI.HMIControl) AND
+		(NOT AxisGroupHandlingKin.Inst[nCntKin].Config.DisableFieldbusMapping) AND
+		(AxisGroupKin_Internal.Inst[nCntKin].Config.PDStart > 0)	THEN
+
+		fDecPlacesFacPos	:= EXPT(10,AxisGroupHandlingKin.Inst[nCntKin].Config.FbusDecimalPlacesPos);
+		fDecPlacesFacDyn	:= EXPT(10,AxisGroupHandlingKin.Inst[nCntKin].Config.FbusDecimalPlacesDyn);
+
+		nPIDataStart		:= AxisGroupKin_Internal.Inst[nCntKin].Config.PDStart;
+		nPDIndex 			:= nPIDataStart;
+
+		CASE AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile OF
+(*================================================================================================================================*)
+			HANDLING_KIN_032PD_STANDARD_PROFILE_05_SEGMENTS,
+			HANDLING_KIN_060PD_STANDARD_PROFILE_10_SEGMENTS,
+			HANDLING_KIN_088PD_STANDARD_PROFILE_15_SEGMENTS,
+			HANDLING_KIN_116PD_STANDARD_PROFILE_20_SEGMENTS:
+	(*================================================================================================================================*)
+	
+			(*
+			At first the telegram numbers are read from the fieldbus data (depending on the configured process data profile).
+			Those telegram numbers are compared to each other to make sure that the process data blocks are read consistently. -> bPdConsistent flag is generated.
+			All the other data from the fieldbus is only taken over if the blocks are consistent.
+			If the data is not consistent for more than 100ms, an error is generated!
+				*)
+	
+			bPdConsistent := TRUE; (* Initialize process data as consistent *)
+	
+			(*---nTelegramNo 1. Block: LowByte: Telegram ID (PD3) ----------*)
+			yTempWORD:= Fieldbus.IN[nPDIndex	+	2];
+			AxisGroupHandlingKin.Inst[nCntKin].In.TelegramNo		:= WORD_TO_UINT(yTempWORD AND 16#00FF);
+			(* When process data profile 2 (10 Segments, 60PD), 3 (15 Segments, 88PD) or 4 (20 Segments, 116PD) is configured, the second telegram number is evaluated *)
+			IF 	(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_060PD_STANDARD_PROFILE_10_SEGMENTS) OR
+				(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_088PD_STANDARD_PROFILE_15_SEGMENTS) OR
+				(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_116PD_STANDARD_PROFILE_20_SEGMENTS)
+	
+			THEN
+				(* nPDIndex stands on the first word of the first 32 PD block -> +32 to get to the telegram number in second block*)
+				yTempWORD:= Fieldbus.IN[nPDIndex	+	32]; (*1. word of 2. block*)
+				AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.TelegramNo_060PD_STANDARD_PROFILE_10_SEGMENTS:= WORD_TO_UINT(yTempWORD AND 16#00FF);
+				bPdConsistent := bPdConsistent AND
+					(AxisGroupHandlingKin.Inst[nCntKin].In.TelegramNo =	AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional. TelegramNo_060PD_STANDARD_PROFILE_10_SEGMENTS);
+			END_IF
+	
+			(* When process data profile 3 (15 Segments, 88PD) or 4 (20 Segments, 116PD) is configured, the third telegram number is evaluated *)
+			IF 	(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_088PD_STANDARD_PROFILE_15_SEGMENTS) OR
+				(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_116PD_STANDARD_PROFILE_20_SEGMENTS)
+			THEN
+				(* nPDIndex stands on the first word of the first 32 PD block -> +32 +28 to get to the telegram number in third block*)
+				yTempWORD:= Fieldbus.IN[nPDIndex	+	32+28];(*1. word of 3. block*)
+				AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.TelegramNo_088PD_STANDARD_PROFILE_15_SEGMENTS:= WORD_TO_UINT(yTempWORD AND 16#00FF);
+				bPdConsistent := bPdConsistent AND
+					(AxisGroupHandlingKin.Inst[nCntKin].In.TelegramNo =	AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.TelegramNo_088PD_STANDARD_PROFILE_15_SEGMENTS);
+			END_IF
+	
+			(* When process data profile 4 (20 Segments, 116PD) is configured, the fourth telegram number is evaluated *)
+			IF 	(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_116PD_STANDARD_PROFILE_20_SEGMENTS)
+			THEN
+	
+				(* nPDIndex stands on the first word of the first 32 PD block -> +32 +28 +28 to get to the telegram number in fourth block*)
+				yTempWORD:= Fieldbus.IN[nPDIndex	+	32+28+28];(*1. word of 4. block*)
+				AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.TelegramNo_116PD_STANDARD_PROFILE_20_SEGMENTS:= WORD_TO_UINT(yTempWORD AND 16#00FF);
+				bPdConsistent := bPdConsistent AND
+					(AxisGroupHandlingKin.Inst[nCntKin].In.TelegramNo =	AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.TelegramNo_116PD_STANDARD_PROFILE_20_SEGMENTS);
+			END_IF
+	
+	
+			(* Only execute mapping funtionblocks, if process data blocks are consistent. *)
+			IF bPdConsistent THEN
+				(* The first 6 PD words are fixed and are mapped in MC_FieldbusMappingIN_HandlingKinematics *)
+				fbMC_FieldbusMappingIN_HandlingKinematics(
+					nCntKin				:= nCntKin,
+					fDecPlacesFacPos	:= fDecPlacesFacPos,
+					fDecPlacesFacDyn	:= fDecPlacesFacDyn,
+					nPDIndex			:= nPDIndex
+					);
+	
+				STANDARD_PROFILE_32PD; (* call action to map the first 32 PD block (Segments 1-5)*)
+	
+				(* Handle next block, if process data profile 2 (10 Segments, 60PD), 3 (15 Segments, 88PD) or 4 (20 Segments, 116PD) is configured *)
+				IF 	(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_060PD_STANDARD_PROFILE_10_SEGMENTS) OR
+					(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_088PD_STANDARD_PROFILE_15_SEGMENTS) OR
+					(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_116PD_STANDARD_PROFILE_20_SEGMENTS)
+				THEN
+					nPositionOffset:= 5; (* PositionOffset is 5 in 2. block (mapping of segments 6-10)*)
+					STANDARD_PROFILE_PLUS_28PD(); (* call action to map the 28 PD block, which includes the next 5 path segments (Segments 6-10)*)
+				END_IF
+	
+				(* Handle next block, if process data profile 3 (15 Segments, 88PD) or 4 (20 Segments, 116PD) is configured *)
+				IF 	(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_088PD_STANDARD_PROFILE_15_SEGMENTS) OR
+					(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_116PD_STANDARD_PROFILE_20_SEGMENTS)
+				THEN
+					nPositionOffset:= 10; (* PositionOffset is 10 in 3. block (mapping of segments 11-15)*)
+					STANDARD_PROFILE_PLUS_28PD(); (* call action to map the 28 PD block, which includes the next 5 path segments (Segments 11-15)*)
+				END_IF
+	
+				(* Handle next block, if process data profile 4 (20 Segments, 116PD) is configured *)
+				IF 	(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_116PD_STANDARD_PROFILE_20_SEGMENTS)
+				THEN
+					nPositionOffset:= 15; (* PositionOffset is 15 in 4. block (mapping of segments 16-20)*)
+					STANDARD_PROFILE_PLUS_28PD();(* call action to map the 28 PD block, which includes the next 5 path segments (Segments 16-20)*)
+				END_IF
+			END_IF
+	
+			(* Generate an error, when the telegram numbers are not equal for more than 100 ms. *)
+			TONbPdNotConsistent(IN:= NOT bPdConsistent, PT:=t#100ms);
+			IF TONbPdNotConsistent.Q THEN
+				Message:='The telegram numbers did not match for more than 100 ms. Therefore the consistency of the PD blocks could not be ensured.';
+				(* 	Set the HandlingKinematics Error output variable and  generate an error message.
+					MC_Enter_Message_Buffer_HandlingKin internally uses the more general function MC_MsgHandler_Enter.
+					MC_MsgHandler_Enter allows to generate Notices, Warnings and Errors and is also foreseen to be applied by the USER.
+					It is described in detail in the library manager -> 03_ApplicationModules/MPLCMessageHandler.lib	*)
+				MC_Enter_Message_Buffer_HandlingKin(
+					(* VAR_INPUT *)
+					ID					:= E_HANDLINGKIN_TELEGRAM_NUMBER_NOT_EQUAL,
+					Message				:= Message,
+					n1					:= 0,
+					n2					:= 0,
+					f1					:= 0,
+					f2					:= 0,
+					ArchOnlyAfterReset	:= TRUE,
+					Instance			:= nCntKin,
+					(* VAR_IN_OUT *)
+					ModuleError			:= Error, 	(* The variable 'Error' and the HandlingKinematics Error output variable
+														are set by this function *)
+					ModuleErrorID		:= ErrorID	(* Assigned by the VAR_INPUT 'ID' *));
+			END_IF
+	
+	
+	(*================================================================================================================================*)
+			HANDLING_KIN_USER_SPECIFIC_PROFILE:
+	(*================================================================================================================================*)
+			USER_SPECIFIC_PROFILE(); (* Call a fieldbus mapping action that is programmed by the User *)
+	
+	(*================================================================================================================================*)
+	(*  NO_VALID_PROFILE SELECTED  *)
+	(*================================================================================================================================*)
+			ELSE
+				yTempWORD := AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile;
+				Message:=CONCAT('Process data profile: ',WORD_TO_STRING(yTempWORD));
+				Message:=CONCAT(Message,' not implemented' );
+				(* 	Set the HandlingKinematics Error output variable and  generate an error message.
+					MC_Enter_Message_Buffer_HandlingKin internally uses the more general function MC_MsgHandler_Enter.
+					MC_MsgHandler_Enter allows to generate Notices, Warnings and Errors and is also foreseen to be applied by the USER.
+					It is described in detail in the library manager -> 03_ApplicationModules/MPLCMessageHandler.lib	*)
+				MC_Enter_Message_Buffer_HandlingKin(
+					(* VAR_INPUT *)
+					ID					:= E_APPMOD_GENERAL_INVALID_CONFIGURATION,
+					Message				:= Message,
+					n1					:= 0,
+					n2					:= 0,
+					f1					:= 0,
+					f2					:= 0,
+					ArchOnlyAfterReset	:= TRUE,
+					Instance			:= nCntKin,
+					(* VAR_IN_OUT *)
+					ModuleError			:= Error, 	(* The variable 'Error' and the HandlingKinematics Error output variable
+														are set by this function *)
+					ModuleErrorID		:= ErrorID	(* Assigned by the VAR_INPUT 'ID' *));
+		END_CASE
+
+	(* Generate error if fieldbus mapping is enabled but the start index is zero. *)
+	ELSIF	(NOT AxisGroupHandlingKin.Inst[nCntKin].Config.DisableFieldbusMapping) AND
+			(AxisGroupKin_Internal.Inst[nCntKin].Config.PDStart = 0) THEN
+
+			MC_Enter_Message_Buffer_HandlingKin(
+								(* VAR_INPUT *)
+								ID					:= E_HANDLINGKIN_PDSTART_ZERO,
+								Message			:= 'Start index of the fieldbus mapping is zero. Set a value > 0 if fieldbus mapping should be used.',
+								n1					:= 0,
+								n2					:= 0,
+								f1					:= 0,
+								f2					:= 0,
+								ArchOnlyAfterReset	:= TRUE,
+								Instance			:= nCntKin,
+								(* VAR_IN_OUT *)
+								ModuleError			:= Error, 	(* The variable 'Error' and the HandlingKinematics Error output variable
+																	are set by this function *)
+								ModuleErrorID		:= ErrorID	(* Assigned by the VAR_INPUT 'ID' *));
+
+	END_IF
+
+END_FOR
+
+
+
+
+
+
+
+
+
+
+
+
+END_PROGRAM
+ACTION	STANDARD_PROFILE_32PD:
+(*	ATTENTION:	The HandlingKinematics monitor accesses the IEC variables
+				AxisGroupHandlingKin and AxisGroupHandlingKinProfile as follows. *)
+
+
+
+(*--------------------------------------------------------------------------*)
+(*--- Program Control information (PD4 High byte) --------------------------*)
+(*--------------------------------------------------------------------------*)
+
+(*	Here, the process data index nPDIndex is assigned to the 7th process data word,
+	thus (nPDIndex-3) accesses the 4th process data word. *)
+
+yTempWORD:= Fieldbus.IN[nPDIndex-3];
+(* Bits 0..2 are assigned in the library, NOT here:
+	AxisGroupHandlingKin.Inst[nCntKin].In.PrgControl.Init	:= yTempWORD.0;
+	AxisGroupHandlingKin.Inst[nCntKin].In.PrgControl.Start	:= yTempWORD.1;
+	AxisGroupHandlingKin.Inst[nCntKin].In.PrgControl.Stop	:= yTempWORD.2;*)
+(* Reserviert																							:= yTempWORD.3;*)
+AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.HandshakeFlagForSpecialProgs	:= yTempWORD.4;
+AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.TouchProbeMotion			 	:= yTempWORD.5;
+AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.TouchProbeMeasure			:= yTempWORD.6;
+(* Reserviert																							:= yTempWORD.7;*)
+AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait1						:= yTempWORD.8;
+AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait2						:= yTempWORD.9;
+AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait3						:= yTempWORD.10;
+AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait4						:= yTempWORD.11;
+AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End1							:= yTempWORD.12;
+AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End2							:= yTempWORD.13;
+AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End3							:= yTempWORD.14;
+AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End4							:= yTempWORD.15;
+
+
+
+(*--------------------------------------------------------------------------*)
+(*--- Program Control informationen (PD6 High byte) ------------------------*)
+(*--------------------------------------------------------------------------*)
+
+(*	Here, the process data index nPDIndex is assigned to the 7th process data word,
+	thus (nPDIndex-1) accesses the 6th process data word. *)
+
+yTempWORD:= Fieldbus.IN[nPDIndex-1];
+AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.RemainingDistancePercentage 	:= WORD_TO_UINT(SHR(yTempWORD,8));
+
+
+
+(*--------------------------------------------------------------------------*)
+(*--- SegementParaRecords (PD7) --------------------------------------------*)
+(*--------------------------------------------------------------------------*)
+FOR nIndex := 1 TO 5 DO
+	yTempWord:= SHR(FieldBus.IN[nPDIndex], (nIndex-1)*3) AND 7;
+	AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.Segments[nIndex].SegmentParaRecNo	:= WORD_TO_UINT(yTempWord)+1;
+END_FOR
+
+
+
+nPDIndex:= nPDIndex + 1;
+
+(*--------------------------------------------------------------------------*)
+(*--- Segment1...Segment5 (PD8...PD32) -------------------------------------*)
+(*--------------------------------------------------------------------------*)
+FOR nIndex := 1 TO 5 DO
+	(*--- X-coordinate -------------------------------------------*)
+	AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.Segments[nIndex].Position[1]		:= INT_TO_LREAL(WORD_TO_INT(FieldBus.IN[nPDIndex])) / fDecPlacesFacPos;
+	nPDIndex:= nPDIndex + 1;
+
+	(*--- Y-coordinate -------------------------------------------*)
+	AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.Segments[nIndex].Position[2]		:= INT_TO_LREAL(WORD_TO_INT(FieldBus.IN[nPDIndex])) / fDecPlacesFacPos;
+	nPDIndex:= nPDIndex + 1;
+
+	(*--- Z-coordinate -------------------------------------------*)
+	AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.Segments[nIndex].Position[3]		:= INT_TO_LREAL(WORD_TO_INT(FieldBus.IN[nPDIndex])) / fDecPlacesFacPos;
+	nPDIndex:= nPDIndex + 1;
+
+	(*--- A-oriantation ------------------------------------------*)
+	AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.Segments[nIndex].Position[4]		:= INT_TO_LREAL(WORD_TO_INT(FieldBus.IN[nPDIndex])) / fDecPlacesFacPos;
+	nPDIndex:= nPDIndex + 1;
+
+	(*--- Blending Distance ------------------------------------------*)
+	AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.Segments[nIndex].BlendingDistance	:= INT_TO_LREAL(WORD_TO_INT(FieldBus.IN[nPDIndex])) / fDecPlacesFacPos;
+	nPDIndex:= nPDIndex + 1;
+END_FOR
+END_ACTION
+
+ACTION	STANDARD_PROFILE_PLUS_28PD:
+(*	ATTENTION:	The HandlingKinematics monitor accesses the IEC variables
+				AxisGroupHandlingKin and AxisGroupHandlingKinProfile as follows. *)
+
+
+CASE nPositionOffset OF
+
+
+	5:
+		(*--------------------------------------------------------------------------*)
+		(*--- Optional Telegram No (PD33, + 0*28) ---------------------------------*)
+		(*--------------------------------------------------------------------------*)
+		yTempWORD:= Fieldbus.IN[nPDIndex];
+
+		(* 	AxisGroupHandlingKinApp.Inst[nCntKin].Buspos_Plus_24PD.In.TelegramNo_060PD_BUSPOS_PROFILE_10_SEGMENTS
+			:= WORD_TO_UINT(yTempWORD AND 16#00FF);
+			-> is assigned in the HIGHER-LEVEL block, in order to avoid a call if the telegram numbers do not fit *)
+
+		nPDIndex:= nPDIndex + 1;
+		(*--------------------------------------------------------------------------*)
+		(*--- ProgramControl (PD34 , + 0*28) ---------------------------------------*)
+		(*--------------------------------------------------------------------------*)
+
+		(* Program control informationen explicitly for each block of 28 process data words *)
+		yTempWORD:= Fieldbus.IN[nPDIndex];
+
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait5	:= yTempWORD.6;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait6	:= yTempWORD.7;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait7	:= yTempWORD.8;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait8	:= yTempWORD.9;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait9	:= yTempWORD.10;
+
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End5		:= yTempWORD.11;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End6		:= yTempWORD.12;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End7		:= yTempWORD.13;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End8		:= yTempWORD.14;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End9		:= yTempWORD.15;
+		nPDIndex:= nPDIndex + 1;
+
+
+	10:
+		(*--------------------------------------------------------------------------*)
+		(*--- Optional Telegramm No (PD35, + 1*28) ---------------------------------*)
+		(*--------------------------------------------------------------------------*)
+		yTempWORD:= Fieldbus.IN[nPDIndex];
+
+
+		(* 	AxisGroupHandlingKinProfile.Inst[nCntKin].Buspos_Plus_24PD.In.TelegramNo_088PD_BUSPOS_PROFILE_15_SEGMENTS
+			:= WORD_TO_UINT(yTempWORD AND 16#00FF);
+			-> is assigned in the HIGHER-LEVEL block, in order to avoid a call if the telegram numbers do not fit *)
+
+		nPDIndex:= nPDIndex + 1;
+		(*--------------------------------------------------------------------------*)
+		(*--- ProgramControl (PD34 , + 1*28) ---------------------------------*)
+		(*--------------------------------------------------------------------------*)
+
+		(* Program control informationen explicitly for each block of 28 process data words *)
+		yTempWORD:= Fieldbus.IN[nPDIndex];
+
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait10	:= yTempWORD.6;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait11	:= yTempWORD.7;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait12	:= yTempWORD.8;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait13	:= yTempWORD.9;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait14	:= yTempWORD.10;
+
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End10	:= yTempWORD.11;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End11	:= yTempWORD.12;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End12	:= yTempWORD.13;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End13	:= yTempWORD.14;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End14	:= yTempWORD.15;
+		nPDIndex:= nPDIndex + 1;
+
+
+	15:
+		(*--------------------------------------------------------------------------*)
+		(*--- Optional Telegramm No (PD35, + 2*28) --------------------------------*)
+		(*--------------------------------------------------------------------------*)
+		yTempWORD:= Fieldbus.IN[nPDIndex];
+
+		(* 	AxisGroupHandlingKinProfile.Inst[nCntKin].Buspos_Plus_24PD.In.TelegramNo_116PD_BUSPOS_PROFILE_20_SEGMENTS
+			:= WORD_TO_UINT(yTempWORD AND 16#00FF);
+			-> is assigned in the HIGHER-LEVEL block, in order to avoid a call if the telegram numbers do not fit *)
+
+		nPDIndex:= nPDIndex + 1;
+		(*--------------------------------------------------------------------------*)
+		(*--- ProgramControl (PD34 , + 2*28) ---------------------------------------*)
+		(*--------------------------------------------------------------------------*)
+
+		(* Program control informationen explicitly for each block of 28 process data words *)
+		yTempWORD:= Fieldbus.IN[nPDIndex];
+
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait15	:= yTempWORD.6;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait16	:= yTempWORD.7;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait17	:= yTempWORD.8;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait18	:= yTempWORD.9;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.Wait19	:= yTempWORD.10;
+
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End15	:= yTempWORD.11;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End16	:= yTempWORD.12;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End17	:= yTempWORD.13;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End18	:= yTempWORD.14;
+		AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.PrgControlAdditional.End19	:= yTempWORD.15;
+		nPDIndex:= nPDIndex + 1;
+
+END_CASE
+
+
+
+(*--------------------------------------------------------------------------*)
+(*--- SegementParaRecords (PD35, + n*28) ----------------------------------*)
+(*--------------------------------------------------------------------------*)
+FOR nIndex := 1 TO 5 DO
+	yTempWord:= SHR(FieldBus.IN[nPDIndex], (nIndex-1)*3) AND 7;
+	AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.Segments[nIndex+nPositionOffset].SegmentParaRecNo:= WORD_TO_UINT(yTempWord)+1;
+END_FOR
+nPDIndex:= nPDIndex + 1;
+
+
+
+(*--------------------------------------------------------------------------*)
+(*--- Segment1...Segment5 (PD8...PD32) -------------------------------------*)
+(*--------------------------------------------------------------------------*)
+FOR nIndex := 1 TO 5 DO
+	(*--- X-coordinate -------------------------------------------*)
+	AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.Segments[nIndex+nPositionOffset].Position[1]			:= INT_TO_LREAL(WORD_TO_INT(FieldBus.IN[nPDIndex])) / fDecPlacesFacPos;
+	nPDIndex:= nPDIndex + 1;
+
+	(*--- Y-coordinate -------------------------------------------*)
+	AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.Segments[nIndex+nPositionOffset].Position[2]			:= INT_TO_LREAL(WORD_TO_INT(FieldBus.IN[nPDIndex])) / fDecPlacesFacPos;
+	nPDIndex:= nPDIndex + 1;
+
+	(*--- Z-coordinate -------------------------------------------*)
+	AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.Segments[nIndex+nPositionOffset].Position[3]			:= INT_TO_LREAL(WORD_TO_INT(FieldBus.IN[nPDIndex])) / fDecPlacesFacPos;
+	nPDIndex:= nPDIndex + 1;
+
+	(*--- A-oriantation ------------------------------------------*)
+	AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.Segments[nIndex+nPositionOffset].Position[4]			:= INT_TO_LREAL(WORD_TO_INT(FieldBus.IN[nPDIndex])) / fDecPlacesFacPos;
+	nPDIndex:= nPDIndex + 1;
+
+	(*--- Blending Distance ------------------------------------------*)
+	AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.In.Segments[nIndex+nPositionOffset].BlendingDistance		:= INT_TO_LREAL(WORD_TO_INT(FieldBus.IN[nPDIndex])) / fDecPlacesFacPos;
+	nPDIndex:= nPDIndex + 1;
+END_FOR
+END_ACTION
+
+ACTION	USER_SPECIFIC_PROFILE:
+;
+END_ACTION
+
+
+
+
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin\/Fieldbus\/OUT' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(*##############################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	Name:			MC_FieldbusMappingIN_HandlingKinematics_Application
+	Job:			Mapping the HandlingKin interface to the fieldbus values
+					->	Process data could be adapted to special requirements,
+						e. g.	- higher precision for coordinates (e. g. 2 words)
+								- further coordinates (B/C-orientation, auxiliary axis 7/8)
+								- further control signals and output process data (e. g. inverter current)
+								- less points, instead point management in MOVI-PLC
+								- ...
+	Activation:		see PRG PLC_Start_TechModule_AxisGroupControl_HandlingKin
+
+################################################################################################################*)
+PROGRAM MC_FieldbusMappingOUT_HandlingKin_StandardProf
+
+VAR_INPUT
+	Enable	: BOOL;
+END_VAR
+
+VAR_OUTPUT
+	Error	: BOOL;
+	ErrorID	: DWORD;
+END_VAR
+
+VAR
+	yTempDWORD			: DWORD;
+	yTempWORD			: WORD;
+	yTempBYTE			: BYTE;
+	nCntKin				: UINT;
+	CntSeg				: UINT;
+	CntDim				: UINT;
+
+	nPIDataStart		: UINT;
+	KinSelect			: UINT:=1;
+	Index				: UINT:=1;
+	nPDIndex			: UINT;
+	nPositionOffset		: UINT;
+
+	ModuleName			: STRING(50):='MC_FieldbusMappingOUT_HandlingKin_Application';
+	Message				: STRING(128):='MC_FieldbusMappingOUT_HandlingKin_Application';
+	nTaskID				: WORD;
+	nTaskPriority		: DINT;
+
+	fDecPlacesFacPos	: LREAL;
+	fDecPlacesFacDyn	: LREAL;
+
+	nIndex				: UINT;
+	fbMC_FieldbusMappingOUT_HandlingKinematics: MC_FieldbusMappingOUT_HandlingKinematics;
+
+END_VAR
+(* @END_DECLARATION := '0' *)
+IF NOT Enable THEN
+	RETURN;
+END_IF
+
+IF  NOT AxisGroupHandlingKin.ConfigDataAvailable THEN
+	RETURN;
+END_IF
+
+IF  AxisGroupKin.ConfigDataAvailable THEN
+
+	FOR nCntKin:= 1 TO AxisGroupKin.NumberOfInstances DO
+
+		IF (AxisGroupKin_Internal.Inst[nCntKin].Config.PDStart > 0) THEN
+
+			nPIDataStart	:= AxisGroupKin_Internal.Inst[nCntKin].Config.PDStart;
+			nPDIndex := nPIDataStart;
+	
+			fDecPlacesFacPos	:= EXPT(10,AxisGroupHandlingKin.Inst[nCntKin].Config.FbusDecimalPlacesPos);
+			fDecPlacesFacDyn	:= EXPT(10,AxisGroupHandlingKin.Inst[nCntKin].Config.FbusDecimalPlacesDyn);
+	
+			CASE AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile OF
+	
+				(*================================================================================================================================*)
+				HANDLING_KIN_032PD_STANDARD_PROFILE_05_SEGMENTS,
+				HANDLING_KIN_060PD_STANDARD_PROFILE_10_SEGMENTS,
+				HANDLING_KIN_088PD_STANDARD_PROFILE_15_SEGMENTS,
+				HANDLING_KIN_116PD_STANDARD_PROFILE_20_SEGMENTS:
+	
+					fbMC_FieldbusMappingOUT_HandlingKinematics(
+						nCntKin				:= nCntKin,
+						fDecPlacesFacPos	:= fDecPlacesFacPos,
+						fDecPlacesFacDyn	:= fDecPlacesFacDyn,
+						nPDIndex			:= nPDIndex
+						);
+	
+					STANDARD_PROFILE_32PD;
+					(*================================================================================================================================*)
+					IF 	(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_060PD_STANDARD_PROFILE_10_SEGMENTS) OR
+						(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_088PD_STANDARD_PROFILE_15_SEGMENTS) OR
+						(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_116PD_STANDARD_PROFILE_20_SEGMENTS)
+					THEN
+						nPositionOffset:= 5;
+						STANDARD_PROFILE_PLUS_28PD();
+					END_IF
+	
+					IF 	(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_088PD_STANDARD_PROFILE_15_SEGMENTS) OR
+						(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_116PD_STANDARD_PROFILE_20_SEGMENTS)
+					THEN
+						nPositionOffset:= 10;
+						STANDARD_PROFILE_PLUS_28PD();
+					END_IF
+	
+					IF 	(AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile = HANDLING_KIN_116PD_STANDARD_PROFILE_20_SEGMENTS)
+					THEN
+						nPositionOffset:= 15;
+						STANDARD_PROFILE_PLUS_28PD();
+					END_IF
+	
+				(*================================================================================================================================*)
+				HANDLING_KIN_USER_SPECIFIC_PROFILE:
+				(*================================================================================================================================*)
+				USER_SPECIFIC_PROFILE();
+				(*================================================================================================================================*)
+				(*  NO_VALID_PROFILE SELECTED  *)
+				(*================================================================================================================================*)
+			ELSE
+				yTempWORD	:= AxisGroupHandlingKin.Inst[nCntKin].Config.PDprofile;
+				Message		:= CONCAT('Process data profile: ', WORD_TO_STRING(yTempWORD));
+				Message		:= CONCAT(Message,' NOT implemented' );
+				(* 	Set the HandlingKinematics Error output variable and  generate an error message.
+					MC_Enter_Message_Buffer_HandlingKin internally uses the more general function MC_MsgHandler_Enter.
+					MC_MsgHandler_Enter allows to generate Notices, Warnings and Errors and is also foreseen to be applied by the USER.
+					It is described in detail in the library manager -> 03_ApplicationModules/MPLCMessageHandler.lib	*)
+				MC_Enter_Message_Buffer_HandlingKin(
+					(* VAR_INPUT *)
+					ID					:= E_APPMOD_GENERAL_INVALID_CONFIGURATION,
+					Message				:= Message,
+					n1					:= 0,
+					n2					:= 0,
+					f1					:= 0,
+					f2					:= 0,
+					ArchOnlyAfterReset	:= TRUE,
+					Instance			:= nCntKin,
+					(* VAR_IN_OUT *)
+					ModuleError			:= Error, 	(* The variable 'Error' and the HandlingKinematics Error output variable
+														are set by this function *)
+					ModuleErrorID		:= ErrorID	(* Assigned by the VAR_INPUT 'ID' *));
+			END_CASE
+
+		END_IF (* IF (AxisGroupKin_Internal.Inst[nCntKin].Config.PDStart > 0) THEN *)
+
+	END_FOR
+END_IF
+END_PROGRAM
+ACTION	STANDARD_PROFILE_32PD:
+(*	ATTENTION:	The HandlingKinematics monitor accesses the IEC variables
+				AxisGroupHandlingKin and AxisGroupHandlingKinProfile as follows. *)
+
+
+
+(*--------------------------------------------------------------------------*)
+(*--- Program Status informationen (PD4 High byte) -------------------------*)
+(*--------------------------------------------------------------------------*)
+
+(*	Here, the process data index nPDIndex is assigned to the 7th process data word,
+	thus (nPDIndex-3) accesses the 4th process data word. *)
+
+Fieldbus.Out[nPDIndex-3].5	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.TouchProbeMotionActive;
+Fieldbus.Out[nPDIndex-3].6	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.TouchProbeMotionDetected;
+Fieldbus.Out[nPDIndex-3].7	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.TouchProbeMeasureActive;
+
+Fieldbus.Out[nPDIndex-3].8	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive1;
+Fieldbus.Out[nPDIndex-3].9	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive2;
+Fieldbus.Out[nPDIndex-3].10	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive3;
+Fieldbus.Out[nPDIndex-3].11	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive4;
+Fieldbus.Out[nPDIndex-3].12	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive1;
+Fieldbus.Out[nPDIndex-3].13	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive2;
+Fieldbus.Out[nPDIndex-3].14	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive3;
+Fieldbus.Out[nPDIndex-3].15	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive4;
+
+
+
+(*--------------------------------------------------------------------------*)
+(*--- Act Pos KCS (PD7..11) ------------------------------------------------*)
+(*--------------------------------------------------------------------------*)
+FOR nIndex := 1 TO 4 DO
+	IF AxisGroupHandlingKin.Inst[nCntKin].In.Control.DisplayOfTouchProbeMeasure THEN
+		(* display Pmeasured *)
+		FieldBus.OUT[nPDIndex]:= LREAL_TO_WORD(SRL.Inst[nCntKin].Interface.Out.TouchProbe.Pmeasured[nIndex] * fDecPlacesFacPos);
+	ELSE
+		(* display PositionKCS *)
+		FieldBus.OUT[nPDIndex]:= LREAL_TO_WORD(AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PositionKCS[nIndex] * fDecPlacesFacPos);
+	END_IF
+	nPDIndex:= nPDIndex+1;
+END_FOR
+(* Constellation *)
+FieldBus.OUT[nPDIndex]:= UINT_TO_WORD(AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.Constellation);
+(* Reserved *)
+nPDIndex := nPDIndex+1;
+
+
+
+(*--------------------------------------------------------------------------*)
+(*--- Act Pos ACS (PD12..15) -----------------------------------------------*)
+(*--------------------------------------------------------------------------*)
+FOR nIndex := 1 TO 4 DO
+	FieldBus.OUT[nPDIndex]:= LREAL_TO_WORD(AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PositionACS[nIndex] * fDecPlacesFacPos);
+	nPDIndex:= nPDIndex+1;
+END_FOR
+
+
+
+(*--------------------------------------------------------------------------*)
+(*--- Motor speed (PD16..19) -----------------------------------------------*)
+(*--------------------------------------------------------------------------*)
+IF AxisGroupHandlingKin.Inst[nCntKin].In.Control.DisplayOfActMotorSpeed THEN
+	(* display actual motor speed *)
+	FOR nIndex := 1 TO 4 DO
+		FieldBus.OUT[nPDIndex]:= LREAL_TO_WORD(AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.MotorSpeed[nIndex]);
+		nPDIndex:= nPDIndex+1;
+	END_FOR
+ELSE
+	(* display max. reached motor speed *)
+	FOR nIndex := 1 TO 4 DO
+		FieldBus.OUT[nPDIndex]:= LREAL_TO_WORD(AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PastAbsoluteReachedMotorSpeed[nIndex]);
+		nPDIndex:= nPDIndex+1;
+	END_FOR
+END_IF
+
+
+
+(*--------------------------------------------------------------------------*)
+(*--- Status Axes (PD20..25) -----------------------------------------------*)
+(*--------------------------------------------------------------------------*)
+FOR nIndex := 1 TO 6 DO
+	yTempWORD := 0;
+	(*Low Byte*)
+	yTempWORD.0 := AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.StatusAxis[nIndex].MotorTurning;
+	yTempWORD.1 := AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.StatusAxis[nIndex].InverterReady;
+	yTempWORD.2 := AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.StatusAxis[nIndex].DriveReferenced;
+	yTempWORD.3 := AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.StatusAxis[nIndex].PowerAmplifierEnabled;
+	yTempWORD.4 := AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.StatusAxis[nIndex].BrakeReleased;
+	yTempWORD.5 := AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.StatusAxis[nIndex].InverterConnected;
+	yTempWORD.6 := AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.StatusAxis[nIndex].InverterError;
+	(*High Byte*)
+	yTempWORD:= yTempWORD OR SHL(UINT_TO_WORD(AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.StatusAxis[nIndex].InverterStatus),8);
+
+	FieldBus.OUT[nPDIndex]:= yTempWORD;
+	nPDIndex:= nPDIndex+1;
+END_FOR
+
+
+
+(*--------------------------------------------------------------------------*)
+(*--- Kinematics (PD26...32) -----------------------------------------------*)
+(*--------------------------------------------------------------------------*)
+
+(* Kinematics Output Flags 		PD26*)
+yTempWORD:= 0;
+yTempWORD.0:= AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.Kinematics.ActualMotionCommandCompleted;
+yTempWORD.1:= AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.Kinematics.CpPathEndReached;
+yTempWORD.2:= AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.Kinematics.BackToPathActive;
+yTempWORD.3:= AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.Kinematics.CpMotionSlowedDown;
+yTempWORD.4:= AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.Kinematics.CartesianPositionValid;
+FieldBus.OUT[nPDIndex]:= yTempWORD;
+nPDIndex := nPDIndex+1;
+
+(* Kinematics Mode				PD27*)
+FieldBus.OUT[nPDIndex]		:=UINT_TO_WORD(AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.Kinematics.KinMode);
+nPDIndex := nPDIndex+1;
+
+(* Translation Velocity			PD28*)
+FieldBus.OUT[nPDIndex]		:=LREAL_TO_WORD(AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.Kinematics.TranslationVel * fDecPlacesFacDyn);
+nPDIndex := nPDIndex+1;
+
+(* Reserved						PD29*)
+nPDIndex := nPDIndex+1;
+
+(* Reserved						PD30*)
+nPDIndex := nPDIndex+1;
+
+(* Cp path Target Distance		PD31*)
+FieldBus.OUT[nPDIndex]		:=LREAL_TO_WORD(AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.Kinematics.PathTargetDistance * fDecPlacesFacPos);
+nPDIndex := nPDIndex+1;
+
+(* Cp Remaining Segments/ Actual Segment ID		PD32*)
+yTempWORD := 0;
+yTempWORD:= UINT_TO_WORD(AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.Kinematics.RemainingSegments);
+yTempWORD:= yTempWORD OR SHL(UINT_TO_WORD(AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.ActualSegmentID),8);
+
+FieldBus.OUT[nPDIndex]		:=yTempWORD;
+nPDIndex := nPDIndex+1;
+END_ACTION
+
+ACTION	STANDARD_PROFILE_PLUS_28PD:
+(*	ATTENTION:	The HandlingKinematics monitor accesses the IEC variables
+				AxisGroupHandlingKin and AxisGroupHandlingKinProfile as follows. *)
+
+
+
+CASE nPositionOffset OF
+
+
+	5:
+		(*--------------------------------------------------------------------------*)
+		(*--- Optional Telegram No (PD33, + 0*28) ----------------------------------*)
+		(*--------------------------------------------------------------------------*)
+		yTempWORD := AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.TelegramNo_060PD_STANDARD_PROFILE_10_SEGMENTS;
+		Fieldbus.Out[nPDIndex]:=UINT_TO_BYTE(yTempWORD);
+		nPDIndex:= nPDIndex + 1;
+
+		(*--------------------------------------------------------------------------*)
+		(*--- ProgramControl (PD34, + 0*28) ----------------------------------------*)
+		(*--------------------------------------------------------------------------*)
+
+		(* Program control informationen explicitly for each block of 28 process data words *)
+		Fieldbus.Out[nPDIndex].6	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive5;
+		Fieldbus.Out[nPDIndex].7	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive6;
+		Fieldbus.Out[nPDIndex].8	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive7;
+		Fieldbus.Out[nPDIndex].9	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive8;
+		Fieldbus.Out[nPDIndex].10	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive9;
+
+		Fieldbus.Out[nPDIndex].11	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive5;
+		Fieldbus.Out[nPDIndex].12	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive6;
+		Fieldbus.Out[nPDIndex].13	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive7;
+		Fieldbus.Out[nPDIndex].14	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive8;
+		Fieldbus.Out[nPDIndex].15	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive9;
+		nPDIndex:= nPDIndex + 1;
+
+
+	10:
+		(*--------------------------------------------------------------------------*)
+		(*--- Optional Telegram No (PD33, + 1*28) ---------------------------------*)
+		(*--------------------------------------------------------------------------*)
+		yTempWORD := AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.TelegramNo_088PD_STANDARD_PROFILE_15_SEGMENTS;
+		Fieldbus.Out[nPDIndex]:=UINT_TO_BYTE(yTempWORD);
+		nPDIndex:= nPDIndex + 1;
+
+		(*--------------------------------------------------------------------------*)
+		(*--- ProgramControl (PD34, + 1*28) ----------------------------------------*)
+		(*--------------------------------------------------------------------------*)
+
+		(* Program control informationen explicitly for each block of 28 process data words *)
+		Fieldbus.Out[nPDIndex].6	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive10;
+		Fieldbus.Out[nPDIndex].7	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive11;
+		Fieldbus.Out[nPDIndex].8	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive12;
+		Fieldbus.Out[nPDIndex].9	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive13;
+		Fieldbus.Out[nPDIndex].10	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive14;
+
+		Fieldbus.Out[nPDIndex].11	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive10;
+		Fieldbus.Out[nPDIndex].12	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive11;
+		Fieldbus.Out[nPDIndex].13	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive12;
+		Fieldbus.Out[nPDIndex].14	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive13;
+		Fieldbus.Out[nPDIndex].15	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive14;
+		nPDIndex:= nPDIndex + 1;
+
+
+	15:
+		(*--------------------------------------------------------------------------*)
+		(*--- Optional Telegram No (PD33, + 2*28) ---------------------------------*)
+		(*--------------------------------------------------------------------------*)
+		yTempWORD := AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.TelegramNo_116PD_STANDARD_PROFILE_20_SEGMENTS;
+		Fieldbus.Out[nPDIndex]:=UINT_TO_BYTE(yTempWORD);
+		nPDIndex:= nPDIndex + 1;
+
+		(*--------------------------------------------------------------------------*)
+		(*--- ProgramControl (PD34, + 2*28) ----------------------------------------*)
+		(*--------------------------------------------------------------------------*)
+
+		(* Program control informationen explicitly for each block of 28 process data words *)
+		Fieldbus.Out[nPDIndex].6	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive15;
+		Fieldbus.Out[nPDIndex].7	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive16;
+		Fieldbus.Out[nPDIndex].8	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive17;
+		Fieldbus.Out[nPDIndex].9	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive18;
+		Fieldbus.Out[nPDIndex].10	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.WaitActive19;
+
+		Fieldbus.Out[nPDIndex].11	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive15;
+		Fieldbus.Out[nPDIndex].12	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive16;
+		Fieldbus.Out[nPDIndex].13	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive17;
+		Fieldbus.Out[nPDIndex].14	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive18;
+		Fieldbus.Out[nPDIndex].15	:=AxisGroupHandlingKinProfile.Inst[nCntKin].Standard.Out.PrgStatusAdditional.EndActive19;
+		nPDIndex:= nPDIndex + 1;
+
+END_CASE
+
+
+(* switch to next process data block (61) *)
+nPDIndex:= nPDIndex + 26;
+END_ACTION
+
+ACTION	USER_SPECIFIC_PROFILE:
+;
+END_ACTION
+
+
+
+
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+PROGRAM PLC_Start_TechModule_AxisGroupControl_HandlingKin
+(*###########################################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	------------------------------------------------------------------------------------------------------
+
+	This program is executed once when the MOVI-PLC starts.
+
+##############################################################################################################################*)
+VAR
+	bInitTechmoduleHandlingKinematicsDone	: BOOL;	(* Initialization done *)
+	nCntKin 								: UINT;
+END_VAR
+(* @END_DECLARATION := '0' *)
+IF AxisGroupHandlingKin.ConfigDataAvailable AND NOT bInitTechmoduleHandlingKinematicsDone THEN
+
+	(*	Disable fieldbus mapping for HandlingKinematics *)
+	FOR nCntKin:= 1 TO AxisGroupKin.NumberOfInstances DO
+		AxisGroupHandlingKin.Inst[nCntKin].Config.DisableFieldbusMapping := TRUE;
+	END_FOR
+
+	(*	If you want to use the fieldbus mapping for HandlingKinematics,
+		you have to set DisableFieldbusMapping to FALSE.
+
+		Furthermore, it is necessary to set the start index in the fieldbus array as follows.
+		ATTENTION: 1, 33, 65 are only sample values.
+		You have to adapt them to the really applied process data interface.
+
+		AxisGroupKin_Internal.Inst[1].Config.PDStart:= 1;
+		AxisGroupKin_Internal.Inst[2].Config.PDStart:= 33;
+		AxisGroupKin_Internal.Inst[2].Config.PDStart:= 65;	*)
+
+	(* Initialization done *)
+	bInitTechmoduleHandlingKinematicsDone := TRUE;
+
+END_IF
+END_PROGRAM
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples\/Simu3D_Show User Positions' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(*##############################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	Name:			PRG_Example_UserCoordSystems
+	Job:			This example shows, how you can display user defined positions in the 3D Simulation. They are shown as coordinate systems. 
+
+					The struct 'Example_CoordSystems' contains the data for the visualization.
+					With the variables 'Example_CoordSystems.CS[1].WCS_XCS[1..6]' you can change the postition of the coordinate systems.
+					In the action 'Configuration' you can change the amount of coordinate systems ('Example_CoordSystems.Config.NumberOfCoordSystems') and the names/labels that are displayed in the 3D Simulation.
+
+					Call this Programm in the TaskLowPriority.	
+
+################################################################################################################*)
+PROGRAM PRG_UserCoordSystems_Example
+VAR
+
+	Example_CoordSystems						 : ST_Simu3D_CoordSystems;	(* Datastructure/Interface for the coordinate systems *)
+	fbFB_Simu3D_DataExchange_CoordSys 	 :  FB_Simu3D_DataExchange_CoordSys;	(* This FB manages the communication with the PC/simulation tool *)
+	bCoordSystemsConfigured	: BOOL:=FALSE;
+	iCoordSysCounter : INT;
+
+END_VAR
+(* @END_DECLARATION := '0' *)
+IF NOT bCoordSystemsConfigured THEN
+	Configuration();
+ELSE
+	Example_CoordSystems.EnableVisu := TRUE; (* Start the communication with the PC after the configuration is done *)
+
+	Example_CoordSystems.CS[1].WCS_XCS[1] := 50; (* example for changing the position (here only x coordinate) of the first coordinate system *)
+
+	fbFB_Simu3D_DataExchange_CoordSys(CoordSystems := Example_CoordSystems);
+END_IF
+
+END_PROGRAM
+ACTION	Configuration:
+IF AxisGroupKin.ConfigDataAvailable THEN
+
+	Example_CoordSystems.Config.Simu3D_Config.Content1_FileName := ''; (* Do not change. *)
+	Example_CoordSystems.Config.Simu3D_Config.Content1_Coding := 138; (* Do not change. *)
+	Example_CoordSystems.Config.Simu3D_Config.Content2_Coding := 84; (* Do not change. *)
+	Example_CoordSystems.Config.Simu3D_Config.Content2_FileName := 'UserCoordsystems.csb'; (* Do not change. *)
+	Example_CoordSystems.Config.Simu3D_Config.WriteDiagToMemoryCard := FALSE; (* Do not change. *)
+	Example_CoordSystems.Config.Simu3D_Config.KeepSceneAtLoading := TRUE; (* Do not change. *)
+
+	Example_CoordSystems.Config.strInstanceName := 'Example_UserCoordsystems'; (* Name of the group of coordinate systems which is displayed at bottom left of 3D simulation *)
+	Example_CoordSystems.Config.NumberOfCoordSystems := 1; (* Determines how many coordinate systems are display. Maximum amount of coordinate systems  is NUM_OF_USER_COORDSYSTEMS_PER_INSTANCE (= 20) *)
+
+	(* Use the IP-Address and RotUnit of the first Kinematics-Instance *)
+	Example_CoordSystems.Config.Simu3D_Config.IP_Address_PC := AxisGroupKin.Inst[1].Config.Simu3D.IP_Address_SimulationPC;
+	IF AxisGroupKin.Inst[1].Config.Cart.Use[4] = KIN_USE_DEGR THEN
+		Example_CoordSystems.Config.UseDegree := TRUE;
+	ELSE
+		Example_CoordSystems.Config.UseDegree := FALSE;
+	END_IF
+
+	FOR iCoordSysCounter := 1 TO Example_CoordSystems.Config.NumberOfCoordSystems DO
+		Example_CoordSystems.CS[iCoordSysCounter].Label := CONCAT('Example_P', INT_TO_STRING(iCoordSysCounter)); (* text displayed at each coordinate sytem *)
+	END_FOR
+
+	bCoordSystemsConfigured := TRUE;
+
+END_IF
+END_ACTION
+
+
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(*##############################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	Name:			FB_User_Kinematics_Examples
+	Job:			This FB is called in  PRG_TaskMain_Kinematics and calls all the User programs
+
+################################################################################################################*)
+
+FUNCTION_BLOCK FB_User_Kinematics_Examples
+VAR
+	fbMainCycle_Kinematics	: MainCycle_Kinematics;
+	F_TRIG: F_TRIG;
+
+END_VAR
+VAR_IN_OUT
+	AxisGroupKin_Inst : ST_AxisGroupKin_Instance;				(* AxisGroupControl Interface to application program *)
+END_VAR
+(* @END_DECLARATION := '0' *)
+_FBD_BODY
+_NETWORKS : 5
+_NETWORK
+
+_COMMENT
+'Don$'t run the example programs, if the kinematics instance is not enabled.'
+_END_COMMENT
+_RET
+_EXPRESSION
+_POSITIV
+_OPERAND
+_EXPRESSION
+_NEGATIV
+AxisGroupKin_Inst.Config.Enable
+_NETWORK
+
+_COMMENT
+'If the HMIControl is True the UserProgramm must not be executed, because otherwise the KinematicsMonitor has no control over the AxisGroupKin Interface'
+_END_COMMENT
+_ASSIGN
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin.HMI.HMIControl
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_NEGATIV
+_SET
+gKinExamples_Control[AxisGroupKin_Inst.Config.General.InstanceNumber].EnableExamples
+_NETWORK
+
+_COMMENT
+'At reset of EnableExamples, stop the motion.'
+_END_COMMENT
+_ASSIGN
+_FUNCTIONBLOCK
+F_TRIG
+_BOX_EXPR : 1
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[AxisGroupKin_Inst.Config.General.InstanceNumber].EnableExamples
+_EXPRESSION
+_POSITIV
+F_TRIG
+_OUTPUTS : 0
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 4
+_OUTPUT
+_POSITIV
+_SET
+AxisGroupKin_Inst.In.General.Kin.RapidStop
+_OUTPUT
+_NEGATIV
+_SET
+AxisGroupKin_Inst.In.General.Kin.FeedEnable
+_OUTPUT
+_NEGATIV
+_SET
+AxisGroupKin_Inst.In.General.Inverter.Enable_Stop[0]
+_OUTPUT
+_NEGATIV
+_SET
+AxisGroupKin_Inst.In.General.Inverter.Enable_RapidStop[0]
+_NETWORK
+
+_COMMENT
+'Don$'t execute any motion sequence before AxisGroupKin.ConfigDataAvailable = TRUE.'
+_END_COMMENT
+_RET
+_EXPRESSION
+_POSITIV
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_NEGATIV
+gKinExamples_Control[AxisGroupKin_Inst.Config.General.InstanceNumber].EnableExamples
+_OPERAND
+_EXPRESSION
+_NEGATIV
+AxisGroupKin.ConfigDataAvailable
+_EXPRESSION
+_POSITIV
+OR
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbMainCycle_Kinematics
+_BOX_EXPR : 1
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+MainCycle_Kinematics
+_OUTPUTS : 0
+
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(*##############################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	Name:			MainCycle_MDX
+	Job:			Calls all UserProgramms
+
+################################################################################################################*)
+FUNCTION_BLOCK MainCycle_Kinematics
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	fbOperationMode			: OperationMode_Kinematics;
+	InstanceNumber				: INT;
+	i : INT;
+END_VAR
+VAR_IN_OUT
+	AxisGroupKin_Inst : ST_AxisGroupKin_Instance;				(* AxisGroupControl Interface to application program *)
+END_VAR
+(* @END_DECLARATION := '0' *)
+
+INITIAL_STEP Init:
+InstanceNumber := AxisGroupKin_Inst.Config.General.InstanceNumber;
+
+FOR i := 1 TO 8 DO
+	AxisGroupKin_Inst.In.General.Inverter.Enable_RapidStop[i] := FALSE;
+	AxisGroupKin_Inst.In.General.Inverter.Enable_Stop[i] := FALSE;
+	AxisGroupKin_Inst.In.General.Inverter.Inhibit[i] := FALSE;
+END_FOR
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION Connected   FROM Init TO (S90_ControlFunction,S100_LogicFunction,S200_ErrorHandling):= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin.Inst[InstanceNumber].Out.General.Inverter.Connected[0]
+
+
+END_TRANSITION
+STEP S90_ControlFunction:
+
+AxisGroupKin_Inst.In.General.Inverter.Enable_RapidStop[0]	:= gKinExamples_Control[InstanceNumber].Inverter.Enable_RapidStop_AllAxis;
+AxisGroupKin_Inst.In.General.Inverter.Enable_Stop[0] 			:= gKinExamples_Control[InstanceNumber].Inverter.Enable_Stop_AllAxis;
+AxisGroupKin_Inst.In.General.Inverter.Inhibit[0]					:= gKinExamples_Control[InstanceNumber].Inverter.Inhibit_AllAxis;
+
+AxisGroupKin_Inst.In.General.Kin.FeedEnable					:= gKinExamples_Control[InstanceNumber].Kin.FeedEnable;
+AxisGroupKin_Inst.In.General.Kin.RapidStop					:= gKinExamples_Control[InstanceNumber].Kin.RapidStop;
+AxisGroupKin_Inst.In.General.Kin.OverridePercentage			:= gKinExamples_Control[InstanceNumber].Kin.OverridePercentage;
+
+AxisGroupKin_Inst.In.General.Reset 							:= gKinExamples_Control[InstanceNumber].ErrorReset;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+STEP S100_LogicFunction:
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+'In the FB Operation Mode the switch on sequense and running the Sequence Programms is implemented.'
+_END_COMMENT
+_ASSIGN
+_FUNCTIONBLOCK
+fbOperationMode
+_BOX_EXPR : 5
+_OPERAND
+_EXPRESSION
+_POSITIV
+gsSeqMode[InstanceNumber].Reset
+_OPERAND
+_EXPRESSION
+_POSITIV
+gsSeqMode[InstanceNumber].Init
+_OPERAND
+_EXPRESSION
+_POSITIV
+gsSeqMode[InstanceNumber].EnableLimit
+_OPERAND
+_EXPRESSION
+_POSITIV
+gsSeqMode[InstanceNumber].QuitError
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+OperationMode_Kinematics
+_OUTPUTS : 2
+_OUTPUT
+_POSITIV
+_NO_SET
+gsSeqMode[InstanceNumber].Error
+_OUTPUT
+_POSITIV
+_NO_SET
+gsSeqMode[InstanceNumber].ErrorStep
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+gsSeqMode[InstanceNumber].CurrentStep
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+STEP S200_ErrorHandling:
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION FROM (S90_ControlFunction,S100_LogicFunction,S200_ErrorHandling) TO Init:= 
+FALSE
+
+
+END_TRANSITION
+
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(*##############################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	Name:			OperationMode
+	Job:			Calls all kinematics example programs
+
+################################################################################################################*)
+FUNCTION_BLOCK OperationMode_Kinematics
+VAR_INPUT
+	SFCReset:						 BOOL;									(*This variable, of type BOOL, behaves similarly to SFCInit. Unlike the latter, however,
+																				further processing takes place after the initialization of the Init step.
+																				Thus for example the SFCReset flag could be re-set to FALSE in the Init step.*)
+
+	SFCInit:							 BOOL;									(*When this boolean variable has the value TRUE the sequential function chart is set back
+																				to the Init step. The other SFC flags are reset too (initialization).
+																				The Init step remains active, but is not executed, for as long as the variable has the value TRUE.
+																				It is only when SFCInit is again set to FALSE that the block can be processed normally.*)
+	SFCEnableLimit:					BOOL;									(*This variable is of the type BOOL. When it has the value TRUE, the timeouts of the
+																				steps will be registered in SFCError. Other timeouts will be ignored.*)
+	SFCQuitError: 						BOOL;									(*Provided that the Execution of the SFC diagram is stopped for as long as this boolean
+																				variable has the value TRUE whereby a possible timeout in the variable SFCError is reset. All
+																				previous times in the active steps are reset when the variable again assumes the value FALSE. It is a
+																				pre-condition that the flag SFCError has been defined also, which registers any timeout in the SFC.*)
+END_VAR
+VAR_OUTPUT
+	SFCCurrentStep:					 STRING;								(*This variable is of the type STRING.
+																				The name of the step is stored in this variable which is active, independently of the time monitoring.
+																				In the case of simultaneous sequences the step is stored in the branch on the outer right.*)
+	SFCError: 							BOOL;									(*This Boolean variable is TRUE when a timeout has occurred in a SFC diagram. If another
+																				timeout occurs in a program after the first one, it will not be registered unless the variable SFCError is
+																				reset first. It is a pre-condition that SFCError is defined, if you want to use the other time-controlling
+																				flags (SFCErrorStep, SFCErrorPOU, SFCQuitError, SFCErrorAnalyzation).*)
+	SFCErrorStep: 					STRING; 								(*This variable is of the type STRING. If SFCError registers a timeout, in this variable is
+																				stored the name of the step which has caused the timeout. It is a pre-condition that the flag SFCError
+																				has been defined also, which registers any timeout in the SFC. *)
+END_VAR
+VAR_IN_OUT
+	AxisGroupKin_Inst				: ST_AxisGroupKin_Instance;				(* AxisGroupControl Interface to application program *)
+END_VAR
+VAR
+	fbPRG_XYZ_PICKnPLACE_ST							: PRG01_XYZ_PICKnPLACE_ST;
+	fbPRG_XYZ_PICKnPLACE_SFC							: PRG02_XYZ_PICKnPLACE_SFC;
+	fbPRG_XYZ_TARG_LIN_CIRC_ST						: PRG03_XYZ_TARG_LIN_CIRC_ST;
+	fbPRG_XYZ_TARG_LIN_CIRC_SFC						: PRG04_XYZ_TARG_LIN_CIRC_SFC;
+	fbPRG_XYZ_FillQueue_LIN3D_with_Array_ST			: PRG05_XYZ_FillQueue_LIN3D_with_Array_ST;
+	fbPRG_XYZ_FillQueue_LIN3D_with_Array_SFC		: PRG06_XYZ_FillQueue_LIN3D_with_Array_SFC;
+	fbPRG_XYZ_USER_ST									: PRG07_XYZ_USER_ST;
+	fbPRG_XYZ_USER_SFC									: PRG08_XYZ_USER_SFC;
+	InstanceNumber: INT;
+END_VAR
+(* @END_DECLARATION := '0' *)
+
+INITIAL_STEP S000_Init:
+
+InstanceNumber							:= AxisGroupKin_Inst.Config.General.InstanceNumber;
+gsSeqMode[InstanceNumber].Reset	:= FALSE;
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION NOT referenced   FROM S000_Init TO S050_Homing:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst.Out.General.Inverter.Connected[0]
+_OPERAND
+_EXPRESSION
+_NEGATIV
+AxisGroupKin_Inst.Out.General.Inverter.Referenced[0]
+_EXPRESSION
+_POSITIV
+AND
+
+
+END_TRANSITION
+TRANSITION referenced   FROM S000_Init TO S051_Not_Homing:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst.Out.General.Inverter.Connected[0]
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst.Out.General.Inverter.Referenced[0]
+_EXPRESSION
+_POSITIV
+AND
+
+
+END_TRANSITION
+STEP S051_Not_Homing:
+_FBD_BODY
+_NETWORKS : 0
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION FROM S051_Not_Homing TO S100_Mode_Select:= 
+TRUE
+
+
+END_TRANSITION
+STEP S050_Homing:
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+'Action for Homing'
+_END_COMMENT
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+_FBD_BODY
+_NETWORKS : 2
+_NETWORK
+
+_COMMENT
+'Entry Action for Homing'
+_END_COMMENT
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_ASSIGN
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+AxisGroupKin_Inst.In.General.Inverter.Inhibit[0]
+
+END_ACTION
+
+EXIT_ACTION	
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_ASSIGN
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+AxisGroupKin_Inst.In.General.Inverter.Inhibit[0]
+
+END_ACTION
+
+TRANSITION Homing done   FROM S050_Homing TO S100_Mode_Select:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst.Out.General.Inverter.Connected[0]
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst.Out.General.Inverter.Referenced[0]
+_EXPRESSION
+_POSITIV
+AND
+
+
+END_TRANSITION
+STEP S100_Mode_Select:
+(* @TEXT_IMPLEMENTATION := 'ST' *)
+AxisGroupKin_Inst.In.General.Mode:=KIN_STOP;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION Automatic Mode   FROM S100_Mode_Select TO S100_Waiting_for_Start:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst.Out.General.Kin.Ready
+
+
+END_TRANSITION
+TRANSITION Jog Mode   FROM S100_Mode_Select TO S700_ManualMode:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERAND
+_EXPRESSION
+_NEGATIV
+FALSE
+
+
+END_TRANSITION
+STEP S700_ManualMode:
+(* @TEXT_IMPLEMENTATION := 'ST' *)
+;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION no Jog Mode   FROM S700_ManualMode TO S100_Mode_Select:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+
+
+END_TRANSITION
+STEP S100_Waiting_for_Start:
+(* @TEXT_IMPLEMENTATION := 'ST' *)
+;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION Start AND Enabled   FROM S100_Waiting_for_Start TO S200_AutomaticMode:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst.Out.General.Kin.Ready
+_EXPRESSION
+_POSITIV
+AND
+
+
+END_TRANSITION
+STEP S200_AutomaticMode:
+_FBD_BODY
+_NETWORKS : 0
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION PRG1_Pick_and_Place_ST   FROM S200_AutomaticMode TO S250_XYZ_PICKnPLACE_ST:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[InstanceNumber].ProgramNumber
+_OPERAND
+_EXPRESSION
+_POSITIV
+1
+_EXPRESSION
+_POSITIV
+EQ
+
+
+END_TRANSITION
+TRANSITION Pick_and_Place_SFC   FROM S200_AutomaticMode TO S300_XYZ_PICKnPLACE_SFC:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[InstanceNumber].ProgramNumber
+_OPERAND
+_EXPRESSION
+_POSITIV
+2
+_EXPRESSION
+_POSITIV
+EQ
+
+
+END_TRANSITION
+STEP S300_XYZ_PICKnPLACE_SFC:
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbPRG_XYZ_PICKnPLACE_SFC
+_BOX_EXPR : 7
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+PRG02_XYZ_PICKnPLACE_SFC
+_OUTPUTS : 5
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbPRG_XYZ_PICKnPLACE_SFC
+_BOX_EXPR : 7
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+PRG02_XYZ_PICKnPLACE_SFC
+_OUTPUTS : 5
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+
+END_ACTION
+
+TRANSITION new Mode or Done   FROM S300_XYZ_PICKnPLACE_SFC TO S000_Init:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[InstanceNumber].ProgramNumber
+_OPERAND
+_EXPRESSION
+_POSITIV
+2
+_EXPRESSION
+_POSITIV
+NE
+_OPERAND
+_EXPRESSION
+_POSITIV
+fbPRG_XYZ_PICKnPLACE_SFC.Done
+_EXPRESSION
+_POSITIV
+OR
+
+
+END_TRANSITION
+TRANSITION XYZ_TARG_LIN_CIRC_ST   FROM S200_AutomaticMode TO S350_XYZ_TARG_LIN_CIRC_ST:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[InstanceNumber].ProgramNumber
+_OPERAND
+_EXPRESSION
+_POSITIV
+3
+_EXPRESSION
+_POSITIV
+EQ
+
+
+END_TRANSITION
+STEP S350_XYZ_TARG_LIN_CIRC_ST:
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbPRG_XYZ_TARG_LIN_CIRC_ST
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+PRG03_XYZ_TARG_LIN_CIRC_ST
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbPRG_XYZ_TARG_LIN_CIRC_ST
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+PRG03_XYZ_TARG_LIN_CIRC_ST
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+
+END_ACTION
+
+TRANSITION new Mode or Done   FROM S350_XYZ_TARG_LIN_CIRC_ST TO S000_Init:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[InstanceNumber].ProgramNumber
+_OPERAND
+_EXPRESSION
+_POSITIV
+3
+_EXPRESSION
+_POSITIV
+NE
+_OPERAND
+_EXPRESSION
+_POSITIV
+fbPRG_XYZ_TARG_LIN_CIRC_ST.Done
+_EXPRESSION
+_POSITIV
+OR
+
+
+END_TRANSITION
+TRANSITION XYZ_TARG_LIN_CIRC_SFC   FROM S200_AutomaticMode TO S400_XYZ_TARG_LIN_CIRC_SFC:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[InstanceNumber].ProgramNumber
+_OPERAND
+_EXPRESSION
+_POSITIV
+4
+_EXPRESSION
+_POSITIV
+EQ
+
+
+END_TRANSITION
+STEP S400_XYZ_TARG_LIN_CIRC_SFC:
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbPRG_XYZ_TARG_LIN_CIRC_SFC
+_BOX_EXPR : 7
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+PRG04_XYZ_TARG_LIN_CIRC_SFC
+_OUTPUTS : 5
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbPRG_XYZ_TARG_LIN_CIRC_SFC
+_BOX_EXPR : 7
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+PRG04_XYZ_TARG_LIN_CIRC_SFC
+_OUTPUTS : 5
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+
+END_ACTION
+
+TRANSITION new Mode or Done   FROM S400_XYZ_TARG_LIN_CIRC_SFC TO S000_Init:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[InstanceNumber].ProgramNumber
+_OPERAND
+_EXPRESSION
+_POSITIV
+4
+_EXPRESSION
+_POSITIV
+NE
+_OPERAND
+_EXPRESSION
+_POSITIV
+fbPRG_XYZ_TARG_LIN_CIRC_SFC.Done
+_EXPRESSION
+_POSITIV
+OR
+
+
+END_TRANSITION
+TRANSITION XYZ_USER_ST   FROM S200_AutomaticMode TO S450_XYZ_USER_ST:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[InstanceNumber].ProgramNumber
+_OPERAND
+_EXPRESSION
+_POSITIV
+7
+_EXPRESSION
+_POSITIV
+EQ
+
+
+END_TRANSITION
+STEP S450_XYZ_USER_ST:
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbPRG_XYZ_USER_ST
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+PRG07_XYZ_USER_ST
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbPRG_XYZ_USER_ST
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+PRG07_XYZ_USER_ST
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+
+END_ACTION
+
+TRANSITION new Mode or Done   FROM S450_XYZ_USER_ST TO S000_Init:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[InstanceNumber].ProgramNumber
+_OPERAND
+_EXPRESSION
+_POSITIV
+7
+_EXPRESSION
+_POSITIV
+NE
+_OPERAND
+_EXPRESSION
+_POSITIV
+fbPRG_XYZ_USER_ST.Done
+_EXPRESSION
+_POSITIV
+OR
+
+
+END_TRANSITION
+TRANSITION XYZ_USER_SFC   FROM S200_AutomaticMode TO S500_XYZ_USER_SFC:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[InstanceNumber].ProgramNumber
+_OPERAND
+_EXPRESSION
+_POSITIV
+8
+_EXPRESSION
+_POSITIV
+EQ
+
+
+END_TRANSITION
+STEP S500_XYZ_USER_SFC:
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbPRG_XYZ_USER_SFC
+_BOX_EXPR : 7
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+PRG08_XYZ_USER_SFC
+_OUTPUTS : 5
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbPRG_XYZ_USER_SFC
+_BOX_EXPR : 7
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+PRG08_XYZ_USER_SFC
+_OUTPUTS : 5
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+
+END_ACTION
+
+TRANSITION new Mode or Done   FROM S500_XYZ_USER_SFC TO S000_Init:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[InstanceNumber].ProgramNumber
+_OPERAND
+_EXPRESSION
+_POSITIV
+8
+_EXPRESSION
+_POSITIV
+NE
+_OPERAND
+_EXPRESSION
+_POSITIV
+fbPRG_XYZ_USER_SFC.Done
+_EXPRESSION
+_POSITIV
+OR
+
+
+END_TRANSITION
+TRANSITION FillQueue_LIN3D_with_Array_ST   FROM S200_AutomaticMode TO S550_XYZ_FillQueue_LIN3D_with_Array_ST:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[InstanceNumber].ProgramNumber
+_OPERAND
+_EXPRESSION
+_POSITIV
+5
+_EXPRESSION
+_POSITIV
+EQ
+
+
+END_TRANSITION
+STEP S550_XYZ_FillQueue_LIN3D_with_Array_ST:
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbPRG_XYZ_FillQueue_LIN3D_with_Array_ST
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+PRG05_XYZ_FillQueue_LIN3D_with_Array_ST
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbPRG_XYZ_FillQueue_LIN3D_with_Array_ST
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+PRG05_XYZ_FillQueue_LIN3D_with_Array_ST
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+
+END_ACTION
+
+TRANSITION new Mode or Done   FROM S550_XYZ_FillQueue_LIN3D_with_Array_ST TO S000_Init:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[InstanceNumber].ProgramNumber
+_OPERAND
+_EXPRESSION
+_POSITIV
+5
+_EXPRESSION
+_POSITIV
+NE
+_OPERAND
+_EXPRESSION
+_POSITIV
+fbPRG_XYZ_FillQueue_LIN3D_with_Array_ST.Done
+_EXPRESSION
+_POSITIV
+OR
+
+
+END_TRANSITION
+TRANSITION FillQueue_LIN3D_with_Array_SFC   FROM S200_AutomaticMode TO S600_XYZ_FillQueue_LIN3D_with_Array_SFC:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[InstanceNumber].ProgramNumber
+_OPERAND
+_EXPRESSION
+_POSITIV
+6
+_EXPRESSION
+_POSITIV
+EQ
+
+
+END_TRANSITION
+STEP S600_XYZ_FillQueue_LIN3D_with_Array_SFC:
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbPRG_XYZ_FillQueue_LIN3D_with_Array_SFC
+_BOX_EXPR : 7
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+PRG06_XYZ_FillQueue_LIN3D_with_Array_SFC
+_OUTPUTS : 5
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbPRG_XYZ_FillQueue_LIN3D_with_Array_SFC
+_BOX_EXPR : 7
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+PRG06_XYZ_FillQueue_LIN3D_with_Array_SFC
+_OUTPUTS : 5
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+
+END_ACTION
+
+TRANSITION new Mode OR Done   FROM S600_XYZ_FillQueue_LIN3D_with_Array_SFC TO S000_Init:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[InstanceNumber].ProgramNumber
+_OPERAND
+_EXPRESSION
+_POSITIV
+6
+_EXPRESSION
+_POSITIV
+NE
+_OPERAND
+_EXPRESSION
+_POSITIV
+fbPRG_XYZ_FillQueue_LIN3D_with_Array_SFC.Done
+_EXPRESSION
+_POSITIV
+OR
+
+
+END_TRANSITION
+TRANSITION Jog Mode   FROM S200_AutomaticMode TO S100_Mode_Select:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERAND
+_EXPRESSION
+_NEGATIV
+FALSE
+
+
+END_TRANSITION
+STEP S250_XYZ_PICKnPLACE_ST:
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbPRG_XYZ_PICKnPLACE_ST
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+PRG01_XYZ_PICKnPLACE_ST
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbPRG_XYZ_PICKnPLACE_ST
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+FALSE
+_OPERAND
+_EXPRESSION
+_POSITIV
+AxisGroupKin_Inst
+_EXPRESSION
+_POSITIV
+PRG01_XYZ_PICKnPLACE_ST
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+
+END_ACTION
+
+TRANSITION new Mode or Done   FROM S250_XYZ_PICKnPLACE_ST TO S000_Init:= 
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_OPERATOR
+_BOX_EXPR : 2
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+gKinExamples_Control[InstanceNumber].ProgramNumber
+_OPERAND
+_EXPRESSION
+_POSITIV
+1
+_EXPRESSION
+_POSITIV
+NE
+_OPERAND
+_EXPRESSION
+_POSITIV
+fbPRG_XYZ_PICKnPLACE_ST.Done
+_EXPRESSION
+_POSITIV
+OR
+
+
+END_TRANSITION
+
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(*##############################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	Name:			PRG_XYZ_PICKnPLACE_ST
+	Job:			Example program		
+					Sequence: XYZ_PICKnPLACE_P2 -> P3 -> P4 -> P3 -> P2 -> P1
+					
+################################################################################################################*)
+FUNCTION_BLOCK  PRG01_XYZ_PICKnPLACE_ST
+VAR_INPUT
+	Enable : BOOL;
+END_VAR
+VAR_OUTPUT
+	Active : BOOL;
+	Done : BOOL;
+END_VAR
+VAR
+	nState : INT := 0;
+	fbRtrig : R_TRIG;
+	i : INT;
+END_VAR
+VAR_IN_OUT
+	AxisGroupKin_Inst											: ST_AxisGroupKin_Instance;
+END_VAR
+
+(* @END_DECLARATION := '0' *)
+(* Initialisation at rising edge of VAR_INPUT Enable *)
+fbRtrig(CLK:=Enable);
+IF fbRtrig.Q THEN
+	nState := 0;
+	Active := TRUE;
+END_IF
+
+(* No execution, if Enable = False *)
+IF (Enable = FALSE) THEN
+	Done := FALSE;
+	RETURN;
+END_IF
+
+
+CASE nState OF
+0:	(*Start*)
+	IF AxisGroupKin.ConfigDataAvailable THEN
+		nState := 5;
+	END_IF
+
+5:	(* Up *)
+	(* Initialize Kinematic Flags*)
+	AxisGroupKin_Inst.In.Cp.Settings.PlusTargetCartABC:=FALSE;
+	AxisGroupKin_Inst.In.Cp.Settings.UseMasterPosition:=FALSE;
+
+(* TARGET_CART settings *)
+	(* Motion Parameters *)
+	AxisGroupKin_Inst.In.Target.Cart.Velocity := CART_VEL100;
+	AxisGroupKin_Inst.In.Target.Cart.Acceleration := CART_ACC100;
+	AxisGroupKin_Inst.In.Target.Cart.Deceleration := CART_DEC100;
+	AxisGroupKin_Inst.In.Target.Cart.Jerk:=CART_Jerk100;
+	AxisGroupKin_Inst.In.Target.Synchronization:= KIN_NO_SYNC;
+	(* Coordinate System *)
+	AxisGroupKin_Inst.In.Target.CoordSys:=KIN_KCS;
+
+	AxisGroupKin_Inst.In.General.Mode := KIN_TARGET_CART;
+
+	AxisGroupKin_Inst.In.Target.Position := XYZ_PICKnPLACE_P2;
+
+	IF (MC_KinInProximity(Threshold := XYZ_PICKnPLACE_BlendingDistance,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)) THEN
+		nState := 10;
+	END_IF
+	AxisGroupKin_Inst.In.Simu3D.Ctrl.Pen_TCP_WCS:=TRUE;
+
+10:	(* Side *)
+	AxisGroupKin_Inst.In.Target.Position := XYZ_PICKnPLACE_P3;
+	IF (MC_KinInProximity(Threshold := XYZ_PICKnPLACE_BlendingDistance,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)) THEN
+		nState := 20;
+	END_IF
+
+20:	(* Down *)
+	AxisGroupKin_Inst.In.Target.Position := XYZ_PICKnPLACE_P4;
+	IF (MC_KinInProximity(Threshold := 0.0,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)
+			AND AxisGroupKin_Inst.Out.General.Standstill.ActCoordSys) THEN
+		nState :=30;
+	END_IF
+
+30:	(* Up *)
+	AxisGroupKin_Inst.In.Target.Position := XYZ_PICKnPLACE_P3;
+	IF (MC_KinInProximity(Threshold := XYZ_PICKnPLACE_BlendingDistance,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)) THEN
+		nState := 40;
+	END_IF
+
+40:	(* Side *)
+	AxisGroupKin_Inst.In.Target.Position := XYZ_PICKnPLACE_P2;
+	IF (MC_KinInProximity(Threshold := XYZ_PICKnPLACE_BlendingDistance,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)) THEN
+		nState := 50;
+	END_IF
+
+50:	(* Down *)
+	AxisGroupKin_Inst.In.Target.Position := XYZ_PICKnPLACE_P1;
+	IF (MC_KinInProximity(Threshold := 0.0,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)
+			AND AxisGroupKin_Inst.Out.General.Standstill.ActCoordSys) THEN
+		AxisGroupKin_Inst.In.Simu3D.Ctrl.Pen_TCP_WCS:=FALSE;
+		Done := TRUE;
+		Active := FALSE;
+	END_IF
+
+ELSE
+;
+
+END_CASE
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(*##############################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	Name:			PRG_XYZ_PICKnPLACE_SFC
+	Job:			Example program		
+					Sequence: XYZ_PICKnPLACE_P2 -> P3 -> P4 -> P3 -> P2 -> P1	
+
+################################################################################################################*)
+FUNCTION_BLOCK PRG02_XYZ_PICKnPLACE_SFC
+VAR_INPUT
+	SFCReset:BOOL;
+	(*SFCInit:BOOL;*)
+	SFCPause:BOOL;
+
+	SFCTipMode:BOOL;
+	SFCTip:BOOL;
+	SFCEnableLimit:BOOL;
+	SFCQuitError:BOOL;
+END_VAR
+VAR_OUTPUT
+	SFCTrans:BOOL;
+	SFCError:BOOL;
+	SFCErrorStep:STRING;
+	SFCErrorPOU:STRING;
+	SFCCurrentStep:STRING;
+	Done:BOOL;
+END_VAR
+VAR
+
+END_VAR
+VAR_IN_OUT
+	AxisGroupKin_Inst											: ST_AxisGroupKin_Instance;
+END_VAR
+
+(* @END_DECLARATION := '0' *)
+
+INITIAL_STEP Start:
+Done:=FALSE;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION FROM Start TO Init:= 
+AxisGroupKin.ConfigDataAvailable
+
+
+END_TRANSITION
+STEP Init:
+(* Initialize Kinematic Flags*)
+	AxisGroupKin_Inst.In.Cp.Settings.PlusTargetCartABC:=FALSE;
+	AxisGroupKin_Inst.In.Cp.Settings.UseMasterPosition:=FALSE;
+
+(* TARGET_CART settings *)
+	(* Motion Parameters *)
+	AxisGroupKin_Inst.In.Target.Cart.Velocity := CART_VEL100;
+	AxisGroupKin_Inst.In.Target.Cart.Acceleration := CART_ACC100;
+	AxisGroupKin_Inst.In.Target.Cart.Deceleration := CART_DEC100;
+	AxisGroupKin_Inst.In.Target.Cart.Jerk := CART_Jerk100;
+	AxisGroupKin_Inst.In.Target.Synchronization := KIN_NO_SYNC;
+	(* Coordinate System *)
+	AxisGroupKin_Inst.In.Target.CoordSys := KIN_KCS;
+
+	AxisGroupKin_Inst.In.General.Mode := KIN_TARGET_CART;
+
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION FROM Init TO S00_TARGET_CART_P2:= 
+TRUE
+
+
+END_TRANSITION
+STEP S00_TARGET_CART_P2:
+AxisGroupKin_Inst.In.Target.Position := XYZ_PICKnPLACE_P2;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION Transition  FROM S00_TARGET_CART_P2 TO S10_TARGET_CART_P3:= 
+MC_KinInProximity(Threshold := XYZ_PICKnPLACE_BlendingDistance,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)
+
+END_TRANSITION
+STEP S10_TARGET_CART_P3:
+AxisGroupKin_Inst.In.Target.Position := XYZ_PICKnPLACE_P3;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION Transition  FROM S10_TARGET_CART_P3 TO S20_TARGET_CART_P4:= 
+MC_KinInProximity(Threshold := XYZ_PICKnPLACE_BlendingDistance,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)
+
+END_TRANSITION
+STEP S20_TARGET_CART_P4:
+AxisGroupKin_Inst.In.Target.Position := XYZ_PICKnPLACE_P4;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION Transition  FROM S20_TARGET_CART_P4 TO S30_TARGET_CART_P3:= 
+MC_KinInProximity(Threshold := 0.0,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)
+AND
+AxisGroupKin_Inst.Out.General.Standstill.ActCoordSys
+
+END_TRANSITION
+STEP S30_TARGET_CART_P3:
+AxisGroupKin_Inst.In.Target.Position := XYZ_PICKnPLACE_P3;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION Transition  FROM S30_TARGET_CART_P3 TO S40_TARGET_CART_P2:= 
+MC_KinInProximity(Threshold := XYZ_PICKnPLACE_BlendingDistance,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)
+
+END_TRANSITION
+STEP S40_TARGET_CART_P2:
+AxisGroupKin_Inst.In.Target.Position := XYZ_PICKnPLACE_P2;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION Transition  FROM S40_TARGET_CART_P2 TO S50_TARGET_CART_P1:= 
+MC_KinInProximity(Threshold := XYZ_PICKnPLACE_BlendingDistance,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)
+
+END_TRANSITION
+STEP S50_TARGET_CART_P1:
+AxisGroupKin_Inst.In.Target.Position := XYZ_PICKnPLACE_P1;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION Transition  FROM S50_TARGET_CART_P1 TO S60_ProgEnd:= 
+MC_KinInProximity(Threshold := 0.0,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)
+AND
+AxisGroupKin_Inst.Out.General.Standstill.ActCoordSys
+
+END_TRANSITION
+STEP S60_ProgEnd:
+Done:=TRUE;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION FROM S60_ProgEnd TO Init:= 
+TRUE
+
+
+END_TRANSITION
+
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(*##############################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	Name:			PRG_XYZ_TARG_LIN_CIRC_ST
+	Job:			Example program			
+					Sequence: TARGET_CART to XYZ_TARG_LIN_CIRC_P1 -> LIN_XY to P2 -> CIRC_XZ with R3/A3 -> LIN_3D to P4 -> LIN_XY to P1
+
+################################################################################################################*)
+FUNCTION_BLOCK PRG03_XYZ_TARG_LIN_CIRC_ST
+VAR_INPUT
+	Enable : BOOL;
+END_VAR
+VAR_OUTPUT
+	Active : BOOL;
+	Done : BOOL;
+END_VAR
+VAR
+	nState : INT;
+	fbRtrig : R_TRIG;
+END_VAR
+VAR_IN_OUT
+	AxisGroupKin_Inst											: ST_AxisGroupKin_Instance;
+END_VAR
+
+
+(* @END_DECLARATION := '0' *)
+(* Initialisation at rising edge of VAR_INPUT Enable *)
+fbRtrig(CLK:=Enable);
+IF fbRtrig.Q THEN
+	nState	:= 0;
+	Active := TRUE;
+END_IF
+
+(* No execution, if Enable = False *)
+IF NOT Enable THEN
+	Done := FALSE;
+	RETURN;
+END_IF
+
+
+CASE nState OF
+0:	(*Start*)
+	IF AxisGroupKin.ConfigDataAvailable THEN
+		nState := 5;
+	END_IF
+5:	(* TARGET_CART to XYZ_TARG_LIN_CIRC_P1 *)
+	(* Initialize Kinematic Flags*)
+	AxisGroupKin_Inst.In.Cp.Settings.PlusTargetCartABC:=FALSE;
+	AxisGroupKin_Inst.In.Cp.Settings.UseMasterPosition:=FALSE;
+
+(* TARGET_CART settings *)
+	(* Motion Parameters *)
+	AxisGroupKin_Inst.In.Target.Cart.Acceleration := CART_ACC50;
+	AxisGroupKin_Inst.In.Target.Cart.Deceleration := CART_DEC50;
+	AxisGroupKin_Inst.In.Target.Cart.Velocity := CART_VEL50;
+	AxisGroupKin_Inst.In.Target.Cart.Jerk:=CART_Jerk100;
+	AxisGroupKin_Inst.In.Target.Synchronization:= KIN_NO_SYNC;
+	(* Coordinate System *)
+	AxisGroupKin_Inst.In.Target.CoordSys:=KIN_KCS;
+
+	AxisGroupKin_Inst.In.General.Mode := KIN_TARGET_CART;
+
+	AxisGroupKin_Inst.In.Target.Position := XYZ_TARG_LIN_CIRC_P1;
+	IF (MC_KinInProximity(Threshold := 0.0,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)
+			AND AxisGroupKin_Inst.Out.General.Standstill.ActCoordSys) THEN
+		nState := 10;
+	END_IF
+
+10:	(* Straight line to XYZ_TARG_LIN_CIRC_P2, as soon as XYZ_TARG_LIN_CIRC_P1 has been reached *)
+
+		AxisGroupKin_Inst.In.General.Mode := KIN_LIN_XY;
+		AxisGroupKin_Inst.In.Cp.Segment.Position := XYZ_TARG_LIN_CIRC_P2;
+(* CP motion parameters *)
+		(* settings for whole path / all segments *)
+		AxisGroupKin_Inst.In.Cp.Path.VelocityPercentage:=100;
+		AxisGroupKin_Inst.In.Cp.Path.FidelityPercentage :=100;
+		(* Settings for the segment, which should be added to the queue *)
+		AxisGroupKin_Inst.In.Cp.Segment.Translation.Velocity := 1000;
+		AxisGroupKin_Inst.In.Cp.Segment.Translation.Acceleration := 100;
+		AxisGroupKin_Inst.In.Cp.Segment.Translation.Deceleration := 100;
+		AxisGroupKin_Inst.In.Cp.Segment.Translation.Jerk := 100;
+		AxisGroupKin_Inst.In.Cp.Segment.Blending.Distance := 50;
+		AxisGroupKin_Inst.In.Cp.Segment.Blending.LimitationPercentage := 50;
+
+		AxisGroupKin_Inst.In.Cp.Segment.ID := AxisGroupKin_Inst.In.Cp.Segment.ID + 1;	(* Change the SegmentID to add the segment to the queue *)
+
+		AxisGroupKin_Inst.In.Simu3D.Ctrl.Pen_TCP_WCS := TRUE;
+
+		nState := 20;
+
+20:	(* A circle section is written into the queue directly after the straight line *)
+	IF (AxisGroupKin_Inst.Out.Cp.Queue.LastMappedSegID = AxisGroupKin_Inst.In.Cp.Segment.ID) THEN (* Wait until the segment was added to the queue; this is not required if FB_KinControl is executed in the same task *)
+		AxisGroupKin_Inst.In.General.Mode := KIN_CIRC_ZX;
+		(* Parameters to define the circle *)
+		AxisGroupKin_Inst.In.Cp.Segment.Circ.Mode := KIN_RADIUS_ANGLE;	(* Define the circle with the radius and angle *)
+		AxisGroupKin_Inst.In.Cp.Segment.Circ.Direction := KIN_CW;	(* Draw circle ClockWise *)
+		AxisGroupKin_Inst.In.Cp.Segment.Circ.Radius := XYZ_TARG_LIN_CIRC_R3;
+		AxisGroupKin_Inst.In.Cp.Segment.Circ.Angle := XYZ_TARG_LIN_CIRC_A3;
+
+
+		AxisGroupKin_Inst.In.Cp.Segment.ID := AxisGroupKin_Inst.In.Cp.Segment.ID + 1;
+		nState := 30;
+	END_IF
+
+30:	(* A Straight line to XYZ_TARG_LIN_CIRC_P4 is written into the queue directly after the circle section
+		-> Blending to the straight line is performed automatically *)
+	IF (AxisGroupKin_Inst.Out.Cp.Queue.LastMappedSegID = AxisGroupKin_Inst.In.Cp.Segment.ID) THEN
+		AxisGroupKin_Inst.In.General.Mode := KIN_LIN_3D;
+		AxisGroupKin_Inst.In.Cp.Segment.Position := XYZ_TARG_LIN_CIRC_P4;
+
+
+		AxisGroupKin_Inst.In.Cp.Segment.ID := AxisGroupKin_Inst.In.Cp.Segment.ID + 1;
+		nState := 40;
+	END_IF
+
+40:	(* Straight line to XYZ_TARG_LIN_CIRC_P1 is written into the queue directly after the previous straight line
+		-> Blending to the straight line is performed automatically *)
+	IF (AxisGroupKin_Inst.Out.Cp.Queue.LastMappedSegID = AxisGroupKin_Inst.In.Cp.Segment.ID) THEN
+		AxisGroupKin_Inst.In.General.Mode := KIN_LIN_XY;
+		AxisGroupKin_Inst.In.Cp.Segment.Position := XYZ_TARG_LIN_CIRC_P1;
+
+
+		AxisGroupKin_Inst.In.Cp.Segment.ID := AxisGroupKin_Inst.In.Cp.Segment.ID + 1;
+		nState := 50;
+	END_IF
+
+50:	(* Program end, as soon as XYZ_TARG_LIN_CIRC_P1 has been reached *)
+	IF (AxisGroupKin_Inst.Out.Cp.Path.EndReached)
+	AND (AxisGroupKin_Inst.Out.Cp.Queue.LastMappedSegID = AxisGroupKin_Inst.In.Cp.Segment.ID) THEN
+		Done := TRUE;
+		Active := FALSE;
+		AxisGroupKin_Inst.In.Simu3D.Ctrl.Pen_TCP_WCS := FALSE;
+	END_IF
+
+ELSE
+;
+
+END_CASE
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(*##############################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	Name:			PRG_XYZ_TARG_LIN_CIRC_SFC
+	Job:			Example program			
+					Sequence: TARGET_CART to XYZ_TARG_LIN_CIRC_P1 -> LIN_XY to P2 -> CIRC_XZ with R3/A3 -> LIN_3D to P4 -> LIN_XY to P1
+
+################################################################################################################*)
+FUNCTION_BLOCK PRG04_XYZ_TARG_LIN_CIRC_SFC
+VAR_INPUT
+	SFCReset:BOOL;
+	(*SFCInit:BOOL;*)
+	SFCPause:BOOL;
+
+	SFCTipMode:BOOL;
+	SFCTip:BOOL;
+	SFCEnableLimit:BOOL;
+	SFCQuitError:BOOL;
+
+END_VAR
+VAR_OUTPUT
+	SFCTrans:BOOL;
+	SFCError:BOOL;
+	SFCErrorStep:STRING;
+	SFCErrorPOU:STRING;
+(*	SFCErrorAnalyzation:STRING;*)
+	SFCCurrentStep:STRING;
+	Done:BOOL;
+END_VAR
+VAR
+
+END_VAR
+VAR_IN_OUT
+	AxisGroupKin_Inst											: ST_AxisGroupKin_Instance;
+END_VAR
+
+(* @END_DECLARATION := '0' *)
+
+INITIAL_STEP Start:
+Done:=FALSE;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION FROM Start TO Init:= 
+AxisGroupKin.ConfigDataAvailable
+
+
+END_TRANSITION
+STEP Init:
+(* Initialize Kinematic Flags*)
+	AxisGroupKin_Inst.In.Cp.Settings.PlusTargetCartABC:=FALSE;
+	AxisGroupKin_Inst.In.Cp.Settings.UseMasterPosition:=FALSE;
+
+(* TARGET_CART settings *)
+	(* Motion Parameters *)
+	AxisGroupKin_Inst.In.Target.Cart.Acceleration := CART_ACC50;
+	AxisGroupKin_Inst.In.Target.Cart.Deceleration := CART_DEC50;
+	AxisGroupKin_Inst.In.Target.Cart.Velocity := CART_VEL50;
+	AxisGroupKin_Inst.In.Target.Cart.Jerk:=CART_Jerk100;
+	AxisGroupKin_Inst.In.Target.Synchronization:= KIN_NO_SYNC;
+	(* Coordinate System *)
+	AxisGroupKin_Inst.In.Target.CoordSys:=KIN_KCS;
+
+	AxisGroupKin_Inst.In.General.Mode := KIN_TARGET_CART;
+
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION FROM Init TO S00_TARGET_CART_P1:= 
+TRUE
+
+
+END_TRANSITION
+STEP S00_TARGET_CART_P1:
+AxisGroupKin_Inst.In.Target.Position :=  XYZ_TARG_LIN_CIRC_P1;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION Transition  FROM S00_TARGET_CART_P1 TO S10_LIN_XY_P2:= 
+MC_KinInProximity(Threshold := 0.0,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)
+AND
+AxisGroupKin_Inst.Out.General.Standstill.ActCoordSys
+
+END_TRANSITION
+STEP S10_LIN_XY_P2:
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+(* Straight line to XYZ_TARG_LIN_CIRC_P2, as soon as XYZ_TARG_LIN_CIRC_P1 has been reached *)
+
+		AxisGroupKin_Inst.In.General.Mode := KIN_LIN_XY;
+		AxisGroupKin_Inst.In.Cp.Segment.Position := XYZ_TARG_LIN_CIRC_P2;
+(* CP motion parameters *)
+		(* settings for whole path / all segments *)
+		AxisGroupKin_Inst.In.Cp.Path.VelocityPercentage:=100;
+		AxisGroupKin_Inst.In.Cp.Path.FidelityPercentage :=100;
+		(* Settings for the segment, which should be added to the queue *)
+		AxisGroupKin_Inst.In.Cp.Segment.Translation.Velocity := 1000;
+		AxisGroupKin_Inst.In.Cp.Segment.Translation.Acceleration := 100;
+		AxisGroupKin_Inst.In.Cp.Segment.Translation.Deceleration := 100;
+		AxisGroupKin_Inst.In.Cp.Segment.Translation.Jerk := 100;
+		AxisGroupKin_Inst.In.Cp.Segment.Blending.Distance := 50;
+		AxisGroupKin_Inst.In.Cp.Segment.Blending.LimitationPercentage := 50;
+
+		AxisGroupKin_Inst.In.Cp.Segment.ID := AxisGroupKin_Inst.In.Cp.Segment.ID + 1;	(* Change the SegmentID to add the segment to the queue *)
+
+		AxisGroupKin_Inst.In.Simu3D.Ctrl.Pen_TCP_WCS := TRUE;
+
+END_ACTION
+
+TRANSITION Transition  FROM S10_LIN_XY_P2 TO S20_CIRC_ZX_Radius:= 
+(* Wait until the segment was added to the queue; this is not required if FB_KinControl is executed in the same task *)
+AxisGroupKin_Inst.Out.Cp.Queue.LastMappedSegID = AxisGroupKin_Inst.In.Cp.Segment.ID
+
+END_TRANSITION
+STEP S20_CIRC_ZX_Radius:
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+AxisGroupKin_Inst.In.General.Mode := KIN_CIRC_ZX;
+(* Parameters to define the circle *)
+AxisGroupKin_Inst.In.Cp.Segment.Circ.Mode := KIN_RADIUS_ANGLE;	(* Define the circle with the radius and angle *)
+AxisGroupKin_Inst.In.Cp.Segment.Circ.Direction := KIN_CW;	(* Draw circle ClockWise *)
+AxisGroupKin_Inst.In.Cp.Segment.Circ.Radius := XYZ_TARG_LIN_CIRC_R3;
+AxisGroupKin_Inst.In.Cp.Segment.Circ.Angle := XYZ_TARG_LIN_CIRC_A3;
+
+
+AxisGroupKin_Inst.In.Cp.Segment.ID := AxisGroupKin_Inst.In.Cp.Segment.ID + 1;
+END_ACTION
+
+TRANSITION Transition  FROM S20_CIRC_ZX_Radius TO S30_LIN_3D_P4:= 
+(* Wait until the segment was added to the queue; this is not required if FB_KinControl is executed in the same task *)
+AxisGroupKin_Inst.Out.Cp.Queue.LastMappedSegID = AxisGroupKin_Inst.In.Cp.Segment.ID
+
+END_TRANSITION
+STEP S30_LIN_3D_P4:
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+AxisGroupKin_Inst.In.General.Mode := KIN_LIN_3D;
+AxisGroupKin_Inst.In.Cp.Segment.Position := XYZ_TARG_LIN_CIRC_P4;
+
+
+AxisGroupKin_Inst.In.Cp.Segment.ID := AxisGroupKin_Inst.In.Cp.Segment.ID + 1;
+END_ACTION
+
+TRANSITION Transition  FROM S30_LIN_3D_P4 TO S40_LIN_XY_P1:= 
+(* Wait until the segment was added to the queue; this is not required if FB_KinControl is executed in the same task *)
+AxisGroupKin_Inst.Out.Cp.Queue.LastMappedSegID = AxisGroupKin_Inst.In.Cp.Segment.ID
+
+END_TRANSITION
+STEP S40_LIN_XY_P1:
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+AxisGroupKin_Inst.In.General.Mode := KIN_LIN_XY;
+AxisGroupKin_Inst.In.Cp.Segment.Position := XYZ_TARG_LIN_CIRC_P1;
+
+
+AxisGroupKin_Inst.In.Cp.Segment.ID := AxisGroupKin_Inst.In.Cp.Segment.ID + 1;
+END_ACTION
+
+TRANSITION Transition  FROM S40_LIN_XY_P1 TO S50_ProgEnd:= 
+(AxisGroupKin_Inst.Out.Cp.Path.EndReached) AND
+(AxisGroupKin_Inst.Out.Cp.Queue.LastMappedSegID = AxisGroupKin_Inst.In.Cp.Segment.ID)
+
+END_TRANSITION
+STEP S50_ProgEnd:
+Done := TRUE;
+AxisGroupKin_Inst.In.Simu3D.Ctrl.Pen_TCP_WCS := FALSE;  (* Process Off *)
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION FROM S50_ProgEnd TO Init:= 
+TRUE
+
+
+END_TRANSITION
+
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(*##############################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	Name:			PRG_XYZ_FillQueue_LIN3D_with_Array_ST
+	Job:			Example program			
+
+################################################################################################################*)
+FUNCTION_BLOCK PRG05_XYZ_FillQueue_LIN3D_with_Array_ST
+
+VAR_INPUT
+	Enable: BOOL;
+END_VAR
+VAR_OUTPUT
+	Active: BOOL;
+	Done: BOOL;
+END_VAR
+VAR
+	nState : INT := 0;
+	i:INT:=1;
+END_VAR
+VAR_IN_OUT
+	AxisGroupKin_Inst											: ST_AxisGroupKin_Instance;
+END_VAR
+
+(* @END_DECLARATION := '0' *)
+IF NOT Enable THEN
+	Done:=FALSE;
+	Active := FALSE;
+	i:=1;
+	nState:=0;
+	RETURN;
+END_IF
+CASE nState OF
+0:	(*Start*)
+	IF AxisGroupKin.ConfigDataAvailable THEN
+		nState := 5;
+	END_IF
+
+5:	(* Initialization and TARGET_CART to last point in queue *)
+
+	(* Initialize kinematics flags*)
+	AxisGroupKin_Inst.In.Cp.Settings.PlusTargetCartABC :=FALSE;
+	AxisGroupKin_Inst.In.Cp.Settings.UseMasterPosition:=FALSE;
+
+(* CP settings *)
+	(* Initialize SegID *)
+	AxisGroupKin_Inst.In.Cp.Segment.ID := AxisGroupKin_Inst.Out.Cp.Queue.LastMappedSegID;
+	(* Initialize global point array *)
+	points[1].x:=10;	points[1].y:=100;	points[1].z:=50;
+	points[2].x:=10;	points[2].y:=200;	points[2].z:=100;
+	points[3].x:=50;	points[3].y:=300;	points[3].z:=50;
+	points[4].x:=100;	points[4].y:=350;	points[4].z:=100;
+	points[5].x:=200;	points[5].y:=300;	points[5].z:=50;
+	points[6].x:=300;	points[6].y:=200;	points[6].z:=100;
+	points[7].x:=300;	points[7].y:=100;	points[7].z:=50;
+	points[8].x:=200;	points[8].y:=50;	points[8].z:=100;
+	points[9].x:=100;	points[9].y:=10;	points[9].z:=50;
+	points[10].x:=50;	points[10].y:=50;	points[10].z:=100;
+	(* motion parameters for CP modes *)
+	AxisGroupKin_Inst.In.Cp.Segment.Translation.Velocity := 100;
+	AxisGroupKin_Inst.In.Cp.Segment.Translation.Acceleration := 100;
+	AxisGroupKin_Inst.In.Cp.Segment.Translation.Deceleration := 100;
+	AxisGroupKin_Inst.In.Cp.Segment.Translation.Jerk := 100;
+	AxisGroupKin_Inst.In.Cp.Segment.Blending.Distance := 30;
+	AxisGroupKin_Inst.In.Cp.Segment.Blending.LimitationPercentage := 50;
+	AxisGroupKin_Inst.In.Cp.Segment.Mode := KIN_CONTINUOUS_PATH;
+	AxisGroupKin_Inst.In.Cp.Path.VelocityPercentage:=100;
+	AxisGroupKin_Inst.In.Cp.Path.FidelityPercentage :=100;
+
+(* TARGET_CART settings *)
+	(* Set motion parameters for target mode*)
+	AxisGroupKin_Inst.In.Target.Cart.Acceleration := CART_ACC50;
+	AxisGroupKin_Inst.In.Target.Cart.Deceleration := CART_DEC50;
+	AxisGroupKin_Inst.In.Target.Cart.Velocity := CART_VEL50;
+	AxisGroupKin_Inst.In.Target.Cart.Jerk:=CART_Jerk100;
+	AxisGroupKin_Inst.In.Target.CoordSys := KIN_KCS;
+	AxisGroupKin_Inst.In.Target.Synchronization:= KIN_NO_SYNC;
+	(* move to last point in array *)
+	AxisGroupKin_Inst.In.Target.Position[1] := points[10].x;
+	AxisGroupKin_Inst.In.Target.Position[2] := points[10].y;
+	AxisGroupKin_Inst.In.Target.Position[3] := points[10].z;
+
+	AxisGroupKin_Inst.In.General.Mode := KIN_TARGET_CART;
+
+	IF (MC_KinInProximity(Threshold := 0.0,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)
+			AND AxisGroupKin_Inst.Out.General.Standstill.ActCoordSys) THEN
+		nState := 10;
+	END_IF
+10:	(*Fill Queue *)
+	IF i <=10 THEN
+		AxisGroupKin_Inst.In.Simu3D.Ctrl.Pen_TCP_WCS :=TRUE;
+		IF AxisGroupKin_Inst.Out.Cp.Queue.LastMappedSegID = AxisGroupKin_Inst.In.Cp.Segment.ID THEN
+			AxisGroupKin_Inst.In.General.Mode := KIN_LIN_3D;
+			AxisGroupKin_Inst.In.Cp.Segment.Position[1] := points[i].x;
+			AxisGroupKin_Inst.In.Cp.Segment.Position[2] := points[i].y;
+			AxisGroupKin_Inst.In.Cp.Segment.Position[3] := points[i].z;
+			AxisGroupKin_Inst.In.Cp.Segment.ID := AxisGroupKin_Inst.In.Cp.Segment.ID + 1;
+			i:=i+1;
+		END_IF
+	ELSIF AxisGroupKin_Inst.Out.Cp.Path.EndReached THEN
+		Done := TRUE;
+		Active := FALSE;
+		AxisGroupKin_Inst.In.Simu3D.Ctrl.Pen_TCP_WCS := FALSE;
+	END_IF
+END_CASE
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(*##############################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	Name:			PRG_XYZ_FillQueue_LIN3D_with_Array_SFC
+	Job:			Example program		
+
+################################################################################################################*)
+FUNCTION_BLOCK PRG06_XYZ_FillQueue_LIN3D_with_Array_SFC
+VAR_INPUT
+	SFCReset:BOOL;
+	(*SFCInit:BOOL;*)
+	SFCPause:BOOL;
+
+	SFCTipMode:BOOL;
+	SFCTip:BOOL;
+	SFCEnableLimit:BOOL;
+	SFCQuitError:BOOL;
+
+END_VAR
+VAR_OUTPUT
+	SFCTrans:BOOL;
+	SFCError:BOOL;
+	SFCErrorStep:STRING;
+	SFCErrorPOU:STRING;
+	SFCCurrentStep:STRING;
+	Done:BOOL;
+END_VAR
+VAR
+	i:INT;
+END_VAR
+VAR_IN_OUT
+	AxisGroupKin_Inst	: ST_AxisGroupKin_Instance;
+END_VAR
+
+(* @END_DECLARATION := '0' *)
+
+INITIAL_STEP Start:
+Done:=FALSE;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION FROM Start TO Init:= 
+AxisGroupKin.ConfigDataAvailable
+
+
+END_TRANSITION
+STEP Init:
+(* Initialize kinematics flags*)
+	AxisGroupKin_Inst.In.Cp.Settings.PlusTargetCartABC :=FALSE;
+	AxisGroupKin_Inst.In.Cp.Settings.UseMasterPosition:=FALSE;
+
+(* CP settings *)
+	(* Initialize SegID *)
+	AxisGroupKin_Inst.In.Cp.Segment.ID := AxisGroupKin_Inst.Out.Cp.Queue.LastMappedSegID;
+	(* Initialize global point array *)
+	points[1].x:=10;	points[1].y:=100;	points[1].z:=50;
+	points[2].x:=10;	points[2].y:=200;	points[2].z:=100;
+	points[3].x:=50;	points[3].y:=300;	points[3].z:=50;
+	points[4].x:=100;	points[4].y:=350;	points[4].z:=100;
+	points[5].x:=200;	points[5].y:=300;	points[5].z:=50;
+	points[6].x:=300;	points[6].y:=200;	points[6].z:=100;
+	points[7].x:=300;	points[7].y:=100;	points[7].z:=50;
+	points[8].x:=200;	points[8].y:=50;	points[8].z:=100;
+	points[9].x:=100;	points[9].y:=10;	points[9].z:=50;
+	points[10].x:=50;	points[10].y:=50;	points[10].z:=100;
+	(* motion parameters for CP modes *)
+	AxisGroupKin_Inst.In.Cp.Segment.Translation.Velocity := 100;
+	AxisGroupKin_Inst.In.Cp.Segment.Translation.Acceleration := 100;
+	AxisGroupKin_Inst.In.Cp.Segment.Translation.Deceleration := 100;
+	AxisGroupKin_Inst.In.Cp.Segment.Translation.Jerk := 100;
+	AxisGroupKin_Inst.In.Cp.Segment.Blending.Distance := 30;
+	AxisGroupKin_Inst.In.Cp.Segment.Blending.LimitationPercentage := 50;
+	AxisGroupKin_Inst.In.Cp.Segment.Mode := KIN_CONTINUOUS_PATH;
+	AxisGroupKin_Inst.In.Cp.Path.VelocityPercentage:=100;
+	AxisGroupKin_Inst.In.Cp.Path.FidelityPercentage :=100;
+
+(* TARGET_CART settings *)
+	(* Set motion parameters for target mode*)
+	AxisGroupKin_Inst.In.Target.Cart.Acceleration := CART_ACC50;
+	AxisGroupKin_Inst.In.Target.Cart.Deceleration := CART_DEC50;
+	AxisGroupKin_Inst.In.Target.Cart.Velocity := CART_VEL50;
+	AxisGroupKin_Inst.In.Target.Cart.Jerk:=CART_Jerk100;
+	AxisGroupKin_Inst.In.Target.CoordSys := KIN_KCS;
+	AxisGroupKin_Inst.In.Target.Synchronization:= KIN_NO_SYNC;
+
+	AxisGroupKin_Inst.In.General.Mode := KIN_TARGET_CART;
+
+	i:=1;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION FROM Init TO S00_TARGET_LAST_POINT_OF_ARRAY:= 
+TRUE
+
+
+END_TRANSITION
+STEP S00_TARGET_LAST_POINT_OF_ARRAY:
+(* move to last point in array *)
+AxisGroupKin_Inst.In.Target.Position[1] := points[10].x;
+AxisGroupKin_Inst.In.Target.Position[2] := points[10].y;
+AxisGroupKin_Inst.In.Target.Position[3] := points[10].z;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION Transition  FROM S00_TARGET_LAST_POINT_OF_ARRAY TO S05_Next_Array_Element:= 
+MC_KinInProximity(Threshold := 0.0,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)
+
+AND
+AxisGroupKin_Inst.Out.General.Standstill.ActCoordSys
+
+END_TRANSITION
+STEP S05_Next_Array_Element:
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION FROM S05_Next_Array_Element TO S10_Fill_Queue:= 
+TRUE
+
+
+END_TRANSITION
+STEP S10_Fill_Queue:
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+ENTRY_ACTION	
+AxisGroupKin_Inst.In.General.Mode			:= KIN_LIN_3D;
+AxisGroupKin_Inst.In.Cp.Segment.Position[1]	:= points[i].x;
+AxisGroupKin_Inst.In.Cp.Segment.Position[2] 	:= points[i].y;
+AxisGroupKin_Inst.In.Cp.Segment.Position[3] 	:= points[i].z;
+AxisGroupKin_Inst.In.Cp.Segment.ID 		:= AxisGroupKin_Inst.In.Cp.Segment.ID + 1;
+
+i:=i+1;
+END_ACTION
+
+TRANSITION Transition  FROM S10_Fill_Queue TO S20_Wait_for_Path_end:= 
+(AxisGroupKin_Inst.Out.Cp.Queue.LastMappedSegID= AxisGroupKin_Inst.In.Cp.Segment.ID) AND (i >10)
+
+END_TRANSITION
+TRANSITION Transition  FROM S10_Fill_Queue TO S05_Next_Array_Element:= 
+AxisGroupKin_Inst.Out.Cp.Queue.LastMappedSegID = AxisGroupKin_Inst.In.Cp.Segment.ID
+
+END_TRANSITION
+STEP S20_Wait_for_Path_end:
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION Transition  FROM S20_Wait_for_Path_end TO S30_ProgEnd:= 
+AxisGroupKin_Inst.Out.Cp.Path.EndReached
+
+END_TRANSITION
+STEP S30_ProgEnd:
+Done:=TRUE;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION FROM S30_ProgEnd TO Init:= 
+TRUE
+
+
+END_TRANSITION
+
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(*##############################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	Name:			PRG_XYZ_USER_ST
+	Job:			Example program
+					Simple program, in which you can implement your own sample sequence.			
+
+################################################################################################################*)
+FUNCTION_BLOCK PRG07_XYZ_USER_ST
+VAR_INPUT
+	Enable : BOOL;
+END_VAR
+VAR_OUTPUT
+	Active : BOOL;
+	Done : BOOL;
+END_VAR
+VAR
+	nState : INT;
+	fbRtrig : R_TRIG;
+END_VAR
+VAR_IN_OUT
+	AxisGroupKin_Inst											: ST_AxisGroupKin_Instance;
+END_VAR
+
+
+(* @END_DECLARATION := '0' *)
+(* Initialisation at rising edge of VAR_INPUT Enable *)
+fbRtrig(CLK:=Enable);
+IF fbRtrig.Q THEN
+	nState	:= 0;
+	Active := TRUE;
+END_IF
+
+(* No execution, if Enable = False *)
+IF NOT Enable THEN
+	Done := FALSE;
+	RETURN;
+END_IF
+
+CASE nState OF
+0:	(*Start*)
+	IF AxisGroupKin.ConfigDataAvailable THEN
+		nState := 5;
+	END_IF
+5:	(* TARGET_CART to XYZ_USER_P1 *)
+	(* Initialize Kinematic Flags*)
+	AxisGroupKin_Inst.In.Cp.Settings.PlusTargetCartABC:=FALSE;
+	AxisGroupKin_Inst.In.Cp.Settings.UseMasterPosition:=FALSE;
+
+(* TARGET_CART settings *)
+	(* Motion Parameters *)
+	AxisGroupKin_Inst.In.Target.Cart.Velocity := CART_VEL50;
+	AxisGroupKin_Inst.In.Target.Cart.Acceleration := CART_ACC50;
+	AxisGroupKin_Inst.In.Target.Cart.Deceleration := CART_DEC50;
+	AxisGroupKin_Inst.In.Target.Cart.Jerk:=CART_Jerk100;
+	AxisGroupKin_Inst.In.Target.Synchronization:= KIN_NO_SYNC;
+	(* Coordinate System *)
+	AxisGroupKin_Inst.In.Target.CoordSys:=KIN_KCS;
+
+	AxisGroupKin_Inst.In.General.Mode := KIN_TARGET_CART;
+
+	AxisGroupKin_Inst.In.Simu3D.Ctrl.Pen_TCP_WCS := TRUE;  (* Process On *)
+
+	AxisGroupKin_Inst.In.Target.Position := XYZ_USER_P1;
+	IF (MC_KinInProximity(Threshold := 0.0,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)
+			AND AxisGroupKin_Inst.Out.General.Standstill.ActCoordSys) THEN
+		nState := 10;
+	END_IF
+
+10:	(* TARGET_CART to XYZ_USER_P2 *)
+	AxisGroupKin_Inst.In.Target.Position := XYZ_USER_P2;
+	IF (MC_KinInProximity(Threshold := 0.0,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)
+			AND AxisGroupKin_Inst.Out.General.Standstill.ActCoordSys) THEN
+		Done := TRUE;
+		Active := FALSE;
+		AxisGroupKin_Inst.In.Simu3D.Ctrl.Pen_TCP_WCS := FALSE;  (* Process Off *)
+	END_IF
+
+ELSE
+;
+
+END_CASE
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(*##############################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	Name:			PRG_XYZ_USER_SFC
+	Job:			Example program
+					Simple program, in which you can implement your own sample sequence.				
+
+################################################################################################################*)
+FUNCTION_BLOCK PRG08_XYZ_USER_SFC
+VAR_INPUT
+	SFCReset:BOOL;
+	(*SFCInit:BOOL;*)
+	SFCPause:BOOL;
+
+	SFCTipMode:BOOL;
+	SFCTip:BOOL;
+	SFCEnableLimit:BOOL;
+	SFCQuitError:BOOL;
+
+END_VAR
+VAR_OUTPUT
+	SFCTrans:BOOL;
+	SFCError:BOOL;
+	SFCErrorStep:STRING;
+	SFCErrorPOU:STRING;
+(*	SFCErrorAnalyzation:STRING;*)
+	SFCCurrentStep:STRING;
+	Done:BOOL;
+END_VAR
+VAR
+
+END_VAR
+VAR_IN_OUT
+	AxisGroupKin_Inst											: ST_AxisGroupKin_Instance;
+END_VAR
+
+(* @END_DECLARATION := '0' *)
+
+INITIAL_STEP Start:
+Done:=FALSE;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION FROM Start TO Init:= 
+AxisGroupKin.ConfigDataAvailable
+
+
+END_TRANSITION
+STEP Init:
+(* Initialize Kinematic Flags*)
+AxisGroupKin_Inst.In.Cp.Settings.PlusTargetCartABC:=FALSE;
+AxisGroupKin_Inst.In.Cp.Settings.UseMasterPosition:=FALSE;
+
+(* TARGET_CART settings *)
+	(* Motion Parameters *)
+	AxisGroupKin_Inst.In.Target.Cart.Velocity := CART_VEL50;
+	AxisGroupKin_Inst.In.Target.Cart.Acceleration := CART_ACC50;
+	AxisGroupKin_Inst.In.Target.Cart.Deceleration := CART_DEC50;
+	AxisGroupKin_Inst.In.Target.Cart.Jerk:=CART_Jerk100;
+	AxisGroupKin_Inst.In.Target.Synchronization:= KIN_NO_SYNC;
+	(* Coordinate System *)
+	AxisGroupKin_Inst.In.Target.CoordSys:=KIN_KCS;
+
+AxisGroupKin_Inst.In.General.Mode := KIN_TARGET_CART;
+
+AxisGroupKin_Inst.In.Simu3D.Ctrl.Pen_TCP_WCS := TRUE;  (* Process On *)
+
+
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION FROM Init TO S00_TARGET_CART_P1:= 
+TRUE
+
+
+END_TRANSITION
+STEP S00_TARGET_CART_P1:
+AxisGroupKin_Inst.In.Target.Position := XYZ_USER_P1;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION Transition  FROM S00_TARGET_CART_P1 TO S10_TARGET_CART_P2:= 
+MC_KinInProximity(Threshold := 0.0,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)
+AND
+AxisGroupKin_Inst.Out.General.Standstill.ActCoordSys
+
+END_TRANSITION
+STEP S10_TARGET_CART_P2:
+AxisGroupKin_Inst.In.Target.Position := XYZ_USER_P2;
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION Transition  FROM S10_TARGET_CART_P2 TO S60_ProgEnd:= 
+MC_KinInProximity(Threshold := 0.0,
+			Position := AxisGroupKin_Inst.In.Target.Position,
+			CoordSys := AxisGroupKin_Inst.In.Target.CoordSys,
+			Dimension := 2#0000_0111, ActPos := AxisGroupKin_Inst.Out.General.Position)
+AND
+AxisGroupKin_Inst.Out.General.Standstill.ActCoordSys
+
+END_TRANSITION
+STEP S60_ProgEnd:
+Done := TRUE;
+AxisGroupKin_Inst.In.Simu3D.Ctrl.Pen_TCP_WCS := FALSE;  (* Process Off *)
+
+END_STEP
+(* @SFCMAXTIME := '' *)
+(* @SFCMINTIME := '' *)
+(* @SFCCOMMENT := '' *)
+TRANSITION FROM S60_ProgEnd TO Init:= 
+TRUE
+
+
+END_TRANSITION
+
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/PRG_HandlingKinematics_MultiMotion' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+PROGRAM PRG_TaskMain_HandlingKinematics_MultiMotion
+VAR
+END_VAR
+(* @END_DECLARATION := '0' *)
+(*#######################################################################################
+
+	PRG_TaskMain_HandlingKinematics
+
+	ToDo: Call this program in the task configuration after PRG_TaskMain();
+
+#########################################################################################*)
+
+HandlingKin_Examples();
+
+(* Do not remove! *)
+AxisGroupControl_Main_HandlingKin_MultiMotion(Enable:= TRUE );
+AxisGroupControl_HandlingKin();
+
+(* Do not remove! *)
+PRG_TaskMain_Kinematics();
+
+
+
+
+
+END_PROGRAM
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/PRG_Kinematics' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+PROGRAM PRG_TaskMain_Kinematics
+VAR
+	fbUser_Kinematics_Examples : ARRAY[1..KIN_AXISGROUPKIN_MAX_NUMBER_OF_KINEMATICS_INSTANCES] OF FB_User_Kinematics_Examples;
+	i : INT;
+END_VAR
+(* @END_DECLARATION := '0' *)
+(*#######################################################################################
+
+	PRG_TaskMain_Kinematics
+
+	ToDo: Call this program in the task configuration after PRG_TaskMain();
+
+#########################################################################################*)
+
+(* Examples for common motion sequences *)
+FOR i := 1 TO KIN_AXISGROUPKIN_MAX_NUMBER_OF_KINEMATICS_INSTANCES DO
+	fbUser_Kinematics_Examples[i](AxisGroupKin_Inst := AxisGroupKin.Inst[i]);
+END_FOR
+
+(* Do not remove! *)
+AxisGroupControl_Configuration_Kinematics(Enable := TRUE);
+
+(* Do not remove! *)
+AxisGroupControl_Main_Kinematics(Enable := TRUE);
+
+
+END_PROGRAM
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/PRG_Kinematics' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+PROGRAM PRG_TaskPriority_Kinematics
+VAR
+END_VAR
+(* @END_DECLARATION := '0' *)
+(*#######################################################################################
+
+	PRG_TaskPriority_Kinematics
+
+	ToDo: Call this program in the task configuration after PRG_TaskPriority();
+
+########################################################################################*)
+
+(* Do not remove! *)
+AxisGroupControl_Priority_Kinematics();
+END_PROGRAM
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/SewRobotLanguage' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(*##############################################################################################################
+
+	IMPORTANT NOTICE:
+ 	This example is a special and free service that demonstrates only the basic 
+	approach to generating a PLC program as a non-binding sample. 
+	SEW is not liable for the contents of the sample program.
+
+	Name:			FB_SewRobotLanguage_User_Function
+	Job:			Contains User Functions that can be called in SRL Program
+
+################################################################################################################*)
+FUNCTION_BLOCK FB_SewRobotLanguage_User_Function
+VAR_INPUT
+	Enable								: BOOL;				(* Enable of Function*)
+	NumberOfFunction				: INT;					(* Number of the Fuction what will be executed*)
+	bParaValue						: BOOL;				(* Boolean	Value *)
+	rParaValue						: LREAL;				(* Real 	Value *)
+	posParaValue						: ST_SRL_DimPos; 	(* Position Vektor *)
+	Instance							: UINT;
+END_VAR
+VAR_OUTPUT
+	Done								: BOOL;				(* true if function is executed correctly*)
+	Error								: BOOL;				(* Error Flag*)
+	ErrorID								: DWORD;				(* Error ID*)
+END_VAR
+VAR_IN_OUT
+	SRL_Dat_Var						: ST_SRL_Variables;
+	AxisGroupKin_Inst				: ST_AxisGroupKin_Instance;	(*AxisGroupControl Kinematics Variable*)
+END_VAR
+VAR
+	(*Handling Kin: Zuweisung Dynamikwerte anhand der SegParRecords*)
+	nIndex 								: UINT;
+
+
+	SegParaRecCart_Act				: UINT;
+	SegParaRecAxis_Act				: UINT;
+	SegParaRecCp_Act				: UINT;
+	SegParaRecRot_Act				: UINT;
+	SegParaRecTp_Act				: UINT;
+
+	nSynchronization					: WORD;
+
+	fbTON					: TON;
+	tTime					: TIME;
+
+	ModuleName 			: STRING(50)		:='SRL_User_Function';
+	Message				: STRING(128)	:='SRL_User_Function';
+	nTaskID				: WORD;
+	nTaskPriority			: DINT;
+END_VAR
+(* @END_DECLARATION := '0' *)
+
+
+IF ((Instance < 1) OR (Instance > KIN_AXISGROUPKIN_MAX_NUMBER_OF_KINEMATICS_INSTANCES)) THEN
+	MC_MsgHandler_Enter(
+		Class 		:= MSGHANDLER_CLASS_ERROR,
+		Source 	:= MSGHANDLER_SOURCE_TECHNOLOGYMODULE,
+		Module 	:= 'SewRobotLanguage',
+		Instance 	:= Instance,
+		ID 			:= E_KIN_SRL_INSTANCENUMBER_NOT_VALID,
+		Text 		:= 'MC_Enter_Message_Buffer_SRL: InstanceNumber Not Valid',
+		Value_n1 	:= 0 ,
+		Value_n2 	:= 0,
+		Value_f1 	:= 0,
+		Value_f2 	:= 0,
+		ErrorArchivingOnlyAfterReset := FALSE,
+		ForceEntryInNewElement := FALSE);
+		(*weil kein gültige Instanznummer da, hier die 1 auf Fehler setzen*)
+		SRL.Inst[1].Interface.Out.FBError	:= TRUE;
+		SRL.Inst[1].Interface.Out.FBErrorID	:= E_KIN_SRL_INSTANCENUMBER_NOT_VALID;
+
+	RETURN;
+END_IF
+
+tTime:=REAL_TO_TIME(rParaValue);
+
+fbTON(IN:=Enable , PT:=tTime );
+
+IF Enable THEN
+	CASE NumberOfFunction OF
+		11:(* SegParRecAxis *)
+
+			SegParaRecAxis_Act := LREAL_TO_UINT(rParaValue);
+			IF (SegParaRecAxis_Act > 8) OR (SegParaRecAxis_Act < 1) THEN(*tbd ID festlegen*)
+				Message:= ' SegParRecord Number §n1§ not valid => Init Program and Reset Error';
+				MC_Enter_Message_Buffer_HandlingKin(
+					E_HANDLINGKIN_SEG_PAR_RECORD_NUMBER_NOT_VALID,Message,0,0,0,0,TRUE,Instance,Error,ErrorID);
+				RETURN;
+			END_IF
+			FOR nIndex := 1 TO 8 DO
+				(*Es wird nur noch die Geschwindigkeit vom Override Percentage beeinflußt *)
+
+				SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_AXIS_VEL].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecAxis_Act].AxisVel[nIndex];
+				SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_AXIS_ACC].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecAxis_Act].AxisAcc[nIndex]		(** TargetVelocityPercentagefaktor*TargetVelocityPercentagefaktor*);
+				SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_AXIS_DEC].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecAxis_Act].AxisDec[nIndex]		(** TargetVelocityPercentagefaktor*TargetVelocityPercentagefaktor*);
+				IF AxisGroupKin_Inst.Config.General.RealJerk_InsteadOfJerkTime THEN
+					SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_AXIS_JERK].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecAxis_Act].AxisJerk[nIndex](** TargetVelocityPercentagefaktor*TargetVelocityPercentagefaktor*TargetVelocityPercentagefaktor*);
+				ELSE
+					SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_AXIS_JERK].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecAxis_Act].AxisJerk[nIndex] (*/ TargetVelocityPercentagefaktor*)	;
+				END_IF
+			END_FOR
+			nSynchronization:=0;
+			nSynchronization.1:= AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecAxis_Act].AxisSynchronization[1];
+			nSynchronization.2:= AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecAxis_Act].AxisSynchronization[2];
+			nSynchronization.3:= AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecAxis_Act].AxisSynchronization[3];
+			nSynchronization.4:= AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecAxis_Act].AxisSynchronization[4];
+			nSynchronization.5:= AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecAxis_Act].AxisSynchronization[5];
+			nSynchronization.6:= AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecAxis_Act].AxisSynchronization[6];
+			nSynchronization.7:= AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecAxis_Act].AxisSynchronization[7];
+			nSynchronization.8:= AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecAxis_Act].AxisSynchronization[8];
+			SRL_Dat_Var.RealData.Value[SRL_SYS_IN_TARGET_AXIS_SYNC]:=WORD_TO_LREAL(nSynchronization);
+			Done:=TRUE;
+
+		12:(* SegParRecCart	*)
+
+			SegParaRecCart_Act:=LREAL_TO_UINT(rParaValue);
+			IF (SegParaRecCart_Act > 8) OR (SegParaRecCart_Act < 1) THEN(*tbd ID festlegen*)
+				Message:= ' SegParRecord Number §n1§ not valid => Init Program and Reset Error';
+				MC_Enter_Message_Buffer_HandlingKin(
+					E_HANDLINGKIN_SEG_PAR_RECORD_NUMBER_NOT_VALID,Message,0,0,0,0,TRUE,Instance,Error,ErrorID);
+				RETURN;
+			END_IF
+			FOR nIndex := 1 TO 6 DO
+				SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_CART_VEL].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCart_Act].CartVel[nIndex]	;
+				SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_CART_ACC].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCart_Act].CartAcc[nIndex]	(** TargetVelocityPercentagefaktor*TargetVelocityPercentagefaktor*);
+				SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_CART_DEC].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCart_Act].CartDec[nIndex]	(** TargetVelocityPercentagefaktor*TargetVelocityPercentagefaktor*);
+				IF AxisGroupKin_Inst.Config.General.RealJerk_InsteadOfJerkTime THEN
+					SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_CART_JERK].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCart_Act].CartJerk[nIndex](* / (TargetVelocityPercentagefaktor * TargetVelocityPercentagefaktor *TargetVelocityPercentagefaktor )*);
+				ELSE
+					SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_CART_JERK].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCart_Act].CartJerk[nIndex] (* / (TargetVelocityPercentagefaktor )*);
+				END_IF
+			END_FOR
+
+			(* Werte für Achse7 und Achse 8 auch in Callf12 übernehmen, damit die Zusatzachsen in Programm Nr.4 auch korrekt verfahren werden können.  *)
+			FOR nIndex := 7 TO 8 DO
+				SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_AXIS_VEL].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCart_Act].AxisVel[nIndex];
+				SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_AXIS_ACC].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCart_Act].AxisAcc[nIndex]	;
+				SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_AXIS_DEC].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCart_Act].AxisDec[nIndex];
+				IF AxisGroupKin_Inst.Config.General.RealJerk_InsteadOfJerkTime THEN
+					SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_AXIS_JERK].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCart_Act].AxisJerk[nIndex];
+				ELSE
+					SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_AXIS_JERK].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCart_Act].AxisJerk[nIndex];
+				END_IF
+			END_FOR
+
+			(*Die Synchronisation liegt Bitweise vor. Allerdings ist im SegParRecord eine Sync für:
+				- die Achsweise Interpolation vorgesehen und
+				- für die Cartesische Interpolation vorgesehen.
+			In der Kin Schnittstelle gibt es aber nur einen Wert für die Synchronisation, der für Target Axes und Target Cart gilt.
+			Deshalb wird Abhängigkeit vom Kin-Mode die Synchronisation kopiert*)
+
+			nSynchronization:=0;
+			nSynchronization.1:= AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCart_Act].CartSynchronization[1];
+			nSynchronization.2:= AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCart_Act].CartSynchronization[2];
+			nSynchronization.3:= AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCart_Act].CartSynchronization[3];
+			nSynchronization.4:= AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCart_Act].CartSynchronization[4];
+			nSynchronization.5:= AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCart_Act].CartSynchronization[5];
+			nSynchronization.6:= AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCart_Act].CartSynchronization[6];
+			SRL_Dat_Var.RealData.Value[SRL_SYS_IN_TARGET_CART_SYNC]:=WORD_TO_LREAL(nSynchronization);
+			Done:=TRUE;
+
+		13:(* SegParRecCp	*)
+
+			SegParaRecCp_Act:=LREAL_TO_UINT(rParaValue);
+			IF (SegParaRecCp_Act > 8) OR (SegParaRecCp_Act < 1) THEN
+				Message:= ' SegParRecord Number §n1§ not valid => Init Program and Reset Error';
+				MC_Enter_Message_Buffer_HandlingKin(
+					E_HANDLINGKIN_SEG_PAR_RECORD_NUMBER_NOT_VALID,Message,0,0,0,0,TRUE,Instance,Error,ErrorID);
+				RETURN;
+			END_IF
+			SRL_Dat_Var.RealData.Value[SRL_SYS_IN_CP_VEL]		:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCp_Act].TransVel;
+			SRL_Dat_Var.RealData.Value[SRL_SYS_IN_CP_ACC]		:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCp_Act].TransAcc;
+			SRL_Dat_Var.RealData.Value[SRL_SYS_IN_CP_DEC]		:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCp_Act].TransDec;
+			SRL_Dat_Var.RealData.Value[SRL_SYS_IN_CP_JERK]		:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCp_Act].TransJerk;
+
+			SRL_Dat_Var.RealData.Value[SRL_SYS_IN_CP_BLENDING_LIMITATION_PERC]	:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCp_Act].BlendingLimitationPercentage;
+			SRL_Dat_Var.RealData.Value[SRL_SYS_IN_CP_BLENDING_VEL_PERC]			:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCp_Act].BlendingVelocityPercentage;
+			SRL_Dat_Var.RealData.Value[SRL_SYS_IN_CP_BLENDING_VEL_PROFILE]		:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecCp_Act].BlendingVelocityProfile;
+			Done:=TRUE;
+
+		14:(*SegParRecRot	*)
+
+			SegParaRecRot_Act:=LREAL_TO_UINT(rParaValue);
+			(*Die SRL_SYS_IN_ROT_BLENDING_DISTANCE  für die Orientierung wird aus dem angewählten SegParaRecRot_Act  entnommen
+				=> damit kann im Programm über die HandlingKinSysVar SegParRec_Rot der SegParRec ausgewählt werden aus dem die RotBlendingDist 
+					entnommen werden soll*)
+			IF (SegParaRecRot_Act > 8) OR (SegParaRecRot_Act < 1) THEN(*tbd ID festlegen*)
+				Message:= ' SegParRecord Number §n1§ not valid => Init Program and Reset Error';
+				MC_Enter_Message_Buffer_HandlingKin(
+					E_HANDLINGKIN_SEG_PAR_RECORD_NUMBER_NOT_VALID,Message,0,0,0,0,TRUE,Instance,Error,ErrorID);
+				RETURN;
+			END_IF
+			SRL_Dat_Var.RealData.Value[SRL_SYS_IN_ROT_BLENDING_DISTANCE] := AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecRot_Act].RotBlendingDistance;
+			Done:=TRUE;
+
+		15:(*SegParRec_Tp	*)
+
+			SegParaRecTp_Act:=LREAL_TO_UINT(rParaValue);
+			(*Die SRL_SYS_IN_TP_REMAINING_DISTANCE  für den Restweg wird aus dem angewählten  SegParaRecRot_Act  entnommen
+				zusätzlich wird mit dem RemainingDistancePercentage/100 multipliziert
+				=> damit kann im Programm über die HandlingKinSysVar SegParRec_Tp der SegParRec ausgewählt werden aus dem die SRL_SYS_IN_TP_REMAINING_DISTANCE 
+					entnommen werden soll*)
+			IF (SegParaRecTp_Act > 8) OR (SegParaRecTp_Act < 1) THEN(*tbd ID festlegen*)
+				Message:= ' SegParRecord Number §n1§ not valid => Init Program and Reset Error';
+				MC_Enter_Message_Buffer_HandlingKin(
+					E_HANDLINGKIN_SEG_PAR_RECORD_NUMBER_NOT_VALID,Message,0,0,0,0,TRUE,Instance,Error,ErrorID);
+				RETURN;
+			END_IF
+			SRL_Dat_Var.RealData.Value[SRL_SYS_IN_TP_REMAINING_DISTANCE] := (AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecTp_Act].RemainingDistance
+																										 * (AxisGroupHandlingKinProfile.Inst[Instance].Standard.In.PrgControlAdditional.RemainingDistancePercentage/100.0));
+			(*Die Dynamikwerte werden aus dem gleichen SegParRecord entnommen wie die distance*)
+			FOR nIndex := 1 TO 6 DO
+				SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_CART_TP_VEL].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecTp_Act].CartVel[nIndex];
+				SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_CART_TP_ACC].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecTp_Act].CartAcc[nIndex]	(** TargetVelocityPercentagefaktor*TargetVelocityPercentagefaktor*);
+				SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_CART_TP_DEC].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecTp_Act].CartDec[nIndex]	(** TargetVelocityPercentagefaktor*TargetVelocityPercentagefaktor*);
+				IF AxisGroupKin_Inst.Config.General.RealJerk_InsteadOfJerkTime THEN
+					SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_CART_TP_JERK].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecTp_Act].CartJerk[nIndex](* / (TargetVelocityPercentagefaktor * TargetVelocityPercentagefaktor *TargetVelocityPercentagefaktor )*);
+				ELSE
+					SRL_Dat_Var.PositionData.Value[SRL_SYS_IN_CART_TP_JERK].Dim[nIndex]:=AxisGroupHandlingKin.Inst[Instance].Config.SegmentParameterRecord[SegParaRecTp_Act].CartJerk[nIndex] (* / (TargetVelocityPercentagefaktor )*);
+				END_IF
+			END_FOR
+			Done:=TRUE;
+
+		1:
+				Done:=fbTON.Q;
+		2:
+				Done:=TRUE;
+		3:
+				Done:=TRUE;
+		4:
+				Done:=TRUE;
+		5:
+				Done:=TRUE;
+		6:
+				Done:=TRUE;
+		7:
+				Done:=TRUE;
+		8:
+				Done:=TRUE;
+		9:
+				Done:=TRUE;
+		10:
+				Done:=TRUE;
+
+
+	ELSE
+		(* -------------Error--------------------*)
+		Message:=CONCAT('Function Number : ',INT_TO_STRING(NumberOfFunction) );
+		Message:=CONCAT(Message,' is not valid');
+		MC_Enter_Message_Buffer_SRL(E_KIN_SRL_FUNCTION_NUMBER_NOT_VALID,  Message, 0, 0, 0, 0,TRUE, Instance, Error, ErrorID);
+	END_CASE
+ELSE
+	Done	:=FALSE;
+END_IF
+
+END_FUNCTION_BLOCK
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin\/StandardProfile\/In' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ST_AxisGroupHandlingKin_IN_StandardProf :
+STRUCT
+	PrgControlAdditional		: ST_AxisGroupHandlingKin_IN_StandardProf_Prog;
+	Segments					: ARRAY[1..gcHandlingKin_MaxNumberOfSegments] OF ST_AxisGroupHandlingKin_IN_StandardProf_Segments;
+END_STRUCT
+END_TYPE
+
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin\/StandardProfile\/In' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ST_AxisGroupHandlingKin_IN_StandardProf_Prog :
+STRUCT
+
+	HandshakeFlagForSpecialProgs	: BOOL; (* 4.4*)
+	TouchProbeMotion					: BOOL; (* 4.5*)
+	TouchProbeMeasure					: BOOL; (* 4.6*)
+
+	Wait1									: BOOL;
+	Wait2									: BOOL;
+	Wait3									: BOOL;
+	Wait4									: BOOL;
+	Wait5									: BOOL;
+	Wait6									: BOOL;
+	Wait7									: BOOL;
+	Wait8									: BOOL;
+	Wait9									: BOOL;
+	Wait10									: BOOL;
+	Wait11									: BOOL;
+	Wait12									: BOOL;
+	Wait13									: BOOL;
+	Wait14									: BOOL;
+	Wait15									: BOOL;
+	Wait16									: BOOL;
+	Wait17									: BOOL;
+	Wait18									: BOOL;
+	Wait19									: BOOL;
+	Wait20									: BOOL;
+	End1									: BOOL;
+	End2									: BOOL;
+	End3									: BOOL;
+	End4									: BOOL;
+	End5									: BOOL;
+	End6									: BOOL;
+	End7									: BOOL;
+	End8									: BOOL;
+	End9									: BOOL;
+	End10									: BOOL;
+	End11									: BOOL;
+	End12									: BOOL;
+	End13									: BOOL;
+	End14									: BOOL;
+	End15									: BOOL;
+	End16									: BOOL;
+	End17									: BOOL;
+	End18									: BOOL;
+	End19									: BOOL;
+	End20									: BOOL;
+
+	RemainingDistancePercentage		: UINT; (*Percentage for the remaining Distance*)
+	TelegramNo_060PD_STANDARD_PROFILE_10_SEGMENTS				: UINT;	(* TelegrammNo if the Consistence over more than 32 PD is needed*)
+	TelegramNo_088PD_STANDARD_PROFILE_15_SEGMENTS				: UINT;	(* TelegrammNo if the Consistence over more than 32 PD is needed*)
+	TelegramNo_116PD_STANDARD_PROFILE_20_SEGMENTS				: UINT;	(* TelegrammNo if the Consistence over more than 32 PD is needed*)
+
+
+END_STRUCT
+END_TYPE
+
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin\/StandardProfile\/In' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ST_AxisGroupHandlingKin_IN_StandardProf_Segments :
+STRUCT
+	Position					: ARRAY[1..KIN_AXISGROUPKIN_RESERVED_AXES_PER_INSTANCE] OF LREAL;
+	BlendingDistance			: LREAL;
+	SegmentParaRecNo		: UINT:=1;
+END_STRUCT
+END_TYPE
+
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin\/StandardProfile\/Out\/Kinematics' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ST_AxisGroupHandlingKin_OUT_StandardProf_Kin :
+STRUCT
+	ActualMotionCommandCompleted	: BOOL;
+	CpPathEndReached	 			: BOOL;
+	BackToPathActive				: BOOL;
+	CpMotionSlowedDown				: BOOL;
+	CartesianPositionValid			: BOOL;
+
+	KinMode							: UINT;
+	TranslationVel					: LREAL;
+
+	PathTargetDistance				: LREAL;
+	RemainingSegments				: UINT;
+END_STRUCT
+END_TYPE
+
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin\/StandardProfile\/Out\/StatusAxis' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ST_AxisGroupHandlingKin_OUT_StandardProf_Axis :
+STRUCT
+	MotorTurning			: BOOL;
+	InverterReady			: BOOL;
+	DriveReferenced			: BOOL;
+	PowerAmplifierEnabled	: BOOL;
+	BrakeReleased			: BOOL;
+	InverterConnected		: BOOL;
+	InverterError			: BOOL;
+	InverterStatus			: BYTE;
+END_STRUCT
+END_TYPE
+
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin\/StandardProfile\/Out' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ST_AxisGroupHandlingKin_OUT_StandardProf :
+STRUCT
+	PrgStatusAdditional					: ST_AxisGroupHandlingKin_OUT_StandardProf_Prog;
+
+	PositionKCS							: ARRAY[1..KIN_AXISGROUPKIN_RESERVED_AXES_PER_INSTANCE] OF LREAL;
+
+	TouchProbeMeasureKCS				: ARRAY[1..KIN_AXISGROUPKIN_RESERVED_AXES_PER_INSTANCE] OF LREAL;
+
+	Constellation							: UINT;
+
+	PositionACS							: ARRAY[1..KIN_AXISGROUPKIN_RESERVED_AXES_PER_INSTANCE] OF LREAL;
+
+	MotorSpeed							: ARRAY[1..KIN_AXISGROUPKIN_RESERVED_AXES_PER_INSTANCE] OF LREAL;
+
+	PastAbsoluteReachedMotorSpeed	: ARRAY[1..KIN_AXISGROUPKIN_RESERVED_AXES_PER_INSTANCE] OF LREAL;
+
+	StatusAxis								: ARRAY[1..KIN_AXISGROUPKIN_RESERVED_AXES_PER_INSTANCE] OF ST_AxisGroupHandlingKin_OUT_StandardProf_Axis;
+
+	Kinematics							: ST_AxisGroupHandlingKin_OUT_StandardProf_Kin;
+END_STRUCT
+END_TYPE
+
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin\/StandardProfile\/Out' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ST_AxisGroupHandlingKin_OUT_StandardProf_Prog :
+STRUCT
+
+	TouchProbeMotionActive				: BOOL;
+	TouchProbeMotionDetected			: BOOL;
+	TouchProbeMeasureActive			: BOOL;
+
+	WaitActive1							: BOOL;
+	WaitActive2							: BOOL;
+	WaitActive3							: BOOL;
+	WaitActive4							: BOOL;
+	WaitActive5							: BOOL;
+	WaitActive6							: BOOL;
+	WaitActive7							: BOOL;
+	WaitActive8							: BOOL;
+	WaitActive9							: BOOL;
+	WaitActive10							: BOOL;
+	WaitActive11							: BOOL;
+	WaitActive12							: BOOL;
+	WaitActive13							: BOOL;
+	WaitActive14							: BOOL;
+	WaitActive15							: BOOL;
+	WaitActive16							: BOOL;
+	WaitActive17							: BOOL;
+	WaitActive18							: BOOL;
+	WaitActive19							: BOOL;
+	WaitActive20							: BOOL;
+
+	EndActive1							: BOOL;
+	EndActive2							: BOOL;
+	EndActive3							: BOOL;
+	EndActive4							: BOOL;
+	EndActive5							: BOOL;
+	EndActive6							: BOOL;
+	EndActive7							: BOOL;
+	EndActive8							: BOOL;
+	EndActive9							: BOOL;
+	EndActive10							: BOOL;
+	EndActive11							: BOOL;
+	EndActive12							: BOOL;
+	EndActive13							: BOOL;
+	EndActive14							: BOOL;
+	EndActive15							: BOOL;
+	EndActive16							: BOOL;
+	EndActive17							: BOOL;
+	EndActive18							: BOOL;
+	EndActive19							: BOOL;
+	EndActive20							: BOOL;
+
+	ActualSegmentID						: UINT;
+
+	TelegramNo_060PD_STANDARD_PROFILE_10_SEGMENTS				: UINT;	(* TelegrammNo if the Consistence over more than 32 PD is needed*)
+	TelegramNo_088PD_STANDARD_PROFILE_15_SEGMENTS				: UINT;	(* TelegrammNo if the Consistence over more than 32 PD is needed*)
+	TelegramNo_116PD_STANDARD_PROFILE_20_SEGMENTS				: UINT;	(* TelegrammNo if the Consistence over more than 32 PD is needed*)
+
+
+END_STRUCT
+END_TYPE
+
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin\/StandardProfile' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ST_AxisGroupHandlingKin_StandardProf :
+STRUCT
+	In			: ST_AxisGroupHandlingKin_IN_StandardProf;
+	Out			: ST_AxisGroupHandlingKin_OUT_StandardProf;
+END_STRUCT
+END_TYPE
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ST_AxisGroupHandlingKinProf :
+STRUCT
+	Inst			: ARRAY [1..KIN_AXISGROUPKIN_MAX_NUMBER_OF_KINEMATICS_INSTANCES] OF ST_AxisGroupHandlingKinProf_Instance;
+END_STRUCT
+END_TYPE
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ST_AxisGroupHandlingKinProf_Instance :
+STRUCT
+	Standard					: ST_AxisGroupHandlingKin_StandardProf;
+	Simu3D_CoordSystem	: ST_Simu3D_CoordSystems;
+END_STRUCT
+END_TYPE
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ENUM_AxisIndex :(
+	A1:=1,
+	A2:=2,
+	A3:=3,
+	A4:=4,
+	A5:=5,
+	A6:=6,
+	A7:=7,
+	A8:=8
+);
+END_TYPE
+
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ENUM_CartIndex :(
+	X:=1,
+	Y:=2,
+	Z:=3,
+	A:=4,
+	B:=5,
+	C:=6
+
+
+);
+END_TYPE
+
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ST_AxisGroupKin_Point :
+STRUCT
+	x: LREAL;
+	y: LREAL;
+	z: LREAL;
+	A: LREAL;
+	B: LREAL;
+	C: LREAL;
+END_STRUCT
+END_TYPE
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ST_KinExamples_ControlVariables :
+STRUCT
+	EnableExamples		: BOOL;
+
+	ProgramNumber 		: DINT := 1;
+	ErrorReset 			: BOOL;
+
+	Kin 					: ST_KinExamples_ControlVariables_Kin;
+	Inverter				: ST_KinExamples_ControlVariables_Inverter;
+
+
+END_STRUCT
+END_TYPE
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ST_KinExamples_ControlVariables_Inverter :
+STRUCT
+
+	Enable_Stop_AllAxis			: BOOL;
+	Enable_RapidStop_AllAxis	: BOOL;
+	Inhibit_AllAxis 					: BOOL;
+
+END_STRUCT
+END_TYPE
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ST_KinExamples_ControlVariables_Kin :
+STRUCT
+
+	FeedEnable 			: BOOL;
+	RapidStop 			: BOOL;
+	OverridePercentage 	: INT := 10;
+
+END_STRUCT
+END_TYPE
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ST_KinExamples_SequenceType :
+STRUCT
+	Reset: BOOL;						(*Die Variable verhält sich ähnlich wie SFCInit. Im Unterschied zu dieser wird allerdings nach der Initialisierungder Init-Schritt weiter abgearbeitet.
+										So könnte beispielsweise im Init-Schritt das Flag SFCReset gleich wieder auf FALSE gesetzt werden.*)
+	Init: BOOL;							(*Wenn die Variable TRUE ist, wird die Ablaufsprache auf den Init-Schritt zurückgesetzt.
+										Die anderen AS-Flags werden ebenfalls zurückgesetzt (Initialisierung). 
+										Solange die Variable TRUE ist, bleibt der Init-Schritt gesetzt (aktiv), wird aber nicht ausgeführt.
+										Erst wenn SFCInit wieder auf FALSE gesetzt wird, wird der Baustein normal weiterbearbeitet.*)
+	EnableLimit: BOOL;				(*Wenn die Variable TRUE ist, werden Zeitüberschreitungen bei den Schritten in SFCError registriert.
+										Ansonsten werden Zeitüberschreitungen ignoriert.
+										Das Flag kann beispielsweise bei Inbetriebnahme oder Handbetrieb nützlich sein.*)
+	QuitError: BOOL;					(*Solange die Variable TRUE ist, wird die Abarbeitung des AS-Diagramms angehalten.
+										Eine in der Variablen SFCError registrierte Zeitüberschreitung wird dabei zurückgesetzt. 
+										Wenn die Variable wieder auf FALSE gesetzt wird, werden alle bisherigen Zeiten in den aktiven Schritten zurückgesetzt.
+										Voraussetzung dafür ist die Deklaration der Variablen SFCError, die die Zeitüberschreitung registriert.*)
+	CurrentStep: STRING;			(*In dieser Variablen wird der Name des momentan akitven Schritts gespeichert, unabhängig von der Zeitüberwachung.
+										Bei einer Paralellverzweigung wird der Name des Schritts im äußersten rechten Zweig gespeichert*)
+	Error: BOOL;						(*Diese Variable wird TRUE, wenn in einem AS-Diagramm eine Zeitüberschreitung aufgetreten ist.
+										Wenn nach der ersten Zeitüberschreitung eine weitere auftritt, wird diese nicht mehr registriert, 
+										es sei denn, die Variable SFCError wurde vorher wieder zurückgesetzt. 
+										Die Deklaration von SFCError ist Voraussetzung für das Funktionieren der anderen Flag-Variablen,
+										die zur Kontrolle des zeitlichen Ablaufs dienen (SFCErrorStep, SFCErrorPOU, SFCQuitError, SFCErrorAnalyzationTable.*)
+	ErrorStep: STRING; 				(*Wenn in SFCError eine Zeitüberschreitung im AS-Diagramm registriert wird, speichert die Variable den Namen des Schritts,
+										der die Zeitüberschreitung verursacht hat.
+										Voraussetzung dafür ist die Deklaration der Variablen SFCError, die die Zeitüberschreitung registriert. *)
+	Done: BOOL;
+END_STRUCT
+END_TYPE
+(* @END_DECLARATION := '0' *)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @GLOBAL_VARIABLE_LIST := 'GlobalConstant_AxisGroupControl_HandlingKin' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+VAR_GLOBAL CONSTANT
+		(*!!!! The Number of Coordsystems per Instance has to be gcHandlingKin_MaxNumberOfSegments !!!!! *)
+	NUM_OF_USER_COORDSYSTEMS_PER_INSTANCE 				: UINT :=  gcHandlingKin_MaxNumberOfSegments;
+END_VAR
+
+(* @OBJECT_END := 'GlobalConstant_AxisGroupControl_HandlingKin' *)
+(* @CONNECTIONS := GlobalConstant_AxisGroupControl_HandlingKin
+FILENAME : ''
+FILETIME : 0
+EXPORT : 0
+NUMOFCONNECTIONS : 0
+*)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @GLOBAL_VARIABLE_LIST := 'Version_AxisGroupControl_HandlingKin' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+VAR_GLOBAL
+	VERSION_AXISGROUPCONTROL_HANDLINGKIN : DWORD := 180;
+	RELEASE_AXISGROUPCONTROL_HANDLINGKIN : DWORD := 100;
+END_VAR
+
+(* @OBJECT_END := 'Version_AxisGroupControl_HandlingKin' *)
+(* @CONNECTIONS := Version_AxisGroupControl_HandlingKin
+FILENAME : ''
+FILETIME : 0
+EXPORT : 0
+NUMOFCONNECTIONS : 0
+*)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @GLOBAL_VARIABLE_LIST := 'GlobalVar_TechModule_AxisGroupControl_HandlingKin' *)
+(* @PATH := '\/AxisGroupControl_HandlingKin_TechModule' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+VAR_GLOBAL
+	{flag extrasymbolexport on}
+	AxisGroupHandlingKin		: ST_AxisGroupHandlingKin;				(* static first Part of Variable Interface to the HandlingKinematics*)
+	AxisGroupHandlingKinProfile	: ST_AxisGroupHandlingKinProf;(* modifiable Part of the Interface to the HandlingKinematics*)
+	{flag off}
+END_VAR
+(* @OBJECT_END := 'GlobalVar_TechModule_AxisGroupControl_HandlingKin' *)
+(* @CONNECTIONS := GlobalVar_TechModule_AxisGroupControl_HandlingKin
+FILENAME : ''
+FILETIME : 0
+EXPORT : 0
+NUMOFCONNECTIONS : 0
+*)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @GLOBAL_VARIABLE_LIST := 'GlobalVar_AxisGroupControl_Kinematics_Examples' *)
+(* @PATH := '\/AxisGroupControl_Kinematics\/Examples' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+VAR_GLOBAL
+	(* !!! Do not remove '{flag extrasymbolexport on}'. Otherwise the Kinematics Monitor will not work anymore. *)
+	{flag extrasymbolexport on}
+	gKinExamples_Control	: ARRAY[1..KIN_AXISGROUPKIN_MAX_NUMBER_OF_KINEMATICS_INSTANCES] OF ST_KinExamples_ControlVariables;
+	{flag off}
+
+	gsSeqMode				: ARRAY[1..KIN_AXISGROUPKIN_MAX_NUMBER_OF_KINEMATICS_INSTANCES] OF ST_KinExamples_SequenceType;
+
+	CART_VEL1:ARRAY[1..6] OF LREAL := 1,1,1,1,1,1;  (* VEL 1 [user unit / s] *)
+	CART_ACC1:ARRAY[1..6] OF LREAL := 1,1,1,1,1,1;  (*ACC 1 [user unit / (s * s)] *)
+	CART_DEC1:ARRAY[1..6] OF LREAL := 1,1,1,1,1,1;  (* DEC 1 [user unit / (s * s)]  *)
+
+	CART_VEL10:ARRAY[1..6] OF LREAL := 10,10,10,10,10,10;  (* VEL 10 [user unit / s] *)
+	CART_ACC10:ARRAY[1..6] OF LREAL := 10,10,10,10,10,10;  (*ACC 10 [user unit / (s * s)] *)
+	CART_DEC10:ARRAY[1..6] OF LREAL := 10,10,10,10,10,10;  (* DEC 10 [user unit / (s * s)]  *)
+
+	CART_VEL20:ARRAY[1..6] OF LREAL := 20,20,20,20,20,20;  (* VEL 20 [user unit / s] *)
+	CART_ACC20:ARRAY[1..6] OF LREAL := 20,20,20,20,20,20;  (*ACC 20 [user unit / (s * s)] *)
+	CART_DEC20:ARRAY[1..6] OF LREAL := 20,20,20,20,20,20;  (* DEC 20 [user unit / (s * s)]  *)
+
+	CART_VEL50:ARRAY[1..6] OF LREAL := 50,50,50,50,50,50;  (* VEL 50 [user unit / s] *)
+	CART_ACC50:ARRAY[1..6] OF LREAL := 50,50,50,50,50,50;  (*ACC 50 [user unit / (s * s)] *)
+	CART_DEC50:ARRAY[1..6] OF LREAL := 50,50,50,50,50,50;  (* DEC 50 [user unit / (s * s)]  *)
+
+	CART_VEL100:ARRAY[1..6] OF LREAL := 100,100,100,100,100,100;  (* VEL 100 [user unit / s] *)
+	CART_ACC100:ARRAY[1..6] OF LREAL := 100,100,100,100,100,100;  (*ACC 100 [user unit / (s * s)] *)
+	CART_DEC100:ARRAY[1..6] OF LREAL := 100,100,100,100,100,100;  (* DEC 100 [user unit / (s * s)]  *)
+
+	CART_VEL200:ARRAY[1..6] OF LREAL := 200,200,200,200,200,200;  (* VEL 200 [user unit / s] *)
+	CART_ACC200:ARRAY[1..6] OF LREAL := 200,200,200,200,200,200;  (*ACC 200 [user unit / (s * s)] *)
+	CART_DEC200:ARRAY[1..6] OF LREAL := 200,200,200,200,200,200;  (* DEC 200 [user unit / (s * s)]  *)
+
+	CART_VEL1000:ARRAY[1..6] OF LREAL := 1000,1000,1000,1000,1000,1000;  (* VEL 1000 [user unit / s] *)
+	CART_ACC1000:ARRAY[1..6] OF LREAL := 1000,1000,1000,1000,1000,1000;  (*ACC 1000 [user unit / (s * s)] *)
+	CART_DEC1000:ARRAY[1..6] OF LREAL := 1000,1000,1000,1000,1000,1000;  (* DEC 1000 [user unit / (s * s)]  *)
+
+	CART_JERK100:ARRAY[1..6] OF LREAL := 100,100,100,100,100,100;  (* JERK  [ms] *)
+
+	AXIS_VEL100:ARRAY[1..8] OF LREAL := 100,100,100,100,100,100,100,100;  (* VEL 100 [user unit / s] *)
+	AXIS_ACC100:ARRAY[1..8] OF LREAL := 100,100,100,100,100,100,100,100;  (*ACC 100 [user unit / (s * s)] *)
+	AXIS_DEC100:ARRAY[1..8] OF LREAL := 100,100,100,100,100,100,100,100;  (* DEC 100 [user unit / (s * s)]  *)
+	AXIS_JERK100:ARRAY[1..8] OF LREAL := 100,100,100,100,100,100,100,100;  (* JERK  [ms] *)
+
+	KIN_NO_SYNC: ARRAY[0..8]OF BOOL := FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE;
+
+(* PRG_XYZ_FillQueue_LIN3D_with_Array *)
+	points: ARRAY[1..10] OF ST_AxisGroupKin_Point;
+(* PRG_XYZ_USER poses and parameters *)
+	XYZ_USER_P1 : ARRAY[1..8] OF LREAL := 10,10,0;
+	XYZ_USER_P2 : ARRAY[1..8] OF LREAL := 200,200,200;
+(* PRG_XYZ_PICKnPLACE poses and parameters *)
+	XYZ_PICKnPLACE_P1 : ARRAY[1..8] OF LREAL := 10,0,0;
+	XYZ_PICKnPLACE_P2 : ARRAY[1..8] OF LREAL := 10,0,200;
+	XYZ_PICKnPLACE_P3 : ARRAY[1..8] OF LREAL := 300,0,200;
+	XYZ_PICKnPLACE_P4 : ARRAY[1..8] OF LREAL := 300,0,0;
+	XYZ_PICKnPLACE_BlendingDistance : LREAL := 50;
+(* PRG_XYZ_LIN_CIRC_LIN poses and parameters *)
+	XYZ_TARG_LIN_CIRC_P1 : ARRAY[1..8] OF LREAL := 10,10,0;
+	XYZ_TARG_LIN_CIRC_P2 : ARRAY[1..8] OF LREAL := 100,10,0;
+	XYZ_TARG_LIN_CIRC_R3 : LREAL := 50;
+	XYZ_TARG_LIN_CIRC_A3 : LREAL := 180;
+	XYZ_TARG_LIN_CIRC_P4 : ARRAY[1..8] OF LREAL := 10,200,0;
+
+END_VAR
+(* @OBJECT_END := 'GlobalVar_AxisGroupControl_Kinematics_Examples' *)
+(* @CONNECTIONS := GlobalVar_AxisGroupControl_Kinematics_Examples
+FILENAME : ''
+FILETIME : 0
+EXPORT : 0
+NUMOFCONNECTIONS : 0
+*)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @GLOBAL_VARIABLE_LIST := 'GlobalVar_AxisGroupControl_Kinematics' *)
+(* @PATH := '\/AxisGroupControl_Kinematics' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+VAR_GLOBAL
+	{flag extrasymbolexport on}
+	AxisGroupKin 		: ST_AxisGroupKin;
+	{flag off}
+END_VAR
+
+(* @OBJECT_END := 'GlobalVar_AxisGroupControl_Kinematics' *)
+(* @CONNECTIONS := GlobalVar_AxisGroupControl_Kinematics
+FILENAME : ''
+FILETIME : 0
+EXPORT : 0
+NUMOFCONNECTIONS : 0
+*)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @GLOBAL_VARIABLE_LIST := 'Version_AxisGroupControl_Kinematics' *)
+(* @PATH := '\/AxisGroupControl_Kinematics' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+VAR_GLOBAL
+	VERSION_AXISGROUPCONTROL_KINEMATICS : DWORD := 180;
+	RELEASE_AXISGROUPCONTROL_KINEMATICS : DWORD := 100;
+END_VAR
+
+(* @OBJECT_END := 'Version_AxisGroupControl_Kinematics' *)
+(* @CONNECTIONS := Version_AxisGroupControl_Kinematics
+FILENAME : ''
+FILETIME : 0
+EXPORT : 0
+NUMOFCONNECTIONS : 0
+*)
+
+
+LIBRARY
+03_ApplicationModules\MPLCAxisGroupControl_HandlingKin_MultiMotion.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 1
+AxisGroupControl_Main_HandlingKin_MultiMotion: 2048
+NumOfGVLs: 1
+VersionPartNumber_MPLCAxisGroupControl_HandlingKin_MultiMotion: 2048
+END_LIBRARY
+
+LIBRARY
+03_ApplicationModules\MPLCAxisGroupControl_HandlingKinematics.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 15
+AxisGroupControl_HandlingKin: 2048
+AxisGroupControl_HandlingKin_Simu3D_UserCoordSys: 2048
+AxisGroupControl_HandlingKin_Simu3D_UserCoordSys.Configuration: 2048
+FB_ReadHandlingKin_ApplicationSettings: 2048
+MC_Enter_Message_Buffer_HandlingKin: 2048
+MC_FieldbusMappingIN_HandlingKinematics: 2048
+MC_FieldbusMappingOUT_HandlingKinematics: 2048
+MC_HandlingKin_GetActWaitSignal: 2048
+MC_HandlingKin_ResetAllWaitSignals: 2048
+MC_HandlingKin_ResetWaitSignal: 2048
+MC_HandlingKin_SetEndSignal: 2048
+MC_HandlingKin_SetEndSignal_FUN: 2048
+MC_SRL_InterfaceIN_HandlingKinematics: 2048
+MC_SRL_InterfaceIN_HandlingKinematics.AssignVisibility_Simu3DUserCS: 2048
+MC_SRL_InterfaceOUT_HandlingKinematics: 2048
+NumOfGVLs: 2
+GlobaleVar_MPLCAxisGroupControl_HandlingKinematics: 2048
+Version_MPLCAxisGroupControl_HandlingKinematics: 2048
+END_LIBRARY
+
+LIBRARY
+03_ApplicationModules\MPLCAxisGroupControl_Kinematics.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 9
+AxisControl_Main_Kinematics: 2048
+AxisGroupControl_Configuration_Kinematics: 2048
+AxisGroupControl_Main_Kinematics: 2048
+AxisGroupControl_Priority_Kinematics: 2048
+AxisGroupKin_MonitorCpQueue: 2048
+F_GetParamValueV2_UDINT: 2048
+FB_ReadKin_ApplicationSettings: 2048
+MC_Enter_Message_Buffer_AxisGroupControlKin: 2048
+MC_Enter_Notice_AxisGroupControlKin: 2048
+NumOfGVLs: 2
+GlobalVar_MPLCAxisGroupControl_Kinematics: 2048
+Version_MPLCAxisGroupControl_Kinematics: 2048
+END_LIBRARY
+
+LIBRARY
+03_ApplicationModules\MPLCAxisGroupControl_Kinematics_Internal_Inst1.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 0
+NumOfGVLs: 1
+GlobalVar_MPLCAxisGroupControl_Kinematics_Internal_Inst1: 2048
+END_LIBRARY
+
+LIBRARY
+03_ApplicationModules\MPLCSewRobotLanguage.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 55
+GetParamValueCSV: 2048
+MC_Enter_Message_Buffer_SRL: 2048
+MC_Enter_State_Buffer: 2048
+SRL: 2048
+SRL_Back_To_Path: 2048
+SRL_Check: 2048
+SRL_CheckInverter: 2048
+SRL_Default: 2048
+SRL_EvalExpression: 2048
+SRL_EvalExpression.OP1_B_OP2_P: 2048
+SRL_EvalExpression.OP1_B_OR_Z_OP2_B_OR_Z: 2048
+SRL_EvalExpression.OP1_P_OP2_B: 2048
+SRL_EvalExpression.OP1_P_OP2_P: 2048
+SRL_EvalExpression.OP1_P_OP2_Z: 2048
+SRL_EvalExpression.OP1_Z_OP2_P: 2048
+SRL_Fits_ControlStruc_to_Stack: 2048
+SRL_Get_Deref_Par: 2048
+SRL_Get_Deref_Par_Value: 2048
+SRL_Get_Para: 2048
+SRL_Get_PositionIndexFromInstruction: 2048
+SRL_GetVarIndex: 2048
+SRL_GOExact: 2048
+SRL_Homing: 2048
+SRL_Init: 2048
+SRL_Init_CodingTab: 2048
+SRL_Init_ConfigFileTab: 2048
+SRL_Init_ConfigFileTab_Default: 2048
+SRL_Init_ControlStruc_Relations: 2048
+SRL_Init_ExpressionTab: 2048
+SRL_Interpret_Instruction: 2048
+SRL_Interpret_KinInstruction: 2048
+SRL_Interpreter: 2048
+SRL_Is_ControlStruc: 2048
+SRL_Joggen: 2048
+SRL_KinInstruction_DeterminePosition: 2048
+SRL_Main: 2048
+SRL_PathEventExecute: 2048
+SRL_PathEventLimitBufferIndex: 2048
+SRL_PathEventRegister: 2048
+SRL_Program_Manager: 2048
+SRL_Read_Data: 2048
+SRL_ReadSD_Data: 2048
+SRL_Ready: 2048
+SRL_Set_Deref_Par: 2048
+SRL_State_Machine: 2048
+SRL_SysDistance: 2048
+SRL_SysVar_AGK_IN: 2048
+SRL_SysVar_AGK_OUT: 2048
+SRL_TpActivate: 2048
+SRL_TpActivateLastSegment: 2048
+SRL_TpCatch: 2048
+SRL_TpPrepare: 2048
+SRL_Write_Data: 2048
+SRL_WriteSD_Data: 2048
+StringToBuffer: 2048
+NumOfGVLs: 3
+Const_SRL: 2048
+Global_Variables_SRL_InterpreterParameters: 2048
+GlobalVar_MPLCSewRobotLanguage: 2048
+END_LIBRARY
+
+LIBRARY
+04_InterpolatedMotion\MPLCKinematics.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 8
+MC_KinCoordSysMeasurement: 2048
+MC_KinEncoderDataProcessing: 2048
+MC_KinInProximity: 2048
+MC_KinMeasurement_QUADROPOD_LLLL_XYZ_M10: 2048
+MC_KinMonitorCpQueueSegment: 2048
+MC_KinProfGen: 2048
+MC_KinWcsPcs1Assignment: 2048
+MC_KinWcsPcs2Assignment: 2048
+NumOfGVLs: 2
+GlobalVar_Kinematics: 2048
+Version_MPLCKinematics: 2048
+END_LIBRARY
+
+LIBRARY
+04_InterpolatedMotion\MPLCKinematics_UserKin.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 9
+MC_KinAxisCouplingUser: 2048
+MC_KinAxisDecouplingUser: 2048
+MC_KinBijectionConfigUser: 2048
+MC_KinBijectionDirectUser: 2048
+MC_KinBijectionInverseUser: 2048
+MC_KinCheckConfigWithoutParValueUser: 2048
+MC_KinCheckParValueUser: 2048
+MC_KinDirectUser: 2048
+MC_KinInverseUser: 2048
+NumOfGVLs: 2
+GlobalVar_Kinematics_UserKin: 2048
+Version_MPLCKinematics_UserKin: 2048
+END_LIBRARY
+
+LIBRARY
+04_InterpolatedMotion\MPLCKinematics_UserLookAhead.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 1
+MC_KinLookAheadUser: 2048
+NumOfGVLs: 0
+END_LIBRARY
+
+LIBRARY
+04_InterpolatedMotion\MPLCSimu3D.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 30
+FB_BuildCSharpHeader_3DText: 2048
+FB_BuildCSharpHeader_CoordSys: 2048
+FB_BuildCSharpHeader_Kinematics: 2048
+FB_GetRemoteIPViaBroadcast: 2048
+FB_Simu3D_Clear_Pen: 2048
+FB_Simu3D_DataExchange_3DText: 2048
+FB_Simu3D_DataExchange_CoordSys: 2048
+FB_Simu3D_DataExchange_CoordSys.BuildTelegramDescription_CoordSys: 2048
+FB_Simu3D_DataExchange_Kinematics: 2048
+FB_Simu3D_DataExchange_Kinematics.BuildTelegramDescription_Kinematics: 2048
+FB_Simu3D_OpenSimFile_3DText: 2048
+FB_Simu3D_OpenSimFile_CoordSys: 2048
+FB_Simu3D_OpenSimFile_Kinematics: 2048
+FB_Simu3D_ParaToCSharp: 2048
+FB_Simu3D_ParaToCSharp_String: 2048
+FB_Simu3D_ReceiveSetpointTCP: 2048
+FB_Simu3D_SendJobStringTCP_lokale_Puffer: 2048
+FB_Simu3D_SendSetpointTCP: 2048
+FB_StringToBuffer: 2048
+FUN_ByteSwap_MPLCPower_32BitVars: 2048
+FUN_Simu3D_AddSetpointUDP: 2048
+FUN_Simu3D_EnterMessage: 2048
+FUN_Simu3D_SceneDescrCoding: 2048
+FUN_Simu3D_SendSetpointTCP: 2048
+MC_ReceiveV2_BigTelegrams_TCP: 2048
+MC_SendV2_BigTelegrams_TCP: 2048
+PRG_GetRemoteIPViaBroadcast: 2048
+PRG_Simu3D_Config_UserCoordSystems: 2048
+PRG_Simu3D_DataExchange_CoordSys: 2048
+PRG_Simu3D_DataExchange_Kinematics: 2048
+NumOfGVLs: 3
+GlobalVar_MPLCKinematics_Simulation: 2048
+GlobalVar_Simulation_Coordsystems: 2048
+Version_MPLCKinematics_Simulation: 2048
+END_LIBRARY
+
+LIBRARY
+11_System\SysLibStr.lib 27.1.17 13:50:06
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 6
+SysStrCmp: 0
+SysStrCmpI: 0
+SysStrCmpN: 0
+SysStrCmpNI: 0
+SysStrCpy: 0
+SysStrLen: 0
+NumOfGVLs: 1
+Globale_Variablen: 0
+END_LIBRARY
+
+LIBRARY
+Internal\MPLCIntern_Kinematics.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 118
+FB_Derivation_TaskPriority: 2048
+FB_KinAkima: 2048
+FB_KinAxisCouplingSystem: 2048
+FB_KinAxisDecouplingSystem: 2048
+FB_KinAxisIncrToAxisValues: 2048
+FB_KinAxisValuesToAxisIncr: 2048
+FB_KinBijectionConfigSystem: 2048
+FB_KinBijectionDirectSystem: 2048
+FB_KinBijectionInverseSystem: 2048
+FB_KinCalcCL_2D: 2048
+FB_KinCalcCLBlending_Cyclic: 2048
+FB_KinCalcCLBlending_Init: 2048
+FB_KinCartModuloRangeShift: 2048
+FB_KinCircleCenterCorrection_In2D: 2048
+FB_KinCircleFrom_Start_End_Center_In2D: 2048
+FB_KinCircleFrom_Start_End_Radius_In2D: 2048
+FB_KinConfigCheckOnlyParValue: 2048
+FB_KinConfigCheckWithoutParValue: 2048
+FB_KinControl: 2048
+FB_KinControl.A_Config: 2048
+FB_KinControl.B_Back: 2048
+FB_KinControl.C_Parameter: 2048
+FB_KinControl.D_Target: 2048
+FB_KinControl.E_Position: 2048
+FB_KinControl.F_Motion: 2048
+FB_KinControl.G_Continuous: 2048
+FB_KinControl.H_Init: 2048
+FB_KinControl.I_Check: 2048
+FB_KinControl.J_Position: 2048
+FB_KinControl.K_Linear: 2048
+FB_KinControl.L_Circular: 2048
+FB_KinControl.M_Axis: 2048
+FB_KinControl.N_Blending: 2048
+FB_KinControl.O_Look: 2048
+FB_KinControl.P_Execute: 2048
+FB_KinControl.Q_Transform: 2048
+FB_KinControl_Simu3DDataFilling: 2048
+FB_KinConvertFrameToVector: 2048
+FB_KinConvertPoseRadToDegr: 2048
+FB_KinConvertVectorToFrame: 2048
+FB_KinCoordSysMeasurementComputation: 2048
+FB_KinDifferentiate3Points_In2D: 2048
+FB_KinDirNumeric: 2048
+FB_KinDirNumeric.Transform: 2048
+FB_KinDirSystem: 2048
+FB_KinDirSystem.ACTION_KIN_DIR_TRIPOD_LLL_XYZ_M10: 2048
+FB_KinDirSystem.ACTION_KIN_DIR_TRIPOD_RRR_XYZ_M10: 2048
+FB_KinFrameInversion: 2048
+FB_KinFrameMultiplication: 2048
+FB_KinFrameMultiplication_V6FrameV6Notation: 2048
+FB_KinFrameMultiplication_Vect6Notation: 2048
+FB_KinIntersect2CirclesIn2D: 2048
+FB_KinIntersect2LinesIn2D: 2048
+FB_KinIntersect_Circle_CircleSection_In2D: 2048
+FB_KinInvSystem: 2048
+FB_KinInvSystem.ACTION_KIN_INV_QUADROPOD_LLLL_XYZA_M10: 2048
+FB_KinInvSystem.ACTION_KIN_INV_TRIPOD_LLL_XYZ_M10: 2048
+FB_KinInvSystem.ACTION_KIN_INV_TRIPOD_RRR_XYZ_M10: 2048
+FB_KinMbEntry: 2048
+FB_KinPositionFromEncoder: 2048
+FB_KinPositionTransformation: 2048
+FB_KinProjectPointToLine: 2048
+FB_KinSgn: 2048
+FB_KinShowMsg: 2048
+FB_KinShowMsg.ShowEmptyMessage: 2048
+FB_KinShowMsg_ConvertToString: 2048
+FB_KinTargSync: 2048
+FB_KinTargSync.A_CheckForChange: 2048
+FB_KinTargSync.B_TargPosActVel: 2048
+FB_KinTargSync.C_FastProfiles: 2048
+FB_KinTargSync.D0_AdaptedProfiles: 2048
+FB_KinTargSync.D1_TriangleProfile: 2048
+FB_KinTargSync.D2_TrapezoidProfileMaxVel: 2048
+FB_KinTargSync.D3_TrapezoidProfileMaxAccDec: 2048
+FB_KinTargSync.E0_AssignSync: 2048
+FB_KinTargSync.E1_HarmonizedDecelerationProfile: 2048
+FUN_KinAtan2MinusHPIto3HPI: 2048
+FUN_KinAtan2MinusPiToPi: 2048
+FUN_KinEnable_CpLookAhead: 2048
+FUN_KinEnable_CpLookAhead_AxisAccDec: 2048
+FUN_KinEnable_CpLookAheadUsingAkima: 2048
+FUN_KinEnable_CpNumericVelocityLimitation: 2048
+FUN_KinEnableTest_ConfigCartModuloUse: 2048
+FUN_KinEnableTest_ConfigGeneralRealJerkInsteadOfJerkTime: 2048
+FUN_KinEnableTest_InGeneralModeAXISCP: 2048
+FUN_KinEnableTest_InJogCoordSysTCS: 2048
+FUN_KinEnableTest_InTargetCoordSysTCS: 2048
+FUN_KinLimCPQind: 2048
+FUN_KinMappedAxisValue: 2048
+FUN_KinSetAxisKinModelOffset: 2048
+FUN_KinTimeForLinearProfile: 2048
+FUN_KinVect3Add: 2048
+FUN_KinVect3CrossProd: 2048
+FUN_KinVect3Norm: 2048
+FUN_KinVect3ScalarProd: 2048
+FUN_KinVect3ScalarVectProd: 2048
+FUN_KinVect3SquareNorm: 2048
+FUN_KinVect3Sub: 2048
+FUN_KinVect3UnitVect: 2048
+FUN_KinVect8TransDist: 2048
+PRG_KinCalcBlending1Phase: 2048
+PRG_KinCalcBlending3Phases: 2048
+PRG_KinCalcBlending3Phases.Circ1: 2048
+PRG_KinCalcBlending3Phases.Circ3: 2048
+PRG_KinCalcBlendingCL: 2048
+PRG_KinCalcBlendingMotion: 2048
+PRG_KinLocalVelocityLimitation: 2048
+PRG_KinLookAhead: 2048
+PRG_KinProfGen_PVA_TJP_PVA_aMax_dMax_jMax: 2048
+PRG_KinProfGen_PVA_TJP_PVA_Cyclic: 2048
+PRG_KinProfGen_PVA_TJP_PVA_Cyclic_v_a_d_j: 2048
+PRG_KinProfGen_PVA_TJP_PVA_Cyclic_vMax: 2048
+PRG_KinProfGen_PVA_TJP_PVA_Init: 2048
+PRG_KinProfGen_PVA_TJP_PVA_Init.A_Dyn: 2048
+PRG_KinProfGen_PVA_TJP_PVA_Init.B_Super: 2048
+PRG_KinProfGen_PVA_TJP_PVA_Init.C_Check: 2048
+PRG_KinProfGen_PVA_TJP_PVA_Init.D_New: 2048
+PRG_KinProfGen_PVA_TJP_PVA_Init_ConstV: 2048
+NumOfGVLs: 1
+GlobalVar_Intern_Kinematics: 2048
+END_LIBRARY
+
+LIBRARY
+Internal\MPLCIntern_Kinematics_BC.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 9
+FB_KinAxisCouplingSystem_BC: 2048
+FB_KinAxisDecouplingSystem_BC: 2048
+FB_KinBijectionConfigSystem_BC: 2048
+FB_KinBijectionDirectSystem_BC: 2048
+FB_KinBijectionInverseSystem_BC: 2048
+FB_KinConfigCheckOnlyParValue_BC: 2048
+FB_KinConfigCheckWithoutParValue_BC: 2048
+FB_KinDirSystem_BC: 2048
+FB_KinInvSystem_BC: 2048
+NumOfGVLs: 0
+END_LIBRARY
+
+LIBRARY
+Internal\MPLCIntern_Kinematics_Small.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 0
+NumOfGVLs: 1
+GlobalVar_Intern_Kinematics_Small: 2048
+END_LIBRARY

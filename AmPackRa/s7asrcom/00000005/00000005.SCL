@@ -1,0 +1,426 @@
+FUNCTION FC220: VOID
+
+TITLE = 'Pipe_Magazin_Status'
+//
+// Returns alls Storage daters
+//
+VERSION : '1.0'
+AUTHOR  : 'Gadomski'
+NAME    : 'Pipe_Magazin_Status'
+FAMILY  : 'Bauer'
+
+VAR_INPUT 
+    
+    Pallete_change : BOOL; // 1=Pallete change set all Positions as unknown
+    row_1_free     : BOOL; // 1=Row 1 is empty 0=Row 1 is occupied
+    row_2_free     : BOOL; // 1=Row 2 is empty 0=Row 2 is occupied
+    row_3_free     : BOOL; // 1=Row 3 is empty 0=Row 3 is occupied
+    row_4_free     : BOOL; // 1=Row 4 is empty 0=Row 4 is occupied
+    row_5_free     : BOOL; // 1=Row 5 is empty 0=Row 5 is occupied
+    
+    Robot_Job                :BYTE;
+    Robot_row                :BYTE;
+    Robot_collum             :BYTE;
+    Rotob_in_search_position :BOOL;
+    Rotob_Part_availlabe     :BOOL;
+    Robot_Communication_OK   :BOOL;
+    
+    
+END_VAR
+
+VAR_OUTPUT
+ERROR_Sensor_Daterbase  :BOOL;   // 1=Error: Missmatch between Sensor and Database; 0=OK
+ERROR_ROBOT_SCAN_and_Database :BOOL; // 1=Error: Missmatch between Database and Robot Scan value; 0=OK 
+Next_empty_row          :INT;    // Next empty row      to place a pipe; 0=No row found
+Next_empty_position     :INT;    // Next empty position to place a pipe; 0=No position found
+Scan_needed_for_empty   :BOOL;   // 1=Scan is necessary to find an emtpty position
+No_empty_Position       :BOOL;   // 1=No Position to place a pipe (Magazin full or no postion reachable)
+                                 
+Next_occupied_row       :INT;    // Next row      to fetch a pipe; 0=No row found
+Next_occupied_position  :INT;    // Next position to fetch a pipe; 0=No position found
+Scan_needed_for_occupied:BOOL;   // 1=Scan is necessary to find an occupied position                
+No_occupied_Position    :BOOL;   // 1=No Position to fetch  a pipe (Magazin empty)     
+
+Scan_row                :INT;    //Row that needs to be scaned; 0= No row to scan
+Scan_next_position      :BOOL;   //1 = Position scanned, scan next Position 
+
+PositionLeft            :INT;   // 8 or less (last row 5)
+ 
+ 
+END_VAR
+
+VAR_TEMP
+    irow:INT;
+    ipos:INT;
+    row_is_unknown:BOOL;
+    row_not_empty  :BOOL; 
+    row_is_free_sensor:BOOL;
+    
+    row_1_occupied :BOOL;
+    row_2_occupied :BOOL;
+    row_3_occupied :BOOL;
+    row_4_occupied :BOOL;
+    row_5_occupied :BOOL;
+        
+END_VAR
+
+
+
+BEGIN
+// initialisation
+ERROR_Sensor_Daterbase  :=0;    // 1=Error: Missmatch between Sensor and Database; 0=OK
+ERROR_ROBOT_SCAN_and_Database :=0; // 1=Error: Missmatch between Database and Robot Scan value; 0=OK 
+Next_empty_row          :=0;   // Next empty row      to place a pipe; 0=No row found
+Next_empty_position     :=0;    // Next empty position to place a pipe; 0=No position found
+Scan_needed_for_empty   :=0;    // 1=Scan is necessary to find an emtpty position
+No_empty_Position       :=0;    // 1=No Position to place a pipe (Magazin full)
+                                 
+Next_occupied_row       :=0;    // Next row      to fetch a pipe; 0=No row found
+Next_occupied_position  :=0;    // Next position to fetch a pipe; 0=No position found
+Scan_needed_for_occupied:=0;    // 1=Scan is necessary to find an occupied position                
+No_occupied_Position    :=0;    // 1=No Position to fetch  a pipe (Magazin empty)     
+
+Scan_row                :=0;    //Row that needs to be scaned; 0= No row to scan
+
+row_1_occupied :=0;
+row_2_occupied :=0;
+row_3_occupied :=0;
+row_4_occupied :=0;
+row_5_occupied :=0;
+
+PositionLeft := 8;
+
+IF Pallete_change THEN // Set all Position to unknown.
+    FOR irow := 1 TO 5 BY 1 DO
+         FOR ipos := 1 TO 8 BY 1 DO
+                               "Pipe_Magazin".Row[irow].Position[ipos]:=2;  
+         END_FOR;        
+    END_FOR;
+END_IF;
+
+// Position 8 not availabe in row 2 and row 4
+  "Pipe_Magazin".Row[2].Position[8]:=3;
+  "Pipe_Magazin".Row[4].Position[8]:=3;
+  
+  
+//------------------- SCAN by Robot ---------------------------
+Scan_next_position:=0;
+
+
+ IF Robot_Job=7 AND Rotob_in_search_position=1 AND Robot_Communication_OK=1 THEN
+        irow:=WORD_TO_INT(BYTE_TO_WORD(Robot_row));
+        ipos:=WORD_TO_INT(BYTE_TO_WORD(Robot_collum));
+        
+        
+        IF "Pipe_Magazin".Row[irow].Position[ipos]=2 THEN
+            IF Rotob_Part_availlabe THEN
+            "Pipe_Magazin".Row[irow].Position[ipos]:=1;
+            ELSE
+            "Pipe_Magazin".Row[irow].Position[ipos]:=0;
+            Scan_next_position:=1;
+            END_IF;
+        END_IF;
+        
+        IF "Pipe_Magazin".Row[irow].Position[ipos]=1 AND Rotob_Part_availlabe=0  THEN
+            ERROR_ROBOT_SCAN_and_Database:= 1;
+        END_IF;
+        
+        IF "Pipe_Magazin".Row[irow].Position[ipos]=0 AND Rotob_Part_availlabe=1  THEN
+            ERROR_ROBOT_SCAN_and_Database:= 1;
+        END_IF;  
+        
+        
+       // Send Robot to next Scanposition     
+       IF "Pipe_Magazin".Row[irow].Position[ipos]=1 AND Rotob_Part_availlabe=1 AND Rotob_in_search_position=1 THEN
+            Scan_next_position:=1;         
+       END_IF;
+       IF "Pipe_Magazin".Row[irow].Position[ipos]=0 AND Rotob_Part_availlabe=0 AND Rotob_in_search_position=1 THEN
+            Scan_next_position:=1;         
+       END_IF;
+       
+ END_IF;
+
+//------------------- Check row with row Sensors ------------------
+
+
+ FOR irow := 1 TO 5 BY 1 DO
+    
+ row_is_unknown :=0;
+ row_not_empty   :=0;
+        FOR ipos := 1 TO 8 BY 1 DO // next row to scan
+            IF "Pipe_Magazin".Row[irow].Position[ipos]=2 THEN
+                row_is_unknown:=1;
+            END_IF;
+            IF "Pipe_Magazin".Row[irow].Position[ipos]=2 THEN
+               Scan_row:= irow;
+            END_IF;
+           IF "Pipe_Magazin".Row[irow].Position[ipos]=1 THEN // OR "Pipe_Magazin".Row[irow].Position[ipos]=2 THEN
+               row_not_empty   :=1;
+           END_IF;
+           
+           IF "Pipe_Magazin".Row[irow].Position[ipos]=1 OR "Pipe_Magazin".Row[irow].Position[ipos]=2 THEN
+                CASE irow OF
+                        1: row_1_occupied:= 1;
+                        2: row_2_occupied:= 1;
+                        3: row_3_occupied:= 1;
+                        4: row_4_occupied:= 1;
+                        5: row_5_occupied:= 1;
+                END_CASE;
+           END_IF;
+    
+        END_FOR;
+
+        CASE irow OF
+                1:row_is_free_sensor := row_1_free;
+                2:row_is_free_sensor := row_2_free;
+                3:row_is_free_sensor := row_3_free;
+                4:row_is_free_sensor := row_4_free;
+                5:row_is_free_sensor := row_5_free;
+        END_CASE;
+        
+    
+ 
+    
+        IF (row_not_empty=1) AND (row_is_free_sensor=1) AND (Pallete_change=0) AND (row_is_unknown=0) THEN // Error if row is occupied in Database and Sensor reports free
+            ERROR_Sensor_Daterbase :=1;
+        END_IF;
+        IF (row_not_empty=0) AND (row_is_free_sensor=0) AND (Pallete_change=0) AND (row_is_unknown=0) THEN // Error if row is empty in Database ans Sensor reports occupied
+            ERROR_Sensor_Daterbase :=1;
+        END_IF;
+  
+        
+        
+ END_FOR;
+
+//------------------- Scan for next occupied row and position -------------------------------
+
+    FOR irow := 5 TO 1 BY -1 DO
+         FOR ipos := 8 TO 1 BY -1 DO
+                   CASE "Pipe_Magazin".Row[irow].Position[ipos] OF 
+                      
+                                       
+                        1:  Next_occupied_row:=irow;       
+                            Next_occupied_position:=ipos;
+                            EXIT;
+                        2:  Scan_needed_for_occupied:=1;
+                            EXIT;
+                         
+                                                
+                   END_CASE;
+         END_FOR;
+         IF ipos>0 THEN   
+             CASE "Pipe_Magazin".Row[irow].Position[ipos] OF 
+                            1,2: EXIT;
+             END_CASE; 
+         END_IF; 
+    END_FOR; 
+
+    
+//------------------- Scan for next empty row and position -------------------------------
+
+
+    FOR irow := 5 TO 1 BY -1 DO
+         FOR ipos := 8 TO 1 BY -1 DO
+                   CASE "Pipe_Magazin".Row[irow].Position[ipos] OF 
+                      
+                        0:  Next_empty_row := irow;
+                            Next_empty_position:=ipos;
+                        1:  EXIT;
+                            
+                        2:  Scan_needed_for_empty:=1; 
+                            EXIT;
+                         
+                                                
+                   END_CASE;
+         END_FOR;   
+         IF ipos>0 THEN   
+             CASE "Pipe_Magazin".Row[irow].Position[ipos] OF 
+                            1,2: EXIT;
+             END_CASE; 
+         END_IF;   
+    END_FOR;   
+    IF Next_empty_row>0 THEN //Scan for empty position from the other side of the row for the case, that there is an empty position
+        IF Next_empty_row > 2 AND Next_empty_position=1 THEN
+            irow:=Next_empty_row-1;
+        ELSE
+            irow:=Next_empty_row;
+        END_IF;
+        
+        FOR ipos := 1 TO 8 BY 1 DO
+              CASE "Pipe_Magazin".Row[irow].Position[ipos] OF 
+                 
+                   0:  Next_empty_row := irow;
+                       Next_empty_position:=ipos;
+                       EXIT;
+                   2:  Scan_needed_for_empty:=1; 
+                       
+                    
+                                           
+              END_CASE;
+         END_FOR;  
+     END_IF;
+(*
+   IF Next_empty_row = Scan_row THEN
+      Scan_needed_for_empty:=1;
+      Next_empty_row := 0;
+      Next_empty_position := 0;
+   END_IF;
+   
+   IF Next_occupied_row = Scan_row THEN
+      Scan_needed_for_occupied:=1;
+      Next_occupied_row:=0;       
+      Next_occupied_position:=0;
+   END_IF;
+   *)
+// ----------   Check if Empty Position is useable -------       
+    IF Next_empty_row<Next_occupied_row OR Next_empty_position=0 OR Next_empty_row=0 THEN
+            Next_empty_row := 0;
+            Next_empty_position := 0;
+            No_empty_Position := 1;
+    END_IF;
+// ----------   Check if occupied Position is availabe -------   
+    IF Next_occupied_row = 0 OR Next_occupied_position=0 THEN
+            Next_occupied_row:=0;       
+            Next_occupied_position:=0;
+            No_occupied_Position := 1; 
+    END_IF;
+    
+
+    
+    IF Scan_needed_for_occupied=0 AND Scan_needed_for_empty=0 THEN
+        Scan_row :=0;  
+    END_IF;
+    
+    CASE Scan_row OF // Disable Scan if sensors are not free or if database is occupied in the rows before.
+        1: IF                 row_2_free=0 OR row_2_occupied=1 OR row_3_free=0 OR row_3_occupied=1 OR row_4_free=0 OR row_4_occupied=1 OR row_5_free=0 OR row_5_occupied=1 THEN Scan_row :=0; END_IF;
+        2: IF                                                     row_3_free=0 OR row_3_occupied=1 OR row_4_free=0 OR row_4_occupied=1 OR row_5_free=0 OR row_5_occupied=1 THEN Scan_row :=0; END_IF;
+        3: IF                                                                                         row_4_free=0 OR row_4_occupied=1 OR row_5_free=0 OR row_5_occupied=1 THEN Scan_row :=0; END_IF;
+        4: IF                                                                                                                             row_5_free=0 OR row_5_occupied=1 THEN Scan_row :=0; END_IF;
+    END_CASE;
+    
+    FOR ipos := 1 TO 8 BY 1 DO
+        IF("Pipe_Magazin".Row[5].Position[ipos] <> 0) THEN
+            PositionLeft := PositionLeft - 1;
+        END_IF;
+    END_FOR;              
+
+                
+END_FUNCTION;
+
+
+
+//*************************************************************************************************************************************************************************
+//*************************************************************************************************************************************************************************
+//*************************************************************************************************************************************************************************
+
+
+FUNCTION FC221: VOID
+
+TITLE = 'Mark_Magazin_Position_as_unknown'
+//
+// 
+//
+VERSION : '1.0'
+AUTHOR  : 'Gadomski'
+NAME    : 'Mark_as_unknown'
+FAMILY  : 'Bauer'
+
+VAR_INPUT 
+    row:INT;
+    pos:INT;
+END_VAR
+
+VAR_OUTPUT
+
+ 
+END_VAR
+
+VAR_TEMP
+
+        
+END_VAR
+
+
+
+BEGIN
+    "Pipe_Magazin".Row[row].Position[pos]:=2;     
+END_FUNCTION;
+
+//*************************************************************************************************************************************************************************
+//*************************************************************************************************************************************************************************
+//*************************************************************************************************************************************************************************
+
+FUNCTION FC222: VOID
+
+TITLE = 'Mark_Magazin_Position_as_empty'
+//
+// 
+//
+VERSION : '1.0'
+AUTHOR  : 'Gadomski'
+NAME    : 'Mark_as_empty'
+FAMILY  : 'Bauer'
+
+VAR_INPUT 
+    row:INT;
+    pos:INT;
+END_VAR
+
+VAR_OUTPUT
+
+ 
+END_VAR
+
+VAR_TEMP
+
+        
+END_VAR
+
+
+
+BEGIN
+    IF "Pipe_Magazin".Row[row].Position[pos]=2 then
+        "Pipe_Magazin".Row[row].Position[pos]:=0;     
+    END_IF;
+    
+END_FUNCTION;
+
+//*************************************************************************************************************************************************************************
+//*************************************************************************************************************************************************************************
+//*************************************************************************************************************************************************************************
+
+FUNCTION FC223: VOID
+
+TITLE = 'Mark_Magazin_Position_as_occupied'
+//
+// 
+//
+VERSION : '1.0'
+AUTHOR  : 'Gadomski'
+NAME    : 'Mark_as_occupied'
+FAMILY  : 'Bauer'
+
+VAR_INPUT 
+    row:INT;
+    pos:INT;
+END_VAR
+
+VAR_OUTPUT
+
+ 
+END_VAR
+
+VAR_TEMP
+
+        
+END_VAR
+
+
+
+BEGIN
+    IF "Pipe_Magazin".Row[row].Position[pos]=2 then
+        "Pipe_Magazin".Row[row].Position[pos]:=1;     
+    END_IF;
+    
+END_FUNCTION;
+

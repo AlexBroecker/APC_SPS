@@ -1,0 +1,508 @@
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/CodeSamples\/EtherCAT' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+FUNCTION_BLOCK FB_Configuration_ETCSlave_Beckhoff_EPxxxx
+VAR_INPUT
+	Enable: BOOL; 			(* Activate config *)
+END_VAR
+VAR_OUTPUT
+	Done: BOOL;				(* Config done *)
+END_VAR
+VAR_IN_OUT
+	ExtConfig : MC_INITIALPARAMETER_ETCSLAVE;
+	(*	aIndex 		: ARRAY[1..NUMOF_INITIALPARAMETER] OF WORD;		(* Target index *)
+		aSubIndex : ARRAY[1..NUMOF_INITIALPARAMETER] OF WORD;		(* Target subindex *)
+		aBytes		: ARRAY[1..NUMOF_INITIALPARAMETER] OF BYTE;		(* Number of bytes to write (1-4) *)
+		aData 		: ARRAY[1..NUMOF_INITIALPARAMETER] OF DWORD;		(* Data to write *)
+
+		TimeOut 	: UINT :=5000;TimeOut during parameterization [ms]
+		SwapData	: BOOL; (*convert to motorola*)*)		
+END_VAR
+
+(* @END_DECLARATION := '0' *)
+IF Enable AND NOT Done THEN
+
+	(*########################################################
+
+		Configuration of Slave (Beckhoff_EPxxxx)
+		
+	#########################################################*)
+
+
+	(***************************************************** Additional parameters to set in the Slave  ***************************************************************)
+(*################################################################################*)
+	(*e.g. analogoutput  Beckhoff_EP4174 or analoginput _EP3174*)
+	ExtConfig.aIndex[1]			:= 16#F800;
+	ExtConfig.aSubIndex[1]		:= 1;(*channel 1 mode*)
+	ExtConfig.aBytes[1]			:= 2;
+	ExtConfig.aData[1]			:= 16#01;(*function  	00h = +-10V
+															01h = 0..20mA 
+															02h = 4..20mA 
+															06h = 0..10V*)
+	ExtConfig.aIndex[2]			:= 16#F800;
+	ExtConfig.aSubIndex[2]		:= 2;(*channel 2 mode*)
+	ExtConfig.aBytes[2]			:= 2;
+	ExtConfig.aData[2]			:= 16#0000;(*function  	*)
+
+	ExtConfig.aIndex[3]			:= 16#F800;
+	ExtConfig.aSubIndex[3]		:= 3;(*channel 3 mode*)
+	ExtConfig.aBytes[3]			:= 2;
+	ExtConfig.aData[3]			:= 16#0000;(*function  	*)
+
+	ExtConfig.aIndex[4]			:= 16#F800;
+	ExtConfig.aSubIndex[4]		:= 4;(*channel 4 mode*)
+	ExtConfig.aBytes[4]			:= 2;
+	ExtConfig.aData[4]			:= 16#0000;(*function  	*)
+
+	(********************************************** Additional configuration. Default values are in most cases sufficient *****************************************************)
+
+	ExtConfig.TimeOut			:= 10000;	(* [ms]. If the Init-Sequence takes longer than this TimeOut time --> Error *)
+	ExtConfig.SwapData			:= FALSE;	(**)
+	Done := TRUE;
+
+END_IF
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/CodeSamples\/EtherCAT' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+FUNCTION_BLOCK FB_Configuration_ETCSlave_SEW_OCE11B
+VAR_INPUT
+	Enable: BOOL; 			(* Activate config *)
+END_VAR
+VAR_OUTPUT
+	Done: BOOL;				(* Config done *)
+END_VAR
+VAR_IN_OUT
+	ExtConfig : MC_INITIALPARAMETER_ETCSLAVE;
+	(*	aIndex 		: ARRAY[1..NUMOF_INITIALPARAMETER] OF WORD;		(* Target index *)
+		aSubIndex : ARRAY[1..NUMOF_INITIALPARAMETER] OF WORD;		(* Target subindex *)
+		aBytes		: ARRAY[1..NUMOF_INITIALPARAMETER] OF BYTE;		(* Number of bytes to write (1-4) *)
+		aData 		: ARRAY[1..NUMOF_INITIALPARAMETER] OF DWORD;		(* Data to write *)
+
+		TimeOut 	: UINT :=5000;TimeOut during parameterization [ms]
+		SwapData	: BOOL; (*convert to motorola*)*)		
+END_VAR
+
+(* @END_DECLARATION := '0' *)
+IF Enable AND NOT Done THEN
+
+	(*########################################################
+
+		Configuration of Slave (SEW OCE11B)
+		
+	#########################################################*)
+
+
+	(***************************************************** Additional parameters to set in the Slave  ***************************************************************)
+(*################################################################################*)
+	(*e.g. analoginput  OAI43B*)
+	ExtConfig.aIndex[1]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[1]		:= 16;(*parameter lock*)
+	ExtConfig.aBytes[1]			:= 1;
+	ExtConfig.aData[1]			:= 16#00;(* 0=deaktivate 1=aktivate*)
+
+	ExtConfig.aIndex[2]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[2]		:= 1;(*diagnostics alarm*)
+	ExtConfig.aBytes[2]			:= 1;
+	ExtConfig.aData[2]			:= 2#00000000;(*bit 6 / 0=off, 1=alarm on*)
+
+	ExtConfig.aIndex[3]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[3]		:= 3;(*channel 1 mode*)
+	ExtConfig.aBytes[3]			:= 1;
+	ExtConfig.aData[3]			:= 16#28;(*function  	28h = +-10V
+															2Ch = +-20mA 
+															2Dh = 4..20mA 
+															01h = PT100-2wire 
+															FFh = off   
+															etc.*)
+
+	ExtConfig.aIndex[4]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[4]		:= 4;(*channel 2 mode*)
+	ExtConfig.aBytes[4]			:= 1;
+	ExtConfig.aData[4]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[5]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[5]		:= 5;(*channel 3 mode*)
+	ExtConfig.aBytes[5]			:= 1;
+	ExtConfig.aData[5]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[6]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[6]		:= 6;(*channel 4 mode*)
+	ExtConfig.aBytes[6]			:= 1;
+	ExtConfig.aData[6]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[7]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[7]		:= 7;(*channel 1 option*)
+	ExtConfig.aBytes[7]			:= 1;
+	ExtConfig.aData[7]			:= 2#00010000;(*conversion/s  		[0001 	= 30 conv/s with 16 bit resolution] etc*)
+													(*averaging 			[00 	= deaktivate | 01 = 2 from 3 | 10 = 4 from 6]*)
+													(*threshold function	[01 = +-8 | 10 = +-16 | 00 = deaktivate]*)
+
+	ExtConfig.aIndex[8]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[8]		:= 8;(*channel 2 option*)
+	ExtConfig.aBytes[8]			:= 1;
+	ExtConfig.aData[8]			:= 2#00010000;
+
+	ExtConfig.aIndex[9]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[9]		:= 9;(*channel 3 option*)
+	ExtConfig.aBytes[9]			:= 1;
+	ExtConfig.aData[9]			:= 2#00010000;
+
+	ExtConfig.aIndex[10]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[10]		:= 10;(*channel 4 option*)
+	ExtConfig.aBytes[10]			:= 1;
+	ExtConfig.aData[10]			:= 2#00010000;
+
+(*################################################################################
+	(*e.g. analoginput  OAI42B*)
+	ExtConfig.aIndex[1]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[1]		:= 3;(*channel 1 mode*)
+	ExtConfig.aBytes[1]			:= 1;
+	ExtConfig.aData[1]			:= 16#2D;(*function  	2Ch = +-20mA 
+															2Dh = 4..20mA 
+															FFh = off   
+															etc.*)
+
+	ExtConfig.aIndex[2]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[2]		:= 4;(*channel 2 mode*)
+	ExtConfig.aBytes[2]			:= 1;
+	ExtConfig.aData[2]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[3]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[3]		:= 5;(*channel 3 mode*)
+	ExtConfig.aBytes[3]			:= 1;
+	ExtConfig.aData[3]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[4]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[4]		:= 6;(*channel 4 mode*)
+	ExtConfig.aBytes[4]			:= 1;
+	ExtConfig.aData[4]			:= 16#FF;(*function*)
+
+################################################################################*)
+(*################################################################################
+	(*e.g. analoginput  OAI41B*)
+	ExtConfig.aIndex[1]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[1]		:= 3;(*channel 1 mode*)
+	ExtConfig.aBytes[1]			:= 1;
+	ExtConfig.aData[1]			:= 16#28;(*function  	28h = +-10V 
+															FFh = off   
+															etc.*)
+
+	ExtConfig.aIndex[2]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[2]		:= 4;(*channel 2 mode*)
+	ExtConfig.aBytes[2]			:= 1;
+	ExtConfig.aData[2]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[3]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[3]		:= 5;(*channel 3 mode*)
+	ExtConfig.aBytes[3]			:= 1;
+	ExtConfig.aData[3]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[4]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[4]		:= 6;(*channel 4 mode*)
+	ExtConfig.aBytes[4]			:= 1;
+	ExtConfig.aData[4]			:= 16#FF;(*function*)
+
+################################################################################*)
+	(*e.g. analogoutput  OAO43B*)
+	ExtConfig.aIndex[11]			:= 16#3001;(* 2. Modul *)
+	ExtConfig.aSubIndex[11]		:= 16;(*parameter lock*)
+	ExtConfig.aBytes[11]			:= 1;
+	ExtConfig.aData[11]			:= 16#00;(* 0=deaktivate 1=aktivate*)
+
+	ExtConfig.aIndex[12]			:= 16#3001;(* 2. Modul *)
+	ExtConfig.aSubIndex[12]		:= 1;(*diagnostics alarm*)
+	ExtConfig.aBytes[12]			:= 1;
+	ExtConfig.aData[12]			:= 2#00000000;(*bit 6 / 0=off, 1=alarm on*)
+
+	ExtConfig.aIndex[13]			:= 16#3001;(* 2. Modul *)
+	ExtConfig.aSubIndex[13]		:= 3;(*channel 1 mode*)
+	ExtConfig.aBytes[13]			:= 1;
+	ExtConfig.aData[13]			:= 16#09;(*function  	09h = +-10V
+															0Bh = +-20mA 
+															0Ch = 4..20mA 
+															FFh = off   
+															etc.*)
+
+	ExtConfig.aIndex[14]			:= 16#3001;(* 2. Modul *)
+	ExtConfig.aSubIndex[14]		:= 4;(*channel 2 mode*)
+	ExtConfig.aBytes[14]			:= 1;
+	ExtConfig.aData[14]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[15]			:= 16#3001;(* 2. Modul *)
+	ExtConfig.aSubIndex[15]		:= 5;(*channel 3 mode*)
+	ExtConfig.aBytes[15]			:= 1;
+	ExtConfig.aData[15]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[16]			:= 16#3001;(* 2. Modul *)
+	ExtConfig.aSubIndex[16]		:= 6;(*channel 4 mode*)
+	ExtConfig.aBytes[16]			:= 1;
+	ExtConfig.aData[16]			:= 16#FF;(*function*)
+
+(*################################################################################
+	(*e.g. analogoutput  OAO42B*)
+	ExtConfig.aIndex[1]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[1]		:= 3;(*channel 1 mode*)
+	ExtConfig.aBytes[1]			:= 1;
+	ExtConfig.aData[1]			:= 16#2C;(*function  	2Ch = +-20mA 
+															2Dh = 4..20mA 
+															FFh = off   
+															etc.*)
+
+	ExtConfig.aIndex[2]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[2]		:= 4;(*channel 2 mode*)
+	ExtConfig.aBytes[2]			:= 1;
+	ExtConfig.aData[2]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[3]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[3]		:= 5;(*channel 3 mode*)
+	ExtConfig.aBytes[3]			:= 1;
+	ExtConfig.aData[3]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[4]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[4]		:= 6;(*channel 4 mode*)
+	ExtConfig.aBytes[4]			:= 1;
+	ExtConfig.aData[4]			:= 16#FF;(*function*)
+
+################################################################################*)
+(*################################################################################
+	(*e.g. analogoutput  OAO41B*)
+	ExtConfig.aIndex[1]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[1]		:= 3;(*channel 1 mode*)
+	ExtConfig.aBytes[1]			:= 1;
+	ExtConfig.aData[1]			:= 16#09;(*function  	09h = +-10V 
+															0Dh = 0..10V 
+															FFh = off   
+															etc.*)
+
+	ExtConfig.aIndex[2]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[2]		:= 4;(*channel 2 mode*)
+	ExtConfig.aBytes[2]			:= 1;
+	ExtConfig.aData[2]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[3]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[3]		:= 5;(*channel 3 mode*)
+	ExtConfig.aBytes[3]			:= 1;
+	ExtConfig.aData[3]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[4]			:= 16#3000;(* 1. Modul *)
+	ExtConfig.aSubIndex[4]		:= 6;(*channel 4 mode*)
+	ExtConfig.aBytes[4]			:= 1;
+	ExtConfig.aData[4]			:= 16#FF;(*function*)
+
+################################################################################*)
+(*################################################################################*)
+	(* Enable transmission of analog inputs *)
+	ExtConfig.aIndex[17]			:= 16#6423;
+	ExtConfig.aSubIndex[17]		:= 0;
+	ExtConfig.aBytes[17]			:= 1;
+	ExtConfig.aData[17]			:= 1;
+
+
+	(********************************************** Additional configuration. Default values are in most cases sufficient *****************************************************)
+
+	ExtConfig.TimeOut			:= 10000;	(* [ms]. If the Init-Sequence takes longer than this TimeOut time --> Error *)
+	ExtConfig.SwapData			:= TRUE;	(**)
+	Done := TRUE;
+
+END_IF
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/CodeSamples\/EtherCAT' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(************************************************************************************
+*
+*                 Code sample  " PRG_UniversalEtherCAT "                 
+*
+*************************************************************************************
+*
+* (c) 2012 by SEW-EURODRIVE GmbH & Co KG
+*
+************************************************************************************
+************************************************************************************
+*
+* PRG_UniversalEtherCAT
+*
+* This code sample demonstrates, how to configure and connect a 
+* Beckhoff EPxxxx IO via EtherCAT.
+*
+* 
+************************************************************************************)
+PROGRAM PRG_UniversalEtherCAT
+VAR
+	(* Configuration file *)
+	fbConfig_Beckhoff_EP: FB_Configuration_ETCSlave_Beckhoff_EPxxxx;
+	stConfig_Beckhoff_EP: MC_INITIALPARAMETER_ETCSLAVE;
+	bConfigDone_Beckhoff_EP: BOOL;
+
+	(* Connect  *)
+	fbConnect_Beckhoff_EP: MPLC_ConnectUniversalSlave_EtherCAT;
+	bReset_Beckhoff_EP: BOOL;
+	stDiag_Beckhoff_EP: MC_DIAG_EtherCAT_IO;
+	bConnectDone_Beckhoff_EP: BOOL;
+	bConnectError_Beckhoff_EP: BOOL;
+	nConnectErrorID_Beckhoff_EP: UDINT;
+	stAxis_Beckhoff_EP: AXIS_REF;
+END_VAR
+(* @END_DECLARATION := '0' *)
+_FBD_BODY
+_NETWORKS : 2
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_ASSIGN
+_FUNCTIONBLOCK
+fbConfig_Beckhoff_EP
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+stConfig_Beckhoff_EP
+_EXPRESSION
+_POSITIV
+FB_Configuration_ETCSlave_Beckhoff_EPxxxx
+_OUTPUTS : 0
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+bConfigDone_Beckhoff_EP
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_ASSIGN
+_FUNCTIONBLOCK
+fbConnect_Beckhoff_EP
+_BOX_EXPR : 4
+_OPERAND
+_EXPRESSION
+_POSITIV
+bConfigDone_Beckhoff_EP
+_OPERAND
+_EXPRESSION
+_POSITIV
+1001
+_OPERAND
+_EXPRESSION
+_POSITIV
+bReset_Beckhoff_EP
+_OPERAND
+_EXPRESSION
+_POSITIV
+stConfig_Beckhoff_EP
+_EXPRESSION
+_POSITIV
+MPLC_ConnectUniversalSlave_EtherCAT
+_OUTPUTS : 4
+_OUTPUT
+_POSITIV
+_NO_SET
+bConnectError_Beckhoff_EP
+_OUTPUT
+_POSITIV
+_NO_SET
+nConnectErrorID_Beckhoff_EP
+_OUTPUT
+_POSITIV
+_NO_SET
+stAxis_Beckhoff_EP
+_OUTPUT
+_POSITIV
+_NO_SET
+stDiag_Beckhoff_EP
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+bConnectDone_Beckhoff_EP
+
+END_PROGRAM
+
+LIBRARY
+05_Utilities\MPLCCommunication_EtherCAT.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 7
+MC_Additional_MUXElement_EtherCAT: 2048
+MC_CommunicationTask_EtherCAT: 2048
+MC_ConnectGateway_EtherCAT: 2048
+MC_ErrorLogEtherCAT: 2048
+MC_GetFrameInfo_EtherCAT: 2048
+MC_GetInputFrameData_EtherCAT: 2048
+MC_SyncManager_EtherCAT: 2048
+NumOfGVLs: 2
+GlobalVar_Communication_EtherCAT: 2048
+Version_MPLCCommunication_EtherCAT: 2048
+END_LIBRARY
+
+LIBRARY
+05_Utilities\MPLCUtilities.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 12
+MPLC_ClockMemoryByte: 2048
+MPLC_Connect_IP67_IOModul_EtherCAT: 2048
+MPLC_ConnectIOModul_CANopen: 2048
+MPLC_ConnectIOModul_CANopen_with_RTR: 2048
+MPLC_ConnectMOVIMOT_MxD: 2048
+MPLC_ConnectUniversalSlave_CANopen: 2048
+MPLC_ConnectUniversalSlave_EtherCAT: 2048
+MPLC_CycleTime: 2048
+MPLC_Parameter_CANopenIO: 2048
+MPLC_ParameterRW_CANopen: 2048
+MPLC_ParameterRW_CANopen64: 2048
+MPLC_RealTimeClockManager: 2048
+NumOfGVLs: 2
+GlobalVar_Utilities: 2048
+Version_MPLCUtilities: 2048
+END_LIBRARY
+
+LIBRARY
+Internal\MPLCIntern_Communication_EtherCAT.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 13
+F_AddMuxListElement_EtherCAT: 2048
+F_CreateHighPrioImage_EtherCAT: 2048
+F_GetMuxListSize_EtherCAT: 2048
+F_InitDataBuffer_EtherCAT: 2048
+F_InitMuxList: 2048
+F_ReadMuxData_EtherCAT: 2048
+F_ResultETCSDO: 2048
+F_WriteETCSDO: 2048
+F_WriteMuxData_EtherCAT: 2048
+MC_GetInputImage_EtherCAT: 2048
+P_Multiplexer_EtherCAT: 2048
+P_ParameterChannel_EtherCAT: 2048
+P_SDO_EtherCAT: 2048
+NumOfGVLs: 0
+END_LIBRARY
+
+LIBRARY
+Internal\MPLCIntern_Utilities.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 3
+MPLCIntern_ETC_SDORW: 2048
+MPLCIntern_Parameter_CO: 2048
+MPLCIntern_Parameter_CO64: 2048
+NumOfGVLs: 1
+Intern_Utilities: 2048
+END_LIBRARY

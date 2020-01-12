@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<CRCDataForVersionManager xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <UserInfo>
+    <UserName>DEHOKRAI</UserName>
+    <UserComment>Automatic generated file by CreateCRCDataForTSP V1.1.4681.17240</UserComment>
+    <UserDateTime>27.01.2017 / 02:21</UserDateTime>
+  </UserInfo>
+  <Files PathName="PLCConf_MOVI-PLC_advanced_DHR41B\MOVI-PLC_advanced_DHR41B.cfg" CRC="1040778284" />
+  <Files PathName="Ini_MOVI-PLC_advanced_DHR41B\Browser.ini" CRC="3399586028" />
+  <Files PathName="Ini_MOVI-PLC_advanced_DHR41B\Errors.ini" CRC="3056000928" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\standard.lib" CRC="2816763488" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\12_Additional\check.lib" CRC="897585976" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\12_Additional\Iecsfc.lib" CRC="4247683486" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\12_Additional\Util.lib" CRC="3265985416" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\12_Additional\Util_no_Real.lib" CRC="237488170" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCSystem_ConfigLibDataEx_Intern.lib" CRC="3576369523" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCSystem_DataBuffer.lib" CRC="4131799429" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCSystem_DHR41B.lib" CRC="3930927774" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCSystem_ErrorCodes.lib" CRC="393757213" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCSystem_FIFO.lib" CRC="3421338436" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCSystem_Filter.lib" CRC="227812844" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCSystem_Licensing.lib" CRC="2833574083" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCSystem_Maintenance.lib" CRC="4106465116" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCSystem_MathFunctions.lib" CRC="1138577308" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCSystem_SysFcts.lib" CRC="1580164462" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCSystem_TaskInfo.lib" CRC="2503905194" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCSystem_TrapData.lib" CRC="450673806" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCTechFct_Cam.lib" CRC="1517058615" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCTechFct_CamController.lib" CRC="3760892989" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCTechFct_PosTransferFunc.lib" CRC="379889590" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCTechFct_ProfGen.lib" CRC="4229028587" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCTechFct_ProfGenJLimit.lib" CRC="2369994034" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\MPLCTechFct_ProfGenV2.lib" CRC="3389634640" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\SysLibCallback.lib" CRC="654167054" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\SysLibDir.lib" CRC="4100939074" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\SysLibFile.lib" CRC="4184121152" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\SysLibFileAsync.lib" CRC="1260294509" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\SysLibFileStream.lib" CRC="15817259" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\SysLibProjectInfo.lib" CRC="237006927" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\SysLibRtc.lib" CRC="3839435048" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\SysLibSockets.lib" CRC="837353422" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\SysLibSocketsAsync.lib" CRC="2221007671" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\SysLibStr.lib" CRC="2317848348" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\SysLibTime.lib" CRC="919691801" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\11_System\SysTaskInfo.lib" CRC="2395134989" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\10_Interface\MPLCInterface.lib" CRC="327484583" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\10_Interface\MPLCInterface_CAN.lib" CRC="2412572269" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\10_Interface\MPLCInterface_CAN_Ex.lib" CRC="4179295962" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\10_Interface\MPLCInterface_CAN_V2.lib" CRC="3112732918" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\10_Interface\MPLCInterface_COM.lib" CRC="846044818" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\10_Interface\MPLCInterface_COM_ExAdv.lib" CRC="938364917" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\10_Interface\MPLCInterface_DigitalIO.lib" CRC="1986152169" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\10_Interface\MPLCInterface_DPRAM.lib" CRC="4149159520" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\10_Interface\MPLCInterface_EtherCAT.lib" CRC="4205347315" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\10_Interface\MPLCInterface_Fbus.lib" CRC="2457497061" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\10_Interface\MPLCInterface_MoviLink.lib" CRC="336510719" />
+  <Files PathName="Lib_MOVI-PLC_advanced_DHR41B\10_Interface\MPLCInterface_Sni.lib" CRC="3867268081" />
+  <Files PathName="MOVI-PLC_advanced_DHR41B.trg" CRC="153916315" />
+  <Files PathName="MOVI-PLC_advanced_Events.xml" CRC="2261439046" />
+</CRCDataForVersionManager><!--SEWCRCCHECK=db74aec5-->

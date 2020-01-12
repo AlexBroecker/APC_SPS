@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MotionStudioProject Name="LoadingStation">
+  <ActiveNetworkView>Netzwerk</ActiveNetworkView>
+  <SyntaxVersion>4.1</SyntaxVersion>
+  <CreationTime>29.08.2018 00:13:54</CreationTime>
+  <LastWriteTime>29.08.2018 00:41:14</LastWriteTime>
+  <MMSVersion>6.2.0.1</MMSVersion>
+  <OSVersion>Microsoft Windows NT 6.1.7601 Service Pack 1</OSVersion>
+  <Author />
+  <Comment />
+  <TCI>false</TCI>
+  <ShortSig>true</ShortSig>
+  <TCISingle>false</TCISingle>
+  <Resources />
+  <Devices />
+  <DeviceGroups />
+  <NetworkViews>
+    <NetworkView Name="Netzwerk">
+      <RelativeFilePath>Views\Netzwerk.sewview</RelativeFilePath>
+      <Comment />
+    </NetworkView>
+  </NetworkViews>
+  <ProjectView Name="Overview">
+    <RelativeFilePath>Views\Overview.sewview</RelativeFilePath>
+  </ProjectView>
+</MotionStudioProject>

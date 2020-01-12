@@ -1,0 +1,871 @@
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/CodeSamples\/UDP_Communication\/Subroutines' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+FUNCTION_BLOCK BYTEARRAY_TO_WORDARRAY_V2
+VAR
+	a		:INT;
+	Data	:WORD;
+END_VAR
+VAR_INPUT
+	IN		:ARRAY [0..1447] OF BYTE;
+	ChangeByteOrder: BOOL;	(*  *)
+END_VAR
+VAR_IN_OUT
+	OUT	:ARRAY [1..UDP_CommAnzPD] OF WORD;
+END_VAR
+
+(* @END_DECLARATION := '0' *)
+FOR a:= 0 TO ((UDP_CommAnzPD*2)-1) BY 2 DO
+
+	(*Data:= IN[a] + SHL(IN[a+1], 8); old until 2014-01-24, SHL 8 with a BYTE variable erases all data and creates zero*)
+	Data:= IN[a] + SHL(BYTE_TO_WORD(IN[a+1]), 8);
+
+	IF ChangeByteOrder THEN	(*Tausche High-Byte und Low-byte z.B.: für S7-Kommunikation*)
+	Data:=ROL(Data,8);
+	END_IF
+
+	OUT[((a+1)/2)+1]:=Data;
+END_FOR
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/CodeSamples\/UDP_Communication\/Subroutines' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+FUNCTION_BLOCK WORDARRAY_TO_BYTEARRAY
+VAR
+	Data_H	:BYTE;
+	Data_L	:BYTE;
+	a			:INT;
+END_VAR
+VAR_INPUT
+	IN					:ARRAY [1..UDP_CommAnzPD] OF WORD;
+	ChangeByteOrder	:BOOL;
+END_VAR
+VAR_IN_OUT
+	OUT		:ARRAY [0..1447] OF BYTE;
+END_VAR
+
+(* @END_DECLARATION := '0' *)
+FOR a:=0 TO (UDP_CommAnzPD-1) DO
+	Data_L:= WORD_TO_BYTE(IN[a+1]);
+	Data_H:=WORD_TO_BYTE(SHR(IN[a+1],8));
+
+	IF ChangeByteOrder THEN	(*Tausche High-Byte und Low-Byte z.B.: für S7 Kommunikation*)
+		OUT[a*2]:=Data_H;
+		OUT[a*2+1]:=Data_L;
+	ELSE
+		OUT[a*2]:=Data_L;
+		OUT[a*2+1]:=Data_H;
+	END_IF
+END_FOR
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/CodeSamples\/UDP_Communication' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+FUNCTION_BLOCK UDP_Communication_MasterSlave
+VAR_INPUT
+	Enable:BOOL;
+	SendMaster : BOOL;  (* TRUE : Senden alle CycleTime, FALSE: Senden wenn ein Telegramm empfangen wurde *)
+	Port:UINT;
+	IPAdr:STRING(15);
+	CycleTime :TIME;
+	PE_Data:ARRAY[1..UDP_CommAnzPD] OF WORD;
+	TimeOut:TIME;
+	ChangeByteOrder : BOOL;
+END_VAR
+VAR_OUTPUT
+	Done:BOOL;
+	Error:BOOL;
+	ErrorID:DWORD;
+	PDTimeOut:BOOL;
+	PA_Data:ARRAY[1..UDP_CommAnzPD] OF WORD;
+END_VAR
+VAR
+	fbMC_ConnectV2_UDP: MC_ConnectV2_UDP;
+	fbMC_ReceiveV2_UDP: MC_ReceiveV2_UDP;
+	fbMC_SendV2_UDP: MC_SendV2_UDP;
+	fbConvert_Array_1: WORDARRAY_TO_BYTEARRAY;
+	fbConvert_Array: BYTEARRAY_TO_WORDARRAY_V2;
+	R_TRIG_SendTrigger: R_TRIG;
+	TON_TimeOut: TON;
+	TON_CyclicSend: TON;
+
+	refUDPConnection: MC_ConnectionV2_UDP;
+
+	Send_Data_Array: ARRAY[0..1447] OF BYTE;
+	Receive_Data_ArraY: ARRAY[0..1447] OF BYTE;
+
+
+	bInitError: BOOL;
+	nInitErrorID: DWORD;
+	bSendError: BOOL;
+	nSendErrorID: DWORD;
+	bRecError: BOOL;
+	nRecErrorID: DWORD;
+
+
+	bCyclicSendTrigger: BOOL;
+	bRecvDone: BOOL;
+
+	nRxCounterOld: UINT;
+
+END_VAR
+(* @END_DECLARATION := '0' *)
+_FBD_BODY
+_NETWORKS : 14
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_JUMP
+_EXPRESSION
+_POSITIV
+NotEnable
+_OPERAND
+_EXPRESSION
+_NEGATIV
+Enable
+_NETWORK
+
+_COMMENT
+'Initialisierung der UDP-Kommunikation'
+_END_COMMENT
+_FUNCTIONBLOCK
+fbMC_ConnectV2_UDP
+_BOX_EXPR : 3
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+Port
+_OPERAND
+_EXPRESSION
+_POSITIV
+refUDPConnection
+_EXPRESSION
+_POSITIV
+MC_ConnectV2_UDP
+_OUTPUTS : 2
+_OUTPUT
+_POSITIV
+_NO_SET
+bInitError
+_OUTPUT
+_POSITIV
+_NO_SET
+nInitErrorID
+_NETWORK
+
+_COMMENT
+'SendeTrigger für Senden wenn Master'
+_END_COMMENT
+_ASSIGN
+_FUNCTIONBLOCK
+TON_CyclicSend
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_NEGATIV
+TON_CyclicSend.Q
+_OPERAND
+_EXPRESSION
+_POSITIV
+CycleTime
+_EXPRESSION
+_POSITIV
+TON
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+bCyclicSendTrigger
+_NETWORK
+
+_COMMENT
+'Umkopieren WORD-Array in BYTE-Array'
+_END_COMMENT
+_FUNCTIONBLOCK
+fbConvert_Array_1
+_BOX_EXPR : 3
+_OPERAND
+_EXPRESSION
+_POSITIV
+PE_Data
+_OPERAND
+_EXPRESSION
+_POSITIV
+ChangeByteOrder
+_OPERAND
+_EXPRESSION
+_POSITIV
+Send_Data_Array
+_EXPRESSION
+_POSITIV
+WORDARRAY_TO_BYTEARRAY
+_OUTPUTS : 0
+_NETWORK
+
+_COMMENT
+'Daten empfangen über UDP'
+_END_COMMENT
+_ASSIGN
+_FUNCTIONBLOCK
+fbMC_ReceiveV2_UDP
+_BOX_EXPR : 3
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+refUDPConnection
+_OPERAND
+_EXPRESSION
+_POSITIV
+Receive_Data_ArraY
+_EXPRESSION
+_POSITIV
+MC_ReceiveV2_UDP
+_OUTPUTS : 5
+_OUTPUT
+_POSITIV
+_NO_SET
+bRecError
+_OUTPUT
+_POSITIV
+_NO_SET
+nRecErrorID
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+bRecvDone
+_NETWORK
+
+_COMMENT
+'Daten senden über UDP'
+_END_COMMENT
+_FUNCTIONBLOCK
+fbMC_SendV2_UDP
+_BOX_EXPR : 6
+_FUNCTIONBLOCK
+R_TRIG_SendTrigger
+_BOX_EXPR : 1
+_OPERATOR
+_BOX_EXPR : 3
+_OPERAND
+_EXPRESSION
+_POSITIV
+SendMaster
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+fbMC_ReceiveV2_UDP.RxCounter
+_OPERAND
+_EXPRESSION
+_POSITIV
+nRxCounterOld
+_EXPRESSION
+_POSITIV
+NE
+_OPERAND
+_EXPRESSION
+_POSITIV
+bCyclicSendTrigger
+_EXPRESSION
+_POSITIV
+SEL
+_EXPRESSION
+_POSITIV
+R_TRIG
+_OUTPUTS : 0
+_OPERAND
+_EXPRESSION
+_POSITIV
+IPAdr
+_OPERAND
+_EXPRESSION
+_POSITIV
+Port
+_OPERAND
+_EXPRESSION
+_POSITIV
+((UDP_CommAnzPD*2)+4)
+_OPERAND
+_EXPRESSION
+_POSITIV
+refUDPConnection
+_OPERAND
+_EXPRESSION
+_POSITIV
+Send_Data_Array
+_EXPRESSION
+_POSITIV
+MC_SendV2_UDP
+_OUTPUTS : 4
+_OUTPUT
+_POSITIV
+_NO_SET
+bSendError
+_OUTPUT
+_POSITIV
+_NO_SET
+nSendErrorID
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_NETWORK
+
+_COMMENT
+'Konvertiere BYTE-Array in WORD-Array'
+_END_COMMENT
+_FUNCTIONBLOCK
+fbConvert_Array
+_BOX_EXPR : 3
+_OPERAND
+_EXPRESSION
+_POSITIV
+Receive_Data_Array
+_OPERAND
+_EXPRESSION
+_POSITIV
+ChangeByteOrder
+_OPERAND
+_EXPRESSION
+_POSITIV
+PA_Data
+_EXPRESSION
+_POSITIV
+BYTEARRAY_TO_WORDARRAY_V2
+_OUTPUTS : 0
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_ASSIGN
+_FUNCTIONBLOCK
+TON_TimeOut
+_BOX_EXPR : 2
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+fbMC_ReceiveV2_UDP.RxCounter
+_OPERAND
+_EXPRESSION
+_POSITIV
+nRxCounterOld
+_EXPRESSION
+_POSITIV
+EQ
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_POSITIV
+TimeOut
+_OPERAND
+_EXPRESSION
+_POSITIV
+CycleTime
+_EXPRESSION
+_POSITIV
+ADD
+_EXPRESSION
+_POSITIV
+TON
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+PDTimeOut
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_ASSIGN
+_OPERAND
+_EXPRESSION
+_POSITIV
+fbMC_ReceiveV2_UDP.RxCounter
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+nRxCounterOld
+_NETWORK
+
+_COMMENT
+'Errorbit setzen'
+_END_COMMENT
+_ASSIGN
+_OPERATOR
+_BOX_EXPR : 3
+_OPERAND
+_EXPRESSION
+_POSITIV
+bInitError
+_OPERAND
+_EXPRESSION
+_POSITIV
+bSendError
+_OPERAND
+_EXPRESSION
+_POSITIV
+bRecError
+_EXPRESSION
+_POSITIV
+OR
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+Error
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_ASSIGN
+_OPERATOR
+_BOX_EXPR : 2
+_OPERAND
+_EXPRESSION
+_NEGATIV
+PDTimeOut
+_OPERAND
+_EXPRESSION
+_NEGATIV
+Error
+_EXPRESSION
+_POSITIV
+AND
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+Done
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_ASSIGN
+_OPERATOR
+_BOX_EXPR : 3
+_OPERAND
+_EXPRESSION
+_POSITIV
+bRecError
+_OPERATOR
+_BOX_EXPR : 3
+_OPERAND
+_EXPRESSION
+_POSITIV
+bSendError
+_OPERATOR
+_BOX_EXPR : 3
+_OPERAND
+_EXPRESSION
+_POSITIV
+bInitError
+_OPERAND
+_EXPRESSION
+_POSITIV
+0
+_OPERAND
+_EXPRESSION
+_POSITIV
+nInitErrorID
+_EXPRESSION
+_POSITIV
+SEL
+_OPERAND
+_EXPRESSION
+_POSITIV
+nSendErrorID
+_EXPRESSION
+_POSITIV
+SEL
+_OPERAND
+_EXPRESSION
+_POSITIV
+nRecErrorID
+_EXPRESSION
+_POSITIV
+SEL
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+ErrorID
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_RET
+_EXPRESSION
+_POSITIV
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_NETWORK
+NotEnable
+_COMMENT
+'Comment'
+_END_COMMENT
+_ASSIGN
+_OPERATOR
+_BOX_EXPR : 3
+_ASSIGN
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 2
+_OUTPUT
+_NEGATIV
+_SET
+Error
+_OUTPUT
+_NEGATIV
+_SET
+Done
+_OPERAND
+_EXPRESSION
+_POSITIV
+0
+_OPERAND
+_EXPRESSION
+_POSITIV
+0
+_EXPRESSION
+_POSITIV
+SEL
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+ErrorID
+
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/CodeSamples\/UDP_Communication' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+PROGRAM UDP_Communication_PRG
+VAR
+	bTest1: BOOL;
+	bTest2: BOOL;
+	bTest3: BOOL;
+	fbUDP_Communication_MasterSlave: UDP_Communication_MasterSlave;
+	bMaster: BOOL;
+	nPort: UINT;
+	sIP: STRING;
+	tCycleTime: TIME;
+	DataOUT: ARRAY[1..UDP_CommAnzPD] OF WORD;
+	ttimeOut: TIME;
+	DataIN: ARRAY[1..UDP_CommAnzPD] OF WORD;
+END_VAR
+
+(*Example inputs for MASTER---------------------------------------------------------------
+UDP_Communication_MasterSlave(
+	Enable:=TRUE , 
+	SendMaster:=TRUE , 
+	Port:= 44818, 
+	IPAdr:= '10.1.254.129', 
+	CycleTime:=t#100ms, 
+	PE_Data:=fbUDP_Communication_MasterSlave.PE_Data , 
+	TimeOut:=t#1000ms , 
+	ChangeByteOrder:=FALSE , 
+	Done=> , 
+	Error=> , 
+	ErrorID=> , 
+	PDTimeOut=> , 
+	PA_Data=> );
+
+Example inputs for SLAVE---------------------------------------------------------------
+UDP_Communication_MasterSlave(
+	Enable:=TRUE , 
+	SendMaster:=FALSE , 
+	Port:= 44818, 
+	IPAdr:= '10.1.254.128', 
+	CycleTime:=t#100ms, 
+	PE_Data:=fbUDP_Communication_MasterSlave.PE_Data , 
+	TimeOut:=t#1000ms , 
+	ChangeByteOrder:=FALSE , 
+	Done=> , 
+	Error=> , 
+	ErrorID=> , 
+	PDTimeOut=> , 
+	PA_Data=> );
+*)	
+(* @END_DECLARATION := '0' *)
+_FBD_BODY
+_NETWORKS : 1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_ASSIGN
+_FUNCTIONBLOCK
+fbUDP_Communication_MasterSlave
+_BOX_EXPR : 8
+_OPERAND
+_EXPRESSION
+_POSITIV
+bTest1
+_OPERAND
+_EXPRESSION
+_POSITIV
+bMaster
+_OPERAND
+_EXPRESSION
+_POSITIV
+nPort
+_OPERAND
+_EXPRESSION
+_POSITIV
+sIP
+_OPERAND
+_EXPRESSION
+_POSITIV
+tCycleTime
+_OPERAND
+_EXPRESSION
+_POSITIV
+DataOUT
+_OPERAND
+_EXPRESSION
+_POSITIV
+ttimeOut
+_OPERAND
+_EXPRESSION
+_POSITIV
+_EMPTY
+_EXPRESSION
+_POSITIV
+UDP_Communication_MasterSlave
+_OUTPUTS : 4
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+_EMPTY
+_OUTPUT
+_POSITIV
+_NO_SET
+DataIN
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+bTest3
+
+END_PROGRAM
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @GLOBAL_VARIABLE_LIST := 'UDP_Konstanten' *)
+(* @PATH := '\/CodeSamples\/UDP_Communication' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+VAR_GLOBAL CONSTANT
+	UDP_CommAnzPD: INT := 64;  (*Datengröße in Byte*)
+END_VAR
+VAR_GLOBAL
+END_VAR
+
+(* @OBJECT_END := 'UDP_Konstanten' *)
+(* @CONNECTIONS := UDP_Konstanten
+FILENAME : ''
+FILETIME : 0
+EXPORT : 0
+NUMOFCONNECTIONS : 0
+*)
+
+LIBRARY
+05_Utilities\MPLCCommunication_Ethernet.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 29
+DINT_TO_MODBUS: 2048
+MC_ConnectClientV2_TCP: 2048
+MC_ConnectServerV2_TCP: 2048
+MC_ConnectV2_UDP: 2048
+MC_Init_UDP: 2048
+MC_InitClient_TCP: 2048
+MC_InitServer_TCP: 2048
+MC_ModbusClientTCP_SEW: 2048
+MC_ModbusServer_TCP: 2048
+MC_ModbusServerTCP_DOP: 2048
+MC_ModbusServerTCP_SEW: 2048
+MC_ModbusServerTCPV2_DOP: 2048
+MC_NTPClient: 2048
+MC_ParameterMaster_SMLP: 2048
+MC_Receive_TCP: 2048
+MC_Receive_UDP: 2048
+MC_ReceiveEnable_TCP: 2048
+MC_ReceiveEnable_UDP: 2048
+MC_ReceiveV2_TCP: 2048
+MC_ReceiveV2_UDP: 2048
+MC_Send_TCP: 2048
+MC_Send_UDP: 2048
+MC_SendEnable_TCP: 2048
+MC_SendEnable_UDP: 2048
+MC_SendV2_TCP: 2048
+MC_SendV2_UDP: 2048
+MODBUS_TO_DINT: 2048
+MODBUS_TO_REAL: 2048
+REAL_TO_MODBUS: 2048
+NumOfGVLs: 1
+Version_MPLCCommunication_Ethernet: 2048
+END_LIBRARY
+
+LIBRARY
+11_System\SysLibSockets.lib 27.1.17 13:50:06
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 25
+SysSockAccept: 0
+SysSockBind: 0
+SysSockClose: 0
+SysSockConnect: 0
+SysSockCreate: 0
+SysSockGetHostByName: 0
+SysSockGetHostName: 0
+SysSockGetLastErrorSync: 2048
+SysSockGetOption: 0
+SysSockHtonl: 0
+SysSockHtons: 0
+SysSockInetAddr: 0
+SysSockInetNtoa: 0
+SysSockIoctl: 0
+SysSockListen: 0
+SysSockNtohl: 0
+SysSockNtohs: 0
+SysSockRecv: 0
+SysSockRecvFrom: 0
+SysSockSelect: 0
+SysSockSend: 0
+SysSockSendTo: 0
+SysSockSetIPAddress: 0
+SysSockSetOption: 0
+SysSockShutdown: 0
+NumOfGVLs: 1
+Globale_Variablen: 0
+END_LIBRARY
+
+LIBRARY
+Internal\MPLCIntern_Communication_Ethernet.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 0
+NumOfGVLs: 1
+Intern_Communication_Ethernet: 2048
+END_LIBRARY
+
+LIBRARY
+standard.lib 27.1.17 13:50:06
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 21
+CONCAT: 0
+CTD: 0
+CTU: 0
+CTUD: 0
+DELETE: 0
+F_TRIG: 0
+FIND: 0
+INSERT: 0
+LEFT: 0
+LEN: 0
+MID: 0
+R_TRIG: 0
+REPLACE: 0
+RIGHT: 0
+RS: 0
+RTC: 0
+SEMA: 0
+SR: 0
+TOF: 0
+TON: 0
+TP: 0
+NumOfGVLs: 4
+'CAM Data': 2048
+'CNC Data': 2048
+'Drive Configuration Data': 2048
+'Global Variables 0': 0
+END_LIBRARY

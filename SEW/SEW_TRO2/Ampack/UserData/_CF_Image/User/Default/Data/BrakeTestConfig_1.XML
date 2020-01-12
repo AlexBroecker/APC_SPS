@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StaticBrakeTestConfig>
+  <TestCoverage>0</TestCoverage>
+  <DefaultTestDirection>0</DefaultTestDirection>
+  <TorqueConstant>0.85</TorqueConstant>
+  <PositionTolerance1>10.0</PositionTolerance1>
+  <PositionTolerance2>10.0</PositionTolerance2>
+  <Backlash>5.0</Backlash>
+  <MaxDistance>1000.0</MaxDistance>
+  <AmbientTemperature>25.0</AmbientTemperature>
+  <StopDistanceReference_default>1.0</StopDistanceReference_default>
+  <StopDistanceReference_invers>1.0</StopDistanceReference_invers>
+  <StopDistanceToleranceLong>1.0</StopDistanceToleranceLong>
+  <SafetyFactor>1.0</SafetyFactor>
+  <FirstBrakeDO1>0</FirstBrakeDO1>
+  <RampSwitchOnTorque>50</RampSwitchOnTorque>
+  <TestTorque>20.0</TestTorque>
+  <TestVelocity>20.0</TestVelocity>
+  <Acceleration>500.0</Acceleration>
+  <Deceleration>500.0</Deceleration>
+  <TestVelocityD>1.0</TestVelocityD>
+  <AccelerationD>500.0</AccelerationD>
+  <DecelerationD>500.0</DecelerationD>
+  <SpeedFilter>10</SpeedFilter>
+  <ControlWaitTime>10</ControlWaitTime>
+  <TestTorqueWaitTime>10</TestTorqueWaitTime>
+</StaticBrakeTestConfig>

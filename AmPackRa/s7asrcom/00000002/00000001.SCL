@@ -1,0 +1,120 @@
+FUNCTION FC205 : Void
+
+TITLE = 'Scan manual pos'
+//
+// Baustein-Kommentar ...
+//
+VERSION : '1.0'
+AUTHOR  : Koenig
+NAME    : ManPos
+FAMILY  : Scan
+
+// Bausteinparameter
+VAR_INPUT
+    // Eingangsparameter
+    PositionNo      :   INT;        // Positions number
+    PositionDB      :   INT;        // DB Number of Positions
+
+    ActualPosition  :   DINT;
+    PositionMin     :   DINT;
+    PositionMax     :   DINT;
+
+   END_VAR
+
+VAR_OUTPUT
+    // Ausgangsparameter 
+    PrevPosition    :   DINT;
+    NextPosition    :   DINT;
+    FirstPosition   :   DINT;
+    LastPosition    :   DINT;
+    
+    Error           :   WORD;       
+END_VAR
+
+VAR_TEMP
+    // temporäre Variablen
+    i               :   INT;
+    value           :   DINT;
+    diff            :   DINT;
+    
+    DB_No           :   WORD;
+    DB_Length       :   WORD;
+    DB_WP           :   BOOL;
+    RETURN_Value    :   INT;  
+END_VAR
+
+    // Anweisungsteil
+
+    Error := w#16#00;
+    
+    PrevPosition := 0;
+    NextPosition := 0;
+    FirstPosition := 0;
+    LastPosition := 0;
+    
+    DB_No :=  INT_TO_WORD(PositionDB);
+    RETURN_Value := TEST_DB(DB_NUMBER := DB_No // IN: WORD
+                             ,DB_LENGTH := DB_Length // OUT: WORD
+                             ,WRITE_PROT := DB_WP // OUT: BOOL
+                             ); // INT
+    // Baustein existiert ?                         
+    IF(RETURN_Value <> 0) then                   
+                             Error := w#16#8001;
+                             RETURN;
+    END_IF;                         
+    // Baustein Länge ?  
+    IF(DB_Length <> w#16#059C) then                   
+                             Error := w#16#8002;
+                             Return;
+
+    END_IF;
+     
+      
+    FOR i := 0 TO (PositionNo-1) BY 1 DO
+        value := DWORD_TO_DINT(WORD_TO_BLOCK_DB(INT_TO_WORD(PositionDB)).DD[i*14 + 2]);
+        IF(value>0) THEN
+            // minimal
+            IF(((value < FirstPosition) OR (FirstPosition = 0)) AND
+               (value >= PositionMin)) THEN
+                FirstPosition := value;
+            END_IF;
+            // maximal
+            IF((value > LastPosition) AND 
+               (value <= PositionMax)) THEN
+                LastPosition := value;
+            END_IF; 
+            
+            diff := 0;
+            IF(value > ActualPosition) THEN
+                diff := value - ActualPosition;
+            ELSE
+                diff := ActualPosition - value;
+            END_IF;
+            
+            IF((value >= PositionMin) AND (value <= PositionMax)) THEN
+                // positions
+                //IF( diff > 100) THEN
+                    IF((value<ActualPosition - 10) AND (value>PrevPosition)) THEN
+                        PrevPosition := value;
+                    END_IF;
+                    IF((value>ActualPosition + 10) AND ((value<NextPosition) OR (NextPosition = 0) )) THEN
+                        NextPosition := value;
+                    END_IF;
+
+                //END_IF;
+            END_IF;
+        END_IF;
+        
+    END_FOR;
+    
+    // nothing found ???
+    IF(PrevPosition = 0) THEN
+        PrevPosition := FirstPosition;
+    END_IF;    
+    IF(NextPosition = 0) THEN
+        NextPosition := LastPosition;
+    END_IF;   
+     
+END_FUNCTION
+
+

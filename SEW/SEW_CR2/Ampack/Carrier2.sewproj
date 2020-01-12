@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MotionStudioProject Name="Carrier2">
+  <ActiveNetworkView>Netzwerk</ActiveNetworkView>
+  <SyntaxVersion>4.1</SyntaxVersion>
+  <CreationTime>11.06.2018 07:45:08</CreationTime>
+  <LastWriteTime>19.09.2018 23:58:51</LastWriteTime>
+  <MMSVersion>6.2.0.1</MMSVersion>
+  <OSVersion>Microsoft Windows NT 6.1.7601 Service Pack 1</OSVersion>
+  <Author />
+  <Comment />
+  <TCI>false</TCI>
+  <ShortSig>true</ShortSig>
+  <TCISingle>false</TCISingle>
+  <Resources />
+  <Devices>
+    <Device Name="Carrier01" ProfinetName="car01-SewBridge" Signature="Carrier01">
+      <TciDeviceRef />
+      <Type>MDX_B</Type>
+      <FirmwarePart>1822 091 6</FirmwarePart>
+      <FirmwareStatus>22</FirmwareStatus>
+      <SubDevices />
+      <Label>MDX61B0110-5A3</Label>
+    </Device>
+    <Device Name="Carrier02" ProfinetName="car02-SewBridge-1" Signature="Carrier02">
+      <TciDeviceRef />
+      <Type>MDX_B</Type>
+      <FirmwarePart>1822 091 6</FirmwarePart>
+      <FirmwareStatus>22</FirmwareStatus>
+      <SubDevices />
+      <Label>MDX61B0110-5A3</Label>
+    </Device>
+  </Devices>
+  <DeviceGroups />
+  <NetworkViews>
+    <NetworkView Name="Netzwerk">
+      <RelativeFilePath>Views\Netzwerk.sewview</RelativeFilePath>
+      <Comment />
+    </NetworkView>
+  </NetworkViews>
+  <ProjectView Name="Overview">
+    <RelativeFilePath>Views\Overview.sewview</RelativeFilePath>
+    <Comment />
+  </ProjectView>
+</MotionStudioProject>

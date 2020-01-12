@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<DirectoryElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="DHR41B">
+  <Directories>
+    <DirectoryElement Name="AxisConfig">
+      <Directories />
+      <Files>
+        <FileElement Name="AxisConfigA1.xml">
+          <DateTicks>636760012552605315</DateTicks>
+        </FileElement>
+        <FileElement Name="AxisConfigA2.xml">
+          <DateTicks>636760012610001248</DateTicks>
+        </FileElement>
+        <FileElement Name="AxisConfigA3.xml">
+          <DateTicks>636760012665538533</DateTicks>
+        </FileElement>
+        <FileElement Name="AxisHandlerConfig.xml">
+          <DateTicks>636760012705860976</DateTicks>
+        </FileElement>
+        <FileElement Name="CamSwitchConfig.xml">
+          <DateTicks>636760012741774657</DateTicks>
+        </FileElement>
+      </Files>
+    </DirectoryElement>
+    <DirectoryElement Name="CurveConfig">
+      <Directories />
+      <Files />
+    </DirectoryElement>
+  </Directories>
+  <Files>
+    <FileElement Name="TimeStamp.xml">
+      <DateTicks>636731459835267270</DateTicks>
+    </FileElement>
+  </Files>
+</DirectoryElement>

@@ -1,0 +1,952 @@
+/*========================================================================
+              IPOS-Sourcefile
+==========================================================================
+Version:      1.00
+Name:         Katrin Walterspiel / SEW-Eurodrive
+Date:         24.05.2018
+
+
+Logiktabelle DO/AO:
+-------------------------------------------
+Funktion           |  DO10  | DO11 (GIO12) |
+--------------------------------------------
+Bereit             |    1   |      1       |
+In Position        |    1   |      0       |
+Nicht Referenziert |    0   |      1       |
+Störung            |    0   |      0       |
+--------------------------------------------
+
+---------------------------------------------------------------------
+Logiktabelle DI:                                                    |
+---------------------------------------------------------------------
+Funktion           | DI10 | DI11 | DI12 | DI13 |
+---------------------------------------------------------------------
+Position1          |  1   |  0   |  0   |  0   |
+Position2          |  0   |  0   |  0   |  0   |
+Position3          |  1   |  1   |  0   |  0   |
+Position4          |  0   |  1   |  0   |  0   |
+Position5          |  1   |  0   |  1   |  0   |
+Position6          |  0   |  0   |  1   |  0   |
+Position7          |  1   |  1   |  1   |  0   |
+Position8          |  0   |  1   |  1   |  0   |
+Position9          |  1   |  0   |  0   |  1   |
+Position10         |  0   |  0   |  0   |  1   |
+------------------------------------------------
+Funktion           | DI01 | DI02 | DI03 | DI04 |
+------------------------------------------------
+Keine Betriebsart  |  0   |  0   |  x   |  x   |
+Referenzfahrt      |  1   |  0   |  x   |  x   |
+Handbetrieb        |  0   |  1   |  x   |  x   |
+Positionieren      |  1   |  1   |  x   |  x   |
+Reset              |  x   |  x   |  1   |  0   |
+Start              |  x   |  x   |  0   |  1   |
+---------------------------------------------------------------------
+========================================================================
+Version:      1.20
+Name:         Joerg Ockert / SEW-Eurodrive / Dep: BUM I AL
+Date:         19.12.2017
+
+Description:
+===============
+  - Verbessern der Flankenerkennung zum Starten der Referenzfahrt
+  - Referenziertbit wird bei gestarteter Referenzfahrt und ACR nach Einschalten
+    wieder gesetzt. => Während der Referenzfahrt wird der nicht referenzierte Status
+    gespeichert und beim Einschalten entsprechend gesetzt.
+
+========================================================================*/
+#pragma initials   0  127
+#pragma globals  600 1024
+
+#include <constb.h>
+#include <iob.h>
+
+
+
+/*=== Internal variables ===*/
+#define  PGM            H0
+#declare PGM_Init       PGM:0       //First variable Init is done (0x2488)
+#declare PGM_Version    PGM:1       //Program Version 100 => Version 1.00
+
+#define  HOM            H10         //Customer Values for ReferenceTravel (HOMING)
+#declare HOM_Type       HOM:0       //Type of RefTravel 8:Fixed Point 1:CAM LEFT 2:CAM RIGHT
+#declare HOM_State      HOM:9       //ReferencedState
+
+#define  POS1           H20         //Parameters for POSITION 1 (LOWER)
+#declare POS1_Pos       POS1:0      //Setpoint Position in INC
+#declare POS1_Speed     POS1:1      //Positioning Speed
+#declare POS1_Ramp1     POS1:3      //Positioning Ramp 1
+
+#define POS2_Pos        H30         //Parameters for POSITION 2 (UPPER)
+#define POS3_Pos        H32         //Setpoint Position in INC
+#define POS4_Pos        H34         //Setpoint Position in INC
+#define POS5_Pos        H36         //Setpoint Position in INC
+#define POS6_Pos        H38         //Setpoint Position in INC
+#define POS7_Pos        H40         //Setpoint Position in INC
+#define POS8_Pos        H42         //Setpoint Position in INC
+#define POS9_Pos        H44         //Setpoint Position in INC
+#define POS10_Pos       H46         //Setpoint Position in INC
+
+#define  JOG            H60         //Parameters for JogMode
+#declare JOG_Pos        JOG:0       //Internal calculated
+#declare JOG_Speed      JOG:1       //Positioning Speed for JOG mode
+#declare JOG_Ramp       JOG:3       //Positioning Ramp  for JOG mode
+#declare JOG_MaxPos     JOG:5       //Max Position for JOG mode (limit)
+#declare JOG_MinPos     JOG:6       //Min Position for JOG mode (limit)
+
+#define  REF_Type       H140        //Parameters for REFERENCE TRAVEL
+
+#define  OP             H150
+#declare OP_Direction   OP:0        //0: CW  1:CCW
+#declare OP_Status      OP:1        //Actual Status of Program
+#declare OP_NullSpeed1  OP:3
+#declare OP_NullSpeed2  OP:4
+#declare OP_NullRamp1   OP:5
+#declare OP_NullRamp2   OP:6
+#declare OP_Flag        OP:8        //0:RefEdge, 1:RefDel,
+#declare OP_ConfirmData OP:9        //if Value <> 0 Confirm new Parameter values
+
+#define  AUTO1          H160        //Parameters for AUTO MODE POS1
+#declare AUTO1_Pos      AUTO1:0      //Set to SetPoint Position 1    (Lower)
+#declare AUTO1_SpeedCW  AUTO1:1      //Set to TravelParameter CW  POS 1
+#declare AUTO1_SpeedCCW AUTO1:2      //Set to TravelParameter CCW POS 1
+#declare AUTO1_Ramp1    AUTO1:3      //Set to TravelParameter POS 1
+
+#define  AUTO2_Pos      H170         //Parameters for AUTO MODE POS 2
+#define  AUTO3_Pos      H172         //Parameters for AUTO MODE POS 3
+#define  AUTO4_Pos      H174         //Parameters for AUTO MODE POS 4
+#define  AUTO5_Pos      H176         //Parameters for AUTO MODE POS 5
+#define  AUTO6_Pos      H178         //Parameters for AUTO MODE POS 6
+#define  AUTO7_Pos      H180         //Parameters for AUTO MODE POS 7
+#define  AUTO8_Pos      H182         //Parameters for AUTO MODE POS 8
+#define  AUTO9_Pos      H184         //Parameters for AUTO MODE POS 9
+#define  AUTO10_Pos     H186         //Parameters for AUTO MODE POS 10
+
+#define  PAST           H260         //Parameter for PAST Input-Status
+#declare PAST_DI10      PAST:0       //DI10 Trigger Detection
+#declare PAST_DI11      PAST:1       //DI11 Trigger Detection
+#declare PAST_DI12      PAST:2       //DI12 Trigger Detection
+#declare PAST_DI13      PAST:3       //DI13 Trigger Detection
+#declare PAST_DI01      PAST:4       //DI01 Trigger Detection
+#declare PAST_DI02      PAST:5       //DI02 Trigger Detection
+#declare PAST_DI03      PAST:6       //DI03 Trigger Detection
+#declare PAST_DI04      PAST:7       //DI04 Trigger Detection
+
+#define  rEDGE          H270         //Parameter for Rising Edge Inputs
+#declare rEDGE_DI10     rEDGE:0       //DI10 Rising Edge Detection
+#declare rEDGE_DI11     rEDGE:1       //DI11 Rising Edge Detection
+#declare rEDGE_DI12     rEDGE:2       //DI12 Rising Edge Detection
+#declare rEDGE_DI13     rEDGE:3       //DI13 Rising Edge Detection
+#declare rEDGE_DI01     rEDGE:4       //DI01 Rising Edge Detection
+#declare rEDGE_DI02     rEDGE:5       //DI02 Rising Edge Detection
+#declare rEDGE_DI03     rEDGE:6       //DI03 Rising Edge Detection
+#declare rEDGE_DI04     rEDGE:7       //DI04 Rising Edge Detection
+
+#define  fEDGE          H280         //Parameter for Falling Edge Inputs
+#declare fEDGE_DI10     fEDGE:0       //DI10 Falling Edge Detection
+#declare fEDGE_DI11     fEDGE:1       //DI11 Falling Edge Detection
+#declare fEDGE_DI12     fEDGE:2       //DI12 Falling Edge Detection
+#declare fEDGE_DI13     fEDGE:3       //DI13 Falling Edge Detection
+#declare fEDGE_DI01     fEDGE:4       //DI01 Falling Edge Detection
+#declare fEDGE_DI02     fEDGE:5       //DI02 Falling Edge Detection
+#declare fEDGE_DI03     fEDGE:6       //DI03 Falling Edge Detection
+#declare fEDGE_DI04     fEDGE:7       //DI04 Falling Edge Detection
+
+#define  MANU           H300        //Parameters for MANUAL MODE
+#declare MANU_Pos       MANU:0      //Internal calculated
+#declare MANU_SpeedCW   MANU:1      //Set to TravelParameter JOG mode
+#declare MANU_SpeedCCW  MANU:2      //Set to TravelParameter JOG mode
+#declare MANU_Ramp1     MANU:3      //Set to TravelParameter JOG mode
+#declare MANU_MinPos    MANU:6      //Min Position for JOG mode
+#declare MANU_MaxPos    MANU:7      //Max Position for JOG mode
+
+#define  AI             H310        //Analogue Inputs
+#declare AILF           AI:0        //LeadFrequency Input
+#declare AI10           AI:1        //Analogue Input
+
+#define  AO             H320        //Analogue Output
+#declare AO_Value       AO:0        //Value    of AO10    0-350% Current   |0-100% Position
+#declare AO_Funct       AO:1        //Function of AO10    0:Act Current[%] |OTHERS: Act. Position
+
+/*=== Internal structures ===*/
+MOVLNK     ml;
+MLDATA     mld;
+long       CtrlMode;
+long       DIState;
+
+/*=== STATUS INFORMATIONS ===*/
+#define mREFERENCED    (( StatusWord & 0x00100000)>>20)          //ReferencedStaus    (Bit20)
+#define mIN_POSITION   (( StatusWord & 0x00080000)>>19)          //IPOS in Position   (Bit19)
+#define mERROR         ((~StatusWord & 0b10      )>> 1)          //ErrorStatus        (Bit01)
+#define mREADY         (( StatusWord & 0b100     )>> 2)          //Status Drive       (Bit02)
+#define mSTO           (( StatusWord & 0x08000000)>>27)          //STO Staus          (Bit27)
+
+#define mDI13_DI10     (( InpLevelB  & 0xF00     )>> 8)          //InputLevel DI13-DI10
+#define mDI01_DI02     (( InputLevel & 0x6       )>> 1)          //InputLevel DI01-DI02
+
+#define DIState01      ((DIState & 0b10          )>> 1)          //InputLevel DI01
+#define DIState02      ((DIState & 0b100         )>> 2)          //InputLevel DI02
+#define DIState03      ((DIState & 0b1000        )>> 3)          //InputLevel DI03
+#define DIState04      ((DIState & 0b10000       )>> 4)          //InputLevel DI04
+#define DIState10      ((DIState & 0b1000000     )>> 6)          //InputLevel DI10
+#define DIState11      ((DIState & 0b10000000    )>> 7)          //InputLevel DI11
+#define DIState12      ((DIState & 0b100000000   )>> 8)          //InputLevel DI12
+#define DIState13      ((DIState & 0b1000000000  )>> 9)          //InputLevel DI13
+
+#define mSET_ENABLE     (ControlWord &= 0xBFFFFFFD)         //Reset Bit30(INHIBIT) and Bit1 (ENABLE)
+#define mSET_NO_ENABLE  _BitSet(ControlWord,1)              //Set Drive NoEnable
+#define mSET_INHIBIT    _BitSet(ControlWord,30)             //Set Drive INHIBITED
+#define mSET_N11        _BitSet(ControlWord, 4)
+#define mRESET_N11      _BitClear(ControlWord, 4)
+
+#define CTRL_MODE_SERVO     16
+#define CTRL_MODE_SERVOIPOS 18
+
+/*=============================================
+   Main function (IPOS entry function)
+===============================================*/
+main()
+{
+ /*-------------------------------------
+            Initializing
+ --------------------------------------*/
+ mSET_INHIBIT;                               //Set controller inhibit
+ PGM_Version = 120;                          //Version 1.20
+
+ Timer_1 = 5000;                             //
+ while(!mREADY && Timer_1>0);                //Wait for ready (max 5s)
+
+ Timer_1 = 0;
+ INIT_VARIABLES();                           //ALL variables are initialized
+ SET_DEVICESETTINGS();                       //Configurate drive for this program
+ GET_PARAMETER();                            //Get Parameter for this program
+ mSET_NO_ENABLE;                             //Set ControlWord to NoEnable
+
+ if(HOM_State==0)                            //Was ReferencedStatus was deleted before
+  _Go0(GO0_RESET);                           //Delete referenced status
+
+ _SetTask(ST2_START,TASK2);                  //Start TASK_2 (positioning functions)
+
+ /*-------------------------------------
+        Hauptprogramm-Schleife
+  --------------------------------------*/
+ while(1)
+ {
+  //=== CHECK AND CONFIRM USER DATA ===
+  CONFIRM_DATA();                            //...
+
+  TRIGGERED_INPUTS();                        //Detection of rising/falling edge at DIs
+
+  //=== RESET ===                            //
+  if(DIState04)                                   //Provide Reset
+   _BitSet(ControlWord, 12);                 //...
+  else                                       //...
+   _BitClear(ControlWord, 12);               //...
+
+
+  //=== SET STATUS SIGNALS ====
+  if(mREADY && !mREFERENCED && !mERROR)       //Status: NOT REFERENCED
+  {                                           //...
+   _BitClear(OptOutpIPOS,0);                  //set DO10 to OFF
+   _BitSet(OptOutpIPOS,1);                    //set DO11 to ON
+   AO_Value =  0x1FFC;                        //set AO10 to 8mA
+  }                                           //...
+  else                                        //else #1
+  {                                           //
+   if(mREADY && mIN_POSITION && !mERROR)      //Status: IN POSITION
+   {                                          //...
+    _BitSet(OptOutpIPOS,0);                   //set DO10 to ON
+    _BitClear(OptOutpIPOS,1);                 //set DO11 to OFF
+    AO_Value =  0x7FFF;                       //set AO10 to 20mA
+   }                                          //
+   else                                       //else #2
+   {                                          //
+    if(mREADY && !mERROR)                     //Staus: READY
+    {                                         //...
+     _BitSet(OptOutpIPOS,0);                  //set DO10 to ON
+     _BitSet(OptOutpIPOS,1);                  //set DO11 to ON
+     AO_Value =  0x5FF4;                      //set AO10 to 16mA
+    }                                         //
+    else                                      //else #3
+    {                                         //Status Error or Others
+     _BitClear(OptOutpIPOS,0);                //set DO10 to OFF
+     _BitClear(OptOutpIPOS,1);                //set DO11 to OFF
+     AO_Value =  0x0;                         //set AO10 to 4mA
+    }                                         //end else #3
+   }                                          //end else #2
+  }                                           //end else #1
+  AnaOutpIPOS = AO_Value;                     //Set AO10
+
+ }                                           //END while(1)
+}                                            //END main
+
+
+/*==================================================================================================
+   === TASK2                         ===
+   === Perform positioning functions ===
+   === Auto and manual mode          ===
+==================================================================================================*/
+TASK2()
+{
+  // Mode Selection
+  switch(mDI01_DI02)
+  {
+   case 0b00:  // No Mode
+       OP_Flag = 0;                               //No RefTravel active
+       if(mREFERENCED)
+       {
+         OP_Status = 10;                            //Status = AutoMode, NoEnable
+         _SetSys(SS_POSSPEED,OP_NullSpeed1);        //Set No speed as PosSpeed
+         _SetSys(SS_POSRAMP,OP_NullRamp1);          //Set PosRamp
+         mSET_NO_ENABLE;
+       }
+       else
+       {
+         OP_Status = 63;                           //Referenzfahrt, Nicht referenziert
+         mSET_INHIBIT;
+       }
+       break;
+
+
+   case 0b01: // Reference Travel Typ 8
+       if(rEDGE_DI03)                             //If rising edge at Start
+       {                                          //...
+         _Go0(GO0_RESET);
+         HOM_State = 0;                            //Remember drive is NOT referenced
+         _Memorize(MEM_STDATA);                    //Save value
+         _Wait(250);
+         OP_Flag = 1;                              //Start RefTravel (Del. exist. RefState)
+       }                                          //
+
+       if(OP_Flag == 0)                           //Warte auf Flanke
+       {
+         mSET_NO_ENABLE;                          //STOP DRIVE
+         TargetPos = ActPos_Mot;                   //Set current pos
+         OP_Status = 62;                           //Status = Referenzfahrt,Warte auf Flank
+       }
+
+       if(OP_Flag == 1)                           //Start RefTravel
+       {                                          //
+         OP_Status = 61;                           //Status = Referenzfahrt, Enabled
+         if(REF_Type == 8)                         //RefTravel FixedPoint
+         {                                         //...
+           if(!mREFERENCED)                         //As long drive is not referenced
+             REFERENCE_TRAVEL();                     //Run ReferenceTravel to FixedPoint
+           else                                     //if Referenced
+             OP_Flag = 3;                            //RefTravel is done
+         }                                         //
+         else                                      //If RegTravel to RefCam
+         {                                         //...
+           mSET_ENABLE;                             //Freigabe setzen
+           _Wait(250);
+           _Go0(GO0_U_NW_CAM);                      //Start ReferenceTravel to CAM
+           OP_Flag   = 2;                           //Wait until ReferenceTravel is done!
+         }                                         //..
+       }                                          //..
+
+       if(OP_Flag == 2)                           //Wait until RefTravel is done
+       {                                          //
+         if(mREFERENCED)                           //if referenced
+         {
+           HOM_State = 1;                           //Remember drive is NOT referenced
+           _Memorize(MEM_STDATA);                   //Save value
+           OP_Flag   = 3;                           //ReferenceTravel is done!
+         }
+       }
+
+       if(OP_Flag == 3)                          //ReferenceTravel is done!
+       {
+         OP_Status = 64;                          //REF: Travel Done
+         mSET_NO_ENABLE;                          //STOP WHEN REFERENCED
+       }
+
+       if(mSTO || mERROR)
+         OP_Flag = 0;
+
+       if((OP_Flag>3) || mSTO || mERROR)         //Faulty flag, STO or ERROR
+         OP_Flag = 0;                             //Reset FLAG
+
+       break;
+
+
+
+   case 0b10: // Manual Mode
+       OP_Flag = 0;                               //No RefTravel active
+       if(mREFERENCED)
+       {
+           OP_Status = 50;                            //Status = ManuMode, Jog Positive
+
+           _SetSys(SS_POSSPEED,MANU_SpeedCW);         //Set PosSpeed
+          _SetSys(SS_POSRAMP,MANU_Ramp1);            //Set PosRamp
+          if (DIState13)
+          {
+             OP_Status = 52;
+            _GoAbs(GO_NOWAIT,MANU_MaxPos);                //GO TO POSITION
+          }
+          else
+          {
+            OP_Status = 51;
+            _GoAbs(GO_NOWAIT,MANU_MinPos);                //GO TO POSITION
+          }
+        if (DIState03)                                   //Fahre nur, wenn Start-Bit gesetzt
+          {
+            mSET_ENABLE;
+          }
+        else
+          {
+            mSET_NO_ENABLE;
+          }
+       }
+       else
+       {
+         OP_Status = 63;                           //Referenzfahrt, Nicht referenziert
+         mSET_INHIBIT;
+       }
+       break;
+
+   case 0b11: // Positioning Mode
+       OP_Flag = 0;                               //No RefTravel active
+       if(mREFERENCED)
+       {
+          OP_Status = 12;                            //Status = AutoMode
+          _SetSys(SS_POSSPEED,AUTO1_SpeedCW);        //Set PosSpeed
+          _SetSys(SS_POSRAMP,AUTO1_Ramp1);           //Set PosRamp
+          switch(mDI13_DI10)
+          {
+            case 0:
+              _GoAbs(GO_NOWAIT,AUTO1_Pos);               //GO TO POSITION
+               break;
+            case 1:
+              _GoAbs(GO_NOWAIT,AUTO2_Pos);               //GO TO POSITION
+              break;
+            case 2:
+              _GoAbs(GO_NOWAIT,AUTO3_Pos);               //GO TO POSITION
+              break;
+            case 3:
+              _GoAbs(GO_NOWAIT,AUTO4_Pos);               //GO TO POSITION
+              break;
+            case 4:
+              _GoAbs(GO_NOWAIT,AUTO5_Pos);               //GO TO POSITION
+              break;
+            case 5:
+              _GoAbs(GO_NOWAIT,AUTO6_Pos);               //GO TO POSITION
+              break;
+            case 6:
+              _GoAbs(GO_NOWAIT,AUTO7_Pos);               //GO TO POSITION
+              break;
+            case 7:
+              _GoAbs(GO_NOWAIT,AUTO8_Pos);               //GO TO POSITION
+              break;
+            case 8:
+              _GoAbs(GO_NOWAIT,AUTO9_Pos);               //GO TO POSITION
+              break;
+            case 9:
+              _GoAbs(GO_NOWAIT,AUTO10_Pos);              //GO TO POSITION
+              break;
+            default:
+              break;
+          }
+        if (DIState03)                                   //Fahre nur, wenn Start-Bit gesetzt
+          {
+            mSET_ENABLE;
+          }
+        else
+          {
+            mSET_NO_ENABLE;
+          }
+       }
+       else
+       {
+         OP_Status = 63;                           //Referenzfahrt, Nicht referenziert
+         mSET_INHIBIT;
+       }
+       break;
+
+   default:     //Unknown DigitalInputs
+       OP_Flag = 0;                               //No RefTravel active
+       if(mREFERENCED)
+       {
+         OP_Status = 100;                           //Status = Unknown ==> No Movement!
+         _SetSys(SS_POSSPEED,OP_NullSpeed1);        //Set No speed as PosSpeed
+         _SetSys(SS_POSRAMP,OP_NullRamp1);          //Set PosRamp
+         mSET_NO_ENABLE;                            //
+       }
+       else
+       {
+         OP_Status = 63;                           //Referenzfahrt, Nicht referenziert
+         mSET_INHIBIT;
+       }
+       break;
+  } //END switch
+
+}                                           //END TASK2
+
+
+/*==================================================================================================
+   === REFERENCE TRAVEL ===
+==================================================================================================*/
+REFERENCE_TRAVEL()
+{
+   if(!mERROR && !mSTO)                       //If NoError && NoSTo
+   {                                          //
+    ml.Service     = ML_S_WRV;                //movilink service: write parameter volatile
+    ml.Index       = 8557;                    //parameter: Speed monitoring
+    mld.WritePar   = 0;                       //value: OFF
+    _MoviLink(ml);                            //write parameter
+
+   if(CtrlMode != CTRL_MODE_SERVO)
+    {
+     mSET_INHIBIT;
+     CtrlMode  = CTRL_MODE_SERVO;
+     _SetSys(SS_OPMODE,CtrlMode);              //Speed Control Mode
+     mSET_N11;
+     mSET_ENABLE;
+     Timer_2 = 0;                               //Wait for valid Act. Speed value
+    }
+
+      _Go0(GO0_U_W_ZP);                       //...set Referencepoint NOW!
+      if(mREFERENCED)                         //If referenced?
+      {                                       //...
+      HOM_State = 1;
+        mSET_INHIBIT;
+       mRESET_N11;
+       CtrlMode = CTRL_MODE_SERVOIPOS;
+       _SetSys(SS_OPMODE,CtrlMode);           //IPOS ControlMode
+
+       mSET_ENABLE;
+
+       ml.Service     = ML_S_WRV;             //movilink service: write parameter volatile
+       ml.Index       = 8557;                 //para;eter: Speed monitoring
+       mld.WritePar   = 3;                    //value: motor/regenerative
+       _MoviLink(ml);                         //write parameter
+     }                                         //END if
+   }                                          //END if NoSTO && NoError
+}                                             //END REFERENCE_TRAVEL()
+
+/*==================================================================================================
+   === CHECK IF INPUTS HAS RISING/FALLING EDGE ===
+==================================================================================================*/
+TRIGGERED_INPUTS()
+{
+ DIState = InputLevel;
+
+ if(DIState10 && !PAST_DI10)
+  rEDGE_DI10 = 1;
+ else
+  rEDGE_DI10 = 0;
+
+ if(!DIState10 && PAST_DI10)
+  fEDGE_DI10 = 1;
+ else
+  fEDGE_DI10 = 0;
+
+
+ if(DIState11 && !PAST_DI11)
+  rEDGE_DI11 = 1;
+ else
+  rEDGE_DI11 = 0;
+
+ if(!DIState11 && PAST_DI11)
+  fEDGE_DI11 = 1;
+ else
+  fEDGE_DI11 = 0;
+
+
+ if(DIState12 && !PAST_DI12)
+  rEDGE_DI12 = 1;
+ else
+  rEDGE_DI12 = 0;
+
+ if(!DIState12 && PAST_DI12)
+  fEDGE_DI12 = 1;
+ else
+  fEDGE_DI12 = 0;
+
+
+ if(DIState13 && !PAST_DI13)
+  rEDGE_DI13 = 1;
+ else
+  rEDGE_DI13 = 0;
+
+ if(!DIState13 && PAST_DI13)
+  fEDGE_DI13 = 1;
+ else
+  fEDGE_DI13 = 0;
+
+
+ if(DIState01 && !PAST_DI01)
+  rEDGE_DI01 = 1;
+ else
+  rEDGE_DI01 = 0;
+
+ if(!DIState01 && PAST_DI01)
+  fEDGE_DI01 = 1;
+ else
+  fEDGE_DI01 = 0;
+
+
+ if(DIState02 && !PAST_DI02)
+  rEDGE_DI02 = 1;
+ else
+  rEDGE_DI02 = 0;
+
+ if(!DIState02 && PAST_DI02)
+  fEDGE_DI02 = 1;
+ else
+  fEDGE_DI02 = 0;
+
+
+ if(DIState03 && !PAST_DI03)
+  rEDGE_DI03 = 1;
+ else
+  rEDGE_DI03 = 0;
+
+ if(!DIState03 && PAST_DI03)
+  fEDGE_DI03 = 1;
+ else
+  fEDGE_DI03 = 0;
+
+
+ if(DIState04 && !PAST_DI04)
+  rEDGE_DI04 = 1;
+ else
+  rEDGE_DI04 = 0;
+
+ if(!DIState04 && PAST_DI04)
+  fEDGE_DI04 = 1;
+ else
+  fEDGE_DI04 = 0;
+
+
+ PAST_DI10 = DIState10;
+ PAST_DI11 = DIState11;
+ PAST_DI12 = DIState12;
+ PAST_DI13 = DIState13;
+ PAST_DI01 = DIState01;
+ PAST_DI02 = DIState02;
+ PAST_DI03 = DIState03;
+ PAST_DI04 = DIState04;
+}
+
+/*==================================================================================================
+   === CHECK AND CONFIRM CUSTOMER VALUES ===
+==================================================================================================*/
+CONFIRM_DATA()
+{
+ // === RANGE CHECKING =============================================================================
+  HOM_Type   = 8;                   //8:Fixed Point 1:CAM LEFT 2:CAM RIGHT
+
+ if(POS1_Speed < 100)               //Speed to Pos1 min 10rpm
+  POS1_Speed   = 100;               //
+ if(POS1_Speed > 20000)             //Speed to Pos1 max 2000rpm
+  POS1_Speed   = 20000;             //
+
+ if(POS1_Ramp1 < 100)               //Ramp1 to Pos1 min 100ms
+  POS1_Ramp1   = 100;               //
+ if(POS1_Ramp1 > 60000)             //Ramp1 to Pos1 max 60.000ms
+  POS1_Ramp1   = 60000;             //
+
+ if(JOG_Speed < 100)                //Speed for JOG mode min 10rpm
+  JOG_Speed   = 100;                //
+ if(JOG_Speed > 20000)              //Speed for JOG mode max 2000rpm
+  JOG_Speed   = 20000;              //
+
+ if(JOG_Ramp < 100)                 //Ramp JOG mode min 100ms
+  JOG_Ramp   = 100;                 //
+ if(JOG_Ramp > 60000)               //Ramp JOG mode max 60.000ms
+  JOG_Ramp   = 60000;               //
+
+//  JOG_MaxPos    = 4096000;           //Max Position for JOG mode
+//  JOG_MinPos    = -4096000;              //Min Position for JOG mode
+
+ if(OP_Direction < 0)               //Direction of rotation min 0 (CW)
+  OP_Direction = 0;
+ if(OP_Direction > 1)               //Direction of rotation max 1 (CCW)
+  OP_Direction = 1;
+
+
+ // === SET VALUES TO OPERATING VALUES ===========================================================
+ REF_Type       = 8;                //Set to customer value [8:Fixed Point 1:CAM LEFT 2:CAM RIG]
+
+ ml.Service     = ML_S_WRV;         //movilink service: write parameter volatile
+ ml.Index       = 8626;             //parameter: reference travel type
+ mld.WritePar   = 8;                //value: REF-Type
+ _MoviLink(ml);                     //write parameter
+ _Wait(10);
+
+ ml.Service     = ML_S_WR;          //movilink service: write parameter
+ ml.Index       = 8537;             //parameter: Direction of rotation
+ mld.WritePar   = OP_Direction;     //Direction
+ _MoviLink(ml);                     //write parameter
+ _Wait(10);
+
+ ml.Service     = ML_S_RD;          //movilink service: read
+ ml.Index       = 8537;             //parameter: Direction of rotation
+ _MoviLink(ml);                     //read parameter
+ OP_Direction   = mld.ReadPar;      //Direction of rotation (Check if value was written)
+ _Wait(10);
+
+ AUTO1_Pos      = POS1_Pos;         //Set to Setpoint Pos1 (LOWER)
+ AUTO1_SpeedCW  = POS1_Speed;       //Set to TravelParameter POS 1
+ AUTO1_SpeedCCW = POS1_Speed;       //Set to TravelParameter POS 1
+ AUTO1_Ramp1    = POS1_Ramp1;       //Set to TravelParameter POS 1
+
+ AUTO2_Pos      = POS2_Pos;         //Set to Setpoint Pos2
+ AUTO3_Pos      = POS3_Pos;         //Set to Setpoint Pos3
+ AUTO4_Pos      = POS4_Pos;         //Set to Setpoint Pos4
+ AUTO5_Pos      = POS5_Pos;         //Set to Setpoint Pos5
+ AUTO6_Pos      = POS6_Pos;         //Set to Setpoint Pos6
+ AUTO7_Pos      = POS7_Pos;         //Set to Setpoint Pos7
+ AUTO8_Pos      = POS8_Pos;         //Set to Setpoint Pos8
+ AUTO9_Pos      = POS9_Pos;         //Set to Setpoint Pos9
+ AUTO10_Pos     = POS10_Pos;        //Set to Setpoint Pos10
+
+ MANU_Pos       = JOG_Pos;          //Set to Act. JOG POS
+ MANU_SpeedCW   = JOG_Speed;        //Set to TravelParameter JOG
+ MANU_SpeedCCW  = JOG_Speed;        //Set to TravelParameter JOG
+ MANU_Ramp1     = JOG_Ramp;         //Set to TravelParameter JOG
+ MANU_MinPos    = JOG_MinPos;       //SetMinPos
+ MANU_MaxPos    = JOG_MaxPos;       //SetMaxPos
+
+ _Memorize(MEM_STDATA);             //Save customer values!
+
+ OP_ConfirmData = 0;                //Reset ConfirmData
+}
+
+
+/*==================================================================================================
+   === INITIALIZE INTERNAL VARIABLES ===
+==================================================================================================*/
+INIT_VARIABLES()
+{
+ //=== First INIT of NON VOLATILE VARIABLES ===
+ if(PGM_Init != 0x2488)             //If not initialized
+ {                                  //...
+  HOM_Type      = 8;                //Ref.Travel 8:Fixed Point 1:CAM LEFT 2:CAM RIGHT
+
+  POS1_Pos      = 0;                //Lower Setpoint Position = 0
+  POS1_Speed    = 15000;            //Positioning Speed = 1500rpm
+  POS1_Ramp1    = 200;              //Positioning Ramp  = 200ms
+
+  POS2_Pos      = 0;                //Setpoint Position = 0
+  POS3_Pos      = 0;                //Setpoint Position = 0
+  POS4_Pos      = 0;                //Setpoint Position = 0
+  POS5_Pos      = 0;                //Setpoint Position = 0
+  POS6_Pos      = 0;                //Setpoint Position = 0
+  POS7_Pos      = 0;                //Setpoint Position = 0
+  POS8_Pos      = 0;                //Setpoint Position = 0
+  POS9_Pos      = 0;                //Setpoint Position = 0
+  POS10_Pos     = 0;                //Setpoint Position = 0
+
+  JOG_Speed     = 500;              //JogSpeed 50rpm
+  JOG_Ramp      = 500;              //JogRamp  0.5sec
+  JOG_MaxPos    = 4096000;          //Max Position for JOG mode
+  JOG_MinPos    = -4096000;         //Min Position for JOG mode
+
+  PGM_Init      = 0x2488;           //Remanent variables are initialized
+  _Memorize(MEM_STDATA);            //
+ }
+
+ //=== VOLATILE VARIABLES ===
+ OP_Status      = 0;                //Init Status
+ OP_NullSpeed1  = 0;                //Zero Speed
+ OP_NullSpeed2  = 0;                //Zero Speed
+ OP_NullRamp1   = 500;              //Ramp for ZeroSpeed
+ OP_NullRamp2   = 500;              //Ramp for ZeroSpeed
+ OP_Flag        = 0;                //Init OP_Flag
+ OP_ConfirmData = 0;                //if Value <> 0 Confirm new Parameter values
+
+ REF_Type       = HOM_Type;         //Set to customer value [8:Fixed Point 1:CAM LEFT 2:CAM RIGHT]
+
+ AUTO1_Pos      = POS1_Pos;         //Set to setpoint position 1 (Lower)
+ AUTO1_SpeedCW  = POS1_Speed;       //Set to TravelParameter POS 1
+ AUTO1_SpeedCCW = POS1_Speed;       //Set to TravelParameter POS 1
+ AUTO1_Ramp1    = POS1_Ramp1;       //Set to TravelParameter POS 1
+
+ AUTO2_Pos      = POS2_Pos;         //Set to setpoint position 2
+ AUTO3_Pos      = POS3_Pos;         //Set to setpoint position 3
+ AUTO4_Pos      = POS4_Pos;         //Set to setpoint position 4
+ AUTO5_Pos      = POS5_Pos;         //Set to setpoint position 5
+ AUTO6_Pos      = POS6_Pos;         //Set to setpoint position 6
+ AUTO7_Pos      = POS7_Pos;         //Set to setpoint position 7
+ AUTO8_Pos      = POS8_Pos;         //Set to setpoint position 8
+ AUTO9_Pos      = POS9_Pos;         //Set to setpoint position 9
+ AUTO10_Pos     = POS10_Pos;        //Set to setpoint position 10
+
+ JOG_Pos        = ActPos_Mot;       //Init variable
+
+ PAST_DI10      = DI10;             //INIT DI10 Memory
+ PAST_DI11      = DI11;             //INIT DI11 Memory
+ PAST_DI12      = DI12;             //INIT DI12 Memory
+ PAST_DI13      = DI13;             //INIT DI13 Memory
+ PAST_DI01      = DI01;             //INIT DI01 Memory
+ PAST_DI02      = DI02;             //INIT DI02 Memory
+ PAST_DI03      = DI03;             //INIT DI03 Memory
+ PAST_DI04      = DI04;             //INIT DI04 Memory
+
+
+ rEDGE_DI10     = 0;                //Init rising Edge variable
+ rEDGE_DI11     = 0;                //Init rising Edge variable
+ rEDGE_DI12     = 0;                //Init rising Edge variable
+ rEDGE_DI13     = 0;                //Init rising Edge variable
+ rEDGE_DI01     = 0;                //Init rising Edge variable
+ rEDGE_DI02     = 0;                //Init rising Edge variable
+ rEDGE_DI03     = 0;                //Init rising Edge variable
+ rEDGE_DI04     = 0;                //Init rising Edge variable
+
+ fEDGE_DI10     = 0;                //Init rising Edge variable
+ fEDGE_DI11     = 0;                //Init rising Edge variable
+ fEDGE_DI12     = 0;                //Init rising Edge variable
+ fEDGE_DI13     = 0;                //Init rising Edge variable
+ fEDGE_DI01     = 0;                //Init rising Edge variable
+ fEDGE_DI02     = 0;                //Init rising Edge variable
+ fEDGE_DI03     = 0;                //Init rising Edge variable
+ fEDGE_DI04     = 0;                //Init rising Edge variable
+
+ AILF           = 0;                //LeadFrequency Input
+ AI10           = 0;                //Analogue Input
+ AO_Value       = 0;                //Value of AO10
+
+ CtrlMode            = CTRL_MODE_SERVOIPOS; //Standard CtrolMode Servo&IPOS
+
+ // === Internal structures ===
+ ml.BusType  = ML_BT_SBUS;          //bustype: SBUS
+ ml.Address  = 253;                 //Own address
+ ml.Format   = ML_FT_PAR;           //Parameter service
+ ml.DPointer = numof(mld);          //...
+
+}
+
+
+/*==================================================================================================
+   === SET DEVICE SETTINGS ===
+==================================================================================================*/
+SET_DEVICESETTINGS()
+{
+ // === COMMUNICATION INIT ===
+  ml.BusType  = ML_BT_SBUS;                  //bustype: SBUS
+  ml.Address  = 253;                         //Own address
+  ml.Format   = ML_FT_PAR;                   //Parameter service
+  ml.DPointer = numof(mld);                  //...
+
+  ControlWord = 0;                           //ControlWord reset
+  _BitSet(ControlWord, 30);                  //Set controller inhibit
+
+ // === DEVICE SETTINGS ===
+  ml.Service     = ML_S_WRV;                 //movilink service: write parameter volatile
+  ml.Index       = 8595;                     //parameter: parameter lock
+  mld.WritePar   = 0;                        //value: off
+  _MoviLink(ml);                             //write parameter
+  _Wait(10);
+
+  ml.Service     = ML_S_WRV;                 //movilink service: write parameter volatile
+  ml.Index       = 8461;                     //parameter: Setpoint Source
+  mld.WritePar   = 0;                        //value: bipolar
+  _MoviLink(ml);                             //write parameter
+  _Wait(10);
+
+  ml.Service     = ML_S_WRV;                 //movilink service: write parameter volatile
+  ml.Index       = 8462;                     //parameter: Control signal source
+  mld.WritePar   = 0;                        //value: Terminals
+  _MoviLink(ml);                             //write parameter
+  _Wait(10);
+
+  ml.Service     = ML_S_WRV;                 //movilink service: write parameter volatile
+  ml.Index       = 8574;                     //parameter: operating mode
+  mld.WritePar   = 18;                       //value: servo & ipos
+  _MoviLink(ml);                             //write parameter
+  _Wait(10);                                 //
+
+  CtrlMode       = CTRL_MODE_SERVOIPOS;      //Standard CtrolMode Servo&IPOS
+
+  ml.Service     = ML_S_WRV;                 //movilink service: write parameter volatile
+  ml.Index       = 8335;                     //parameter: Function of DI01
+  mld.WritePar   = 16;                       //value:  IPOS INPUT
+  _MoviLink(ml);                             //write parameter
+  _Wait(10);
+
+  ml.Service     = ML_S_WRV;                 //movilink service: write parameter volatile
+  ml.Index       = 8336;                     //parameter: Function of DI02
+  mld.WritePar   = 16;                       //value:  IPOS INPUT
+  _MoviLink(ml);                             //write parameter
+  _Wait(10);
+
+  ml.Service     = ML_S_WRV;                 //movilink service: write parameter volatile
+  ml.Index       = 8337;                     //parameter: Function of DI03
+  mld.WritePar   = 16;                       //value:  IPOS INPUT
+  _MoviLink(ml);                             //write parameter
+  _Wait(10);
+
+  ml.Service     = ML_S_WRV;                 //movilink service: write parameter volatile
+  ml.Index       = 8338;                     //parameter: Function of DI04
+  mld.WritePar   = 16;                       //value:  IPOS INPUT
+  _MoviLink(ml);                             //write parameter
+  _Wait(10);
+
+  ml.Service     = ML_S_WRV;                 //movilink service: write parameter volatile
+  ml.Index       = 8340;                     //parameter: Function of DI10
+  mld.WritePar   = 16;                       //value: IPOS INPUT
+  _MoviLink(ml);                             //write parameter
+  _Wait(10);
+
+  ml.Service     = ML_S_WRV;                 //movilink service: write parameter volatile
+  ml.Index       = 8341;                     //parameter: Function of DI11
+  mld.WritePar   = 16;                       //value: IPOS INPUT
+  _MoviLink(ml);                             //write parameter
+  _Wait(10);
+
+  ml.Service     = ML_S_WRV;                 //movilink service: write parameter volatile
+  ml.Index       = 8342;                     //parameter: Function of DI12
+  mld.WritePar   = 16;                       //value: IPOS INPUT
+  _MoviLink(ml);                             //write parameter
+  _Wait(10);
+
+  ml.Service     = ML_S_WRV;                 //movilink service: write parameter volatile
+  ml.Index       = 8343;                     //parameter: Function of DI12
+  mld.WritePar   = 16;                       //value: IPOS INPUT
+  _MoviLink(ml);                             //write parameter
+  _Wait(10);
+
+  ml.Service     = ML_S_WRV;                 //movilink service: write parameter volatile
+  ml.Index       = 8352;                     //parameter: Function of DO10
+  mld.WritePar   = 21;                       //value: IPOS OUTPUT
+  _MoviLink(ml);                             //write parameter
+  _Wait(10);
+
+  ml.Service     = ML_S_WRV;                 //movilink service: write parameter volatile
+  ml.Index       = 8353;                     //parameter: Function of DO11
+  mld.WritePar   = 21;                       //value: IPOS OUTPUT
+  _MoviLink(ml);                             //write parameter
+  _Wait(10);
+
+  ml.Service     = ML_S_WRV;                 //movilink service: write parameter volatile
+  ml.Index       = 8626;                     //parameter: reference travel type
+  mld.WritePar   = 8;                        //value: 8:Fixed Point
+  _MoviLink(ml);                             //write parameter
+  _Wait(10);
+
+} // === END DEVICE SETTINGS ===
+
+
+/*==================================================================================================
+   === GET DEVICE SETTINGS ===
+==================================================================================================*/
+GET_PARAMETER()
+{
+ // === COMMUNICATION INIT ===
+ ml.BusType  = ML_BT_SBUS;                  //bustype: SBUS
+ ml.Address  = 253;                         //Own address
+ ml.Format   = ML_FT_PAR;                   //Parameter service
+ ml.DPointer = numof(mld);                  //...
+
+ ml.Service     = ML_S_RD;                  //movilink service: read
+ ml.Index       = 8537;                     //parameter: Direction of rotation
+ _MoviLink(ml);                             //read parameter
+ OP_Direction   = mld.ReadPar;              //Direction of rotation
+ _Wait(10);
+
+} // === END DEVICE PARAMETERS ===
+
+
+//=================================================================================================
+// === PROGRAMM END
+//=================================================================================================

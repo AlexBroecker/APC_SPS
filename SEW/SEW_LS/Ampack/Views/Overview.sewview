@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SEWView Name="Overview">
+  <CreationTime>29.08.2018 00:13:54</CreationTime>
+  <LastWriteTime>29.08.2018 00:41:14</LastWriteTime>
+  <MMSVersion>6.2.0.1</MMSVersion>
+  <SyntaxVersion>4.0</SyntaxVersion>
+  <OSVersion>Microsoft Windows NT 6.1.7601 Service Pack 1</OSVersion>
+  <Nodes>
+    <ProjectNode Expand="false" Name="LoadingStation" />
+  </Nodes>
+</SEWView>

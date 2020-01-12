@@ -1,0 +1,873 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<DataManagerConfig xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <!--
+    (c) 2012 by SEW-EURODRIVE GmbH & Co KG
+    
+    Vorlagendatei für freiprogrammierbare Geräte ohne Default-Applikation
+    
+    23.01.09 CS Erweiterung der Functions um ErrorMessages
+    05.02.09 CS Auslagern der Texte in die Textdatenbank
+    17.04.09 CS Anpassung der Fehlertexte
+    12.11.09 CS Kleinere Änderungen
+    25.10.10 CS Für Sync-Dienst aufbereitet
+    20.12.10 CS Anpassungen für ReadStandard-Dienst
+    21.02.11 CS Für Projektierung V2 mit ReadFirmware und WriteFirmware
+    26.09.11 CS Messageboxen erweitert um das Unterdrücken der Anzeige
+    12.03.12 CS Warnhinweistexte angepasst (BugZilla 5212) und Unterdrücken von 10015.0 auf 10037.0 geändert
+    26.04.12 CS Parameter zum Unterdrücken von 10037.0 auf 10020.0 geändert
+    23.05.12 CS Reboot-Zeiten erhöht auf 2 min.
+  -->
+  <Services>
+    <Service Type="0" Name="Read">
+      <Group>
+        <Names>
+          <Name Language="DE">Erstellt eine Sicherung des aktuellen User-Verzeichnis und der aktuellen Firmware (.19v1123)</Name>
+          <Comment Language="DE">Das Bootprojekt und die IEC-Dateien auf der SD-Karte werden mitgesichert.</Comment>
+          <Comment Language="DE">Alle Parameter und der PROFINET-Gerätename werden gesichert.</Comment>
+          <Comment Language="DE">Eingestellte Passwörter werden mitgesichert.</Comment>
+          <Comment Language="DE">Die Sicherungsdatei wird auf der SD-Karte erstellt und anschliessend auf den PC zur Versionierung übertragen.</Comment>
+          <Name Language="EN">Creates backup of the current user directory and the current firmware. (.19v1123)</Name>
+          <Comment Language="EN">A backup is also made of the boot project and the IEC files on the SD card.</Comment>
+          <Comment Language="EN">All parameters and the PROFINET device name are saved.</Comment>
+          <Comment Language="EN">Set passwords are saved.</Comment>
+          <Comment Language="EN">The backup file is created on the SD card and will be transferred to the PC for versioning.</Comment>
+          <Name Language="FR">Réalise une sauvegarde du répertoire utilisateur et du firmware actuel (.19v1123)</Name>
+          <Comment Language="FR">Le projet d'initialisation et les fichiers CEI de la carte SD sont également sauvegardés.</Comment>
+          <Comment Language="FR">Tous les paramètres et la désignation de l'appareil PROFINET sont sauvegardés.</Comment>
+          <Comment Language="FR">Les mots de passe définis sont également sauvegardés.</Comment>
+          <Comment Language="FR">Le fichier de sauvegarde est créé sur la carte SD, puis transféré sur le PC aux fins de versionnage.</Comment>
+        </Names>
+        <Visible>true</Visible>
+        <Enabled>false</Enabled>
+        <Checked>true</Checked>
+        <VarDataType>FC05</VarDataType>
+        <Functions>
+          <Function>
+            <Comment>Show Read Warning MessageBox</Comment>
+            <Enabled>true</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <MessageBoxTexts>
+              <!-- Erstellung einer Sicherung oder Projektieren -->
+              <Name Language="DE">Info (.19v1123)</Name>
+              <Name Language="EN">Information (.19v1123)</Name>
+              <Name Language="FR">Info (.19v1123)</Name>
+              <Comment Language="DE">Bitte beachten Sie folgendes:
+
+  - Bringen Sie ihre Anlage in einen sicheren Zustand!&#xD;  - Erstellt eine Sicherung des aktuellen User-Verzeichnis und der aktuellen Firmware (V1123)&#xD;  - Das Bootprojekt und die IEC-Dateien auf der SD-Karte werden mitgesichert.&#xD;  - Alle Parameter und der PROFINET-Gerätename werden gesichert.&#xD;  - Eingestellte Passwörter werden mitgesichert.&#xD;  - Die Sicherungsdatei wird auf der SD-Karte erstellt und anschliessend auf den PC zur Versionierung übertragen.</Comment>
+              <Comment Language="EN">Please note the following:
+
+  - Bring the system into a safe condition!&#xD;  - Creates backup of the current user directory and the current firmware. (V1123)&#xD;  - A backup is also made of the boot project and the IEC files on the SD card.&#xD;  - All parameters and the PROFINET device name are saved.&#xD;  - Set passwords are saved.&#xD;  - The backup file is created on the SD card and will be transferred to the PC for versioning.</Comment>
+              <Comment Language="FR">Important :
+
+  - Amenez votre installation dans un état sûr !&#xD;  - Réalise une sauvegarde du répertoire utilisateur et du firmware actuel (V1123)&#xD;  - Le projet d'initialisation et les fichiers CEI de la carte SD sont également sauvegardés.&#xD;  - Tous les paramètres et la désignation de l'appareil PROFINET sont sauvegardés.&#xD;  - Les mots de passe définis sont également sauvegardés.&#xD;  - Le fichier de sauvegarde est créé sur la carte SD, puis transféré sur le PC aux fins de versionnage.</Comment>
+            </MessageBoxTexts>
+            <CpuSys>0</CpuSys>
+            <INumber>0</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>14</Service>
+            <Index>10020</Index>
+            <SubIndex>0</SubIndex>
+            <MessageBoxIconType>Warning</MessageBoxIconType><!-- Information (Bit 1), Warning (Bit 2), Error (Bit 3) -->
+            <ErrorMessage>
+              <Name Language="DE">Abbruch durch den Benutzer!</Name>
+              <Name Language="EN">Canceled by user!</Name>
+              <Name Language="FR">Interruption par l'utilisateur !</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Delete Backup</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <BlockCount>0</BlockCount>
+            <Service>18</Service>
+            <ErrorMessage>
+              <Name Language="DE">Delete Backup Fehler!</Name>
+              <Name Language="EN">Delete backup error!</Name>
+              <Name Language="FR">Défaut Delete Backup !</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Create Backup</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <BlockCount>0</BlockCount>
+            <Service>16</Service>
+            <ErrorMessage>
+              <Name Language="DE">Fehler beim Sichern der Daten! Mögliche Ursache: Nicht genügend freier Speicherplatz vorhanden. Bitte stellen Sie sicher das der Schreibschutz der SD-Karte nicht aktiv ist.</Name>
+              <Name Language="EN">Error saving data! Possible cause: Insufficient memory space. Please make sure that the SD card is not write protected.</Name>
+              <Name Language="FR">Défaut lors de la sauvegarde des données ! Cause possible : pas assez d'espace mémoire disponible. Veuillez vous assurer que la carte SD n'est pas protégée en écriture.</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Get Firmware Length</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>11</Service>
+            <ErrorMessage>
+              <Name Language="DE">Get Firmware Length Fehler!</Name>
+              <Name Language="EN">Get firmware length error!</Name>
+              <Name Language="FR">Défaut Get Firmware Length !</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Read Firmware (.19v1123) Data</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <Filename>PlcBackupV1123.vd5</Filename>
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>9</Service>
+            <ErrorMessage>
+              <Name Language="DE">Read Firmware Data Fehler, evt. Fehler bei der Übertragung!</Name>
+              <Name Language="EN">Read firmware data error, probably error during transfer!</Name>
+              <Name Language="FR">Défaut Read Firmware Data, défaut lors du transfert !</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Delete Backup</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <BlockCount>0</BlockCount>
+            <Service>18</Service>
+          </Function>
+        </Functions>
+        <StandardImage>Read</StandardImage>
+      </Group>
+    </Service>
+    <Service Type="1" Name="Write" RebootTime="120000">
+      <Group>
+        <Names>
+          <Name Language="DE">Wiederherstellung einer erstellten Sicherung (.19v1123)</Name>
+          <Comment Language="DE">Achtung: Vor dem Wiederherstellen des User-Verzeichnisses aus der Sicherung wird dieses auf der SD-Karte komplett gelöscht (inklusive aller Daten)!</Comment>
+          <Comment Language="DE">User-Verzeichnis und die Firmware aus der Sicherung werden wiederhergestellt.</Comment>
+          <Comment Language="DE">Das Bootprojekt und die IEC-Dateien werden auf der SD-Karte wiederhergestellt.</Comment>
+          <Comment Language="DE">Alle Parameter und der PROFINET-Gerätename werden wiederhergestellt.</Comment>
+          <Comment Language="DE">Eingestellte Passwörter werden wiederhergestellt.</Comment>
+          <Name Language="EN">Restoring a created backup (.19v1123)</Name>
+          <Comment Language="EN">Important: Prior to restoring the user directory of the backup, the directory is deleted completely from the SD card (including all data).</Comment>
+          <Comment Language="EN">User directory and firmware of the backup are restored.</Comment>
+          <Comment Language="EN">The boot project and the IEC files are restored on the SD card.</Comment>
+          <Comment Language="EN">All parameters and the PROFINET device name are restored.</Comment>
+          <Comment Language="EN">Set passwords are restored.</Comment>
+          <Name Language="FR">Restauration d'une sauvegarde effectuée (.19v1123)</Name>
+          <Comment Language="FR">Attention : avant restauration du répertoire utilisateur depuis la sauvegarde, celui-ci est complètement supprimé de la carte SD (y compris toutes les données) !</Comment>
+          <Comment Language="FR">Le répertoire utilisateur et le firmware de la sauvegarde sont restaurés.</Comment>
+          <Comment Language="FR">Le projet d'initialisation et les fichiers CEI sont restaurés sur la carte SD.</Comment>
+          <Comment Language="FR">Tous les paramètres et la désignation de l'appareil PROFINET sont restaurés.</Comment>
+          <Comment Language="FR">Les mots de passe définis sont restaurés.</Comment>
+        </Names>
+        <Visible>true</Visible>
+        <Enabled>false</Enabled>
+        <Checked>true</Checked>
+        <VarDataType>FC05</VarDataType>
+        <Functions>
+          <Function>
+            <Comment>Show Write Warning MessageBox</Comment>
+            <Enabled>true</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <MessageBoxTexts>
+              <!-- Wiederherstellung einer Sicherung oder Projektieren -->
+              <Name Language="DE">Info (.19v1123)</Name>
+              <Name Language="EN">Information (.19v1123)</Name>
+              <Name Language="FR">Info (.19v1123)</Name>
+              <Comment Language="DE">Bitte beachten Sie folgendes:
+
+  - Bringen Sie ihre Anlage in einen sicheren Zustand!&#xD;  - Eine laufende Applikation wird beim Klick auf OK automatisch angehalten.&#xD;  - Wiederherstellung einer erstellten Sicherung (.19v1123)&#xD;  - Achtung: Vor dem Wiederherstellen des User-Verzeichnisses aus der Sicherung wird dieses auf der SD-Karte komplett gelöscht (inklusive aller Daten)!&#xD;  - User-Verzeichnis und die Firmware aus der Sicherung werden wiederhergestellt.&#xD;  - Das Bootprojekt und die IEC-Dateien werden auf der SD-Karte wiederhergestellt.&#xD;  - Alle Parameter und der PROFINET-Gerätename werden wiederhergestellt.&#xD;  - Eingestellte Passwörter werden wiederhergestellt.</Comment>
+              <Comment Language="EN">Please note the following:
+
+  - Bring the system into a safe condition!&#xD;  - A running application will automatically stop when clicking on OK.&#xD;  - Restoring a created backup (.19v1123)&#xD;  - Important: Prior to restoring the user directory of the backup, the directory is deleted completely from the SD card (including all data).&#xD;  - User directory and firmware of the backup are restored.&#xD;  - The boot project and the IEC files are restored on the SD card.&#xD;  - All parameters and the PROFINET device name are restored.&#xD;  - Set passwords are restored.</Comment>
+              <Comment Language="FR">Important :
+
+  - Amenez votre installation dans un état sûr !&#xD;  - Une application en cours de fonctionnement est automatiquement arrêtée en cliquant sur OK.&#xD;  - Restauration d'une sauvegarde effectuée (.19v1123)&#xD;  - Attention : avant restauration du répertoire utilisateur depuis la sauvegarde, celui-ci est complètement supprimé de la carte SD (y compris toutes les données) !&#xD;  - Le répertoire utilisateur et le firmware de la sauvegarde sont restaurés.&#xD;  - Le projet d'initialisation et les fichiers CEI sont restaurés sur la carte SD.&#xD;  - Tous les paramètres et la désignation de l'appareil PROFINET sont restaurés.&#xD;  - Les mots de passe définis sont restaurés.</Comment>
+            </MessageBoxTexts>
+            <CpuSys>0</CpuSys>
+            <INumber>0</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>14</Service>
+            <Index>10020</Index>
+            <SubIndex>0</SubIndex>
+            <MessageBoxIconType>Warning</MessageBoxIconType><!-- Information (Bit 1), Warning (Bit 2), Error (Bit 3) -->
+            <ErrorMessage>
+              <Name Language="DE">Abbruch durch den Benutzer!</Name>
+              <Name Language="EN">Canceled by user!</Name>
+              <Name Language="FR">Interruption par l'utilisateur !</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Start Firmware Update</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>1</Service>
+            <ErrorMessage>
+              <Name Language="DE">Start Firmware Update Fehler! Kann nicht im Offline-Modus gestartet werden.</Name>
+              <Name Language="EN">Start firmware update error! Cannot be started in offline mode.</Name>
+              <Name Language="FR">Défaut au démarrage de la mise à jour du firmware ! Ne peut pas être lancé en mode Offline.</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Erase</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>3</Service>
+            <ErrorMessage>
+              <Name Language="DE">Bitte stellen Sie sicher das der Schreibschutz der SD-Karte nicht aktiv ist.</Name>
+              <Name Language="EN">Please make sure that the SD card is not write protected.</Name>
+              <Name Language="FR">Veuillez vous assurer que la carte SD n'est pas protégée en écriture.</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Write Firmware (.19v1123) Data</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <Filename>PlcBackupV1123.vd5</Filename>
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>4</Service>
+            <ErrorMessage>
+              <Name Language="DE">Write Firmware Data Fehler, evt. Fehler bei der Übertragung oder Schreibfehler auf dem Dateisystem! Bitte stellen Sie sicher das genügend Speicherplatz auf der SD-Karte verfügbar ist.</Name>
+              <Name Language="EN">Write firmware data error, probably error during transfer or write error on file system! Please make sure that sufficient memory is available on the SD card.</Name>
+              <Name Language="FR">Défaut Write Firmware Data, défaut lors du transfert ou défaut d'écriture dans le fichier système ! Veuillez vous assurer de disposer de suffisamment d'espace mémoire sur la carte SD.</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>CheckCRC</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>5</Service>
+            <ErrorMessage>
+              <Name Language="DE">Check CRC Fehler, evt. Fehler bei der Übertragung oder fehlerhaftes Datenarchiv!</Name>
+              <Name Language="EN">Check CRC error, probably error during transfer or data archive is faulty!</Name>
+              <Name Language="FR">Défaut Check CRC, défaut lors du transfert ou archives de données erronées !</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Restore Backup</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <BlockCount>0</BlockCount>
+            <Service>17</Service>
+            <ErrorMessage>
+              <Name Language="DE">Fehler beim Wiederherstellen der Daten! Mögliche Ursache: RestoreRequirements konnten nicht erfüllt werden, z.B. Falsche Firmwareversion oder nicht unterstütztes Backupformat. Bitte stellen Sie sicher das genügend Speicherplatz auf der SD-Karte verfügbar ist.</Name>
+              <Name Language="EN">Error while restoring data! Possible cause: Restore requirements not fulfilled, such as wrong firmware version or backup format not supported. Please make sure that sufficient memory is available on the SD card.</Name>
+              <Name Language="FR">Défaut lors de la restauration des données ! Cause possible : requêtes de restauration impossibles à exécuter, p. ex. mauvaise version de firmware ou format de sauvegarde non supporté Veuillez vous assurer de disposer de suffisamment d'espace mémoire sur la carte SD.</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Reboot Device</Comment>
+            <Enabled>true</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>6</Service>
+            <ErrorMessage>
+              <Name Language="DE">Reboot Device Fehler!</Name>
+              <Name Language="EN">Reboot device error!</Name>
+              <Name Language="FR">Défaut de réinitialisation appareil</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Delete Backup</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <BlockCount>0</BlockCount>
+            <Service>18</Service>
+            <ErrorMessage>
+              <Name Language="DE">Delete Backup Fehler!</Name>
+              <Name Language="EN">Delete backup error!</Name>
+              <Name Language="FR">Défaut Delete Backup !</Name>
+            </ErrorMessage>
+          </Function>
+        </Functions>
+        <StandardImage>Start</StandardImage>
+      </Group>
+    </Service>
+    <Service Type="2" Name="WriteStandard" RebootTime="120000">
+      <Group>
+        <Names>
+          <Name Language="DE">Firmware und Bootloader ins Gerät schreiben/laden (.19v1123)</Name>
+          <Comment Language="DE">Das Default-User-Verzeichnis wird gelöscht und anschliessend neu angelegt und aktiv geschalten.</Comment>
+          <Comment Language="DE">Die Firmware und der Bootloader aus dieser Version werden auf die SD-Karte geschrieben und nach dem Reboot aktiv.</Comment>
+          <Comment Language="DE">Alle Parameter und der PROFINET-Gerätename bleiben erhalten.</Comment>
+          <Comment Language="DE">Eingestellte Passwörter bleiben erhalten.</Comment>
+          <Comment Language="DE">Die Einstellungen in der NetConfig.cfg bleiben bestehen.</Comment>
+          <Comment Language="DE">Das Applikationsverzeichnis (ApplicationDir) in der BootConfig.cfg wird auf Default gesetzt.</Comment>
+          <Name Language="EN">Write/load firmware and boot loader into unit (.19v1123)</Name>
+          <Comment Language="EN">The default user directory is deleted. It is then created again and activated.</Comment>
+          <Comment Language="EN">Firmware and boot loader of this version are written to the SD card and become active after a reboot.</Comment>
+          <Comment Language="EN">All parameters and the PROFINET device name are maintained.</Comment>
+          <Comment Language="EN">Set passwords are maintained.</Comment>
+          <Comment Language="EN">The settings in the NetConfig.cfg remain maintained.</Comment>
+          <Comment Language="EN">The application directory (ApplicationDir) in the BootConfig.cfg is set to default.</Comment>
+          <Name Language="FR">Ecrire / transférer firmware et Bootloader dans l'appareil (.19v1123)</Name>
+          <Comment Language="FR">Le répertoire utilisateur par défaut est supprimé puis recréé et activé.</Comment>
+          <Comment Language="FR">Le firmware et le Bootloader de cette version sont enregistrés sur la carte SD puis activés après réinitialisation.</Comment>
+          <Comment Language="FR">Tous les paramètres et la désignation de l'appareil PROFINET sont conservés.</Comment>
+          <Comment Language="FR">Les mots de passe définis sont conservés.</Comment>
+          <Comment Language="FR">Les réglages du fichier NetConfig.cf sont conservés.</Comment>
+          <Comment Language="FR">Le répertoire application (ApplicationDir) dans le fichier BootConfig.cfg sont remis à leur configuration par défaut.</Comment>
+        </Names>
+        <Visible>true</Visible>
+        <Enabled>false</Enabled>
+        <Checked>true</Checked>
+        <VarDataType>FC05</VarDataType>
+        <Functions>
+          <Function>
+            <Comment>Show WriteStandard Warning MessageBox</Comment>
+            <Enabled>true</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <MessageBoxTexts>
+              <!-- Download einer Firmware -->
+              <Name Language="DE">Info (.19v1123)</Name>
+              <Name Language="EN">Information (.19v1123)</Name>
+              <Name Language="FR">Info (.19v1123)</Name>
+              <Comment Language="DE">Bitte beachten Sie folgendes:
+
+  - Bringen Sie ihre Anlage in einen sicheren Zustand!
+  - Loggen Sie sich mit dem PLC-Editor aus!
+  - Stoppen Sie ihr IEC Programm um Inkonsistenzen zu vermeiden!&#xD;  - Eine laufende Applikation wird beim Klick auf OK automatisch angehalten.</Comment>
+              <Comment Language="EN">Please note the following:
+
+  - Bring the system into a safe condition!
+  - Log out with the PLC Editor!
+  - Stop your IEC program to avoid inconsistencies!&#xD;  - A running application will automatically stop when clicking on OK.</Comment>
+              <Comment Language="FR">Important :
+
+  - Amenez votre installation dans un état sûr !
+  - Déconnectez-vous avec l'éditeur PLC !
+  - Arrêtez votre programme CEI pour éviter les inconsistances !&#xD;  - Une application en cours de fonctionnement est automatiquement arrêtée en cliquant sur OK.</Comment>
+            </MessageBoxTexts>
+            <CpuSys>0</CpuSys>
+            <INumber>0</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>14</Service>
+            <Index>10020</Index>
+            <SubIndex>0</SubIndex>
+            <MessageBoxIconType>Warning</MessageBoxIconType><!-- Information (Bit 1), Warning (Bit 2), Error (Bit 3) -->
+            <ErrorMessage>
+              <Name Language="DE">Abbruch durch den Benutzer!</Name>
+              <Name Language="EN">Canceled by user!</Name>
+              <Name Language="FR">Interruption par l'utilisateur !</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Start Firmware Update</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>1</Service>
+            <ErrorMessage>
+              <Name Language="DE">Start Firmware Update Fehler! Kann nicht im Offline-Modus gestartet werden.</Name>
+              <Name Language="EN">Start firmware update error! Cannot be started in offline mode.</Name>
+              <Name Language="FR">Défaut au démarrage de la mise à jour du firmware ! Ne peut pas être lancé en mode Offline.</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Erase</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>3</Service>
+            <ErrorMessage>
+              <Name Language="DE">Bitte stellen Sie sicher das der Schreibschutz der SD-Karte nicht aktiv ist.</Name>
+              <Name Language="EN">Please make sure that the SD card is not write protected.</Name>
+              <Name Language="FR">Veuillez vous assurer que la carte SD n'est pas protégée en écriture.</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Write Firmware (.19v1123) Data</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <Filename>FirmwarePackageV1123.vd5</Filename>
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>4</Service>
+            <ErrorMessage>
+              <Name Language="DE">Write Firmware Data Fehler, evt. Fehler bei der Übertragung oder Schreibfehler auf dem Dateisystem! Bitte stellen Sie sicher das genügend Speicherplatz auf der SD-Karte verfügbar ist.</Name>
+              <Name Language="EN">Write firmware data error, probably error during transfer or write error on file system! Please make sure that sufficient memory is available on the SD card.</Name>
+              <Name Language="FR">Défaut Write Firmware Data, défaut lors du transfert ou défaut d'écriture dans le fichier système ! Veuillez vous assurer de disposer de suffisamment d'espace mémoire sur la carte SD.</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>CheckCRC</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>5</Service>
+            <ErrorMessage>
+              <Name Language="DE">Check CRC Fehler, evt. Fehler bei der Übertragung oder fehlerhaftes Datenarchiv!</Name>
+              <Name Language="EN">Check CRC error, probably error during transfer or data archive is faulty!</Name>
+              <Name Language="FR">Défaut Check CRC, défaut lors du transfert ou archives de données erronées !</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Restore Backup</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <BlockCount>0</BlockCount>
+            <Service>17</Service>
+            <ErrorMessage>
+              <Name Language="DE">Fehler beim Wiederherstellen der Daten! Mögliche Ursache: RestoreRequirements konnten nicht erfüllt werden, z.B. Falsche Firmwareversion oder nicht unterstütztes Backupformat.</Name>
+              <Name Language="EN">Error while restoring data! Possible cause: Restore requirements not fulfilled, such as wrong firmware version or backup format not supported.</Name>
+              <Name Language="FR">Défaut lors de la restauration des données ! Cause possible : requêtes de restauration impossibles à exécuter, p. ex. mauvaise version de firmware ou format de sauvegarde non supporté</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Show MessageBox</Comment>
+            <Enabled>true</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <MessageBoxTexts>
+              <Name Language="DE">Info</Name>
+              <Name Language="EN">Information</Name>
+              <Name Language="FR">Info</Name>
+              <Comment Language="DE">Die Firmware und der Bootloader wurden wiederhergestellt.
+Es wird nun ein Reboot durchgeführt.
+Eventuell ist ein Bootloader-Update erforderlich.
+
+Schalten Sie während des gesamten Vorgangs die Spannungsversorgung nicht ab!</Comment>
+              <Comment Language="EN">Firmware and boot loader were restored. 
+Reboot is now performed.
+
+Maybe a bootloader update is required. 
+Do not switch off the voltage supply during the entire process!</Comment>
+              <Comment Language="FR">Le firmware et le Bootloader sont restaurés.
+La réinitialisation va être lancée.
+La mise à jour du Bootloader est éventuellement nécessaire.
+
+Ne pas couper l'alimentation pendant toute la durée de la procédure !</Comment>
+            </MessageBoxTexts>
+            <CpuSys>0</CpuSys>
+            <INumber>0</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>14</Service>
+            <Index>10020</Index>
+            <SubIndex>0</SubIndex>
+            <MessageBoxIconType>Warning</MessageBoxIconType><!-- Information (Bit 1), Warning (Bit 2), Error (Bit 3) -->           
+            <ErrorMessage>
+              <Name Language="DE">Abbruch durch den Benutzer!</Name>
+              <Name Language="EN">Canceled by user!</Name>
+              <Name Language="FR">Interruption par l'utilisateur !</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Reboot Device</Comment>
+            <Enabled>true</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>6</Service>
+            <ErrorMessage>
+              <Name Language="DE">Reboot Device Fehler!</Name>
+              <Name Language="EN">Reboot device error!</Name>
+              <Name Language="FR">Défaut de réinitialisation appareil</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Delete Backup</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <BlockCount>0</BlockCount>
+            <Service>18</Service>
+            <ErrorMessage>
+              <Name Language="DE">Delete Backup Fehler!</Name>
+              <Name Language="EN">Delete backup error!</Name>
+              <Name Language="FR">Défaut Delete Backup !</Name>
+            </ErrorMessage>
+          </Function>
+        </Functions>
+        <StandardImage>Write</StandardImage>
+      </Group>
+    </Service>
+    <Service Type="3" Name="ReadFirmware">
+      <Group>
+        <Names>
+          <Name Language="DE">Erstellt einen Abzug der aktuellen Firmware (ohne Parameter und Applikation) um das Projektieren zu ermöglichen (.19v1123)</Name>
+          <Comment Language="DE">Das Bootprojekt und die IEC-Dateien müssen separat gesichert werden.</Comment>
+          <Comment Language="DE">Parameter und der PROFINET-Gerätename müssen separat gesichert werden.</Comment>
+          <Comment Language="DE">Eingestellte Passwörter müssen separat gesichert werden.</Comment>
+          <Comment Language="DE">Es wird lediglich die aktuell ausgeführte Firmware vom Gerät abgezogen!</Comment>
+          <Name Language="EN">Creates a copy of the current firmware (without parameters and application) to make project planning possible. (.19v1123)</Name>
+          <Comment Language="EN">The boot project and the IEC data must be saved separately.</Comment>
+          <Comment Language="EN">The parameters and the PROFINET device name must be saved separately.</Comment>
+          <Comment Language="EN">Set passwords must be saved separately.</Comment>
+          <Comment Language="EN">Only the currently executed firmware is copied from the device!</Comment>
+          <Name Language="FR">Génère une copie du firmware actuel (sans paramètres et application) pour réaliser la configuration (.19v1123)</Name>
+          <Comment Language="FR">Le projet d'initialisation et les fichiers CEI doivent être sauvegardés séparément.</Comment>
+          <Comment Language="FR">Tous les paramètres et la désignation de l'appareil PROFINET doivent être sauvegardés séparément.</Comment>
+          <Comment Language="FR">Les mots de passe réglés doivent être sauvegardés séparément.</Comment>
+          <Comment Language="FR">Seule les données de la version de firmware actuelle de l'appareil sont copiées !</Comment>
+        </Names>
+        <Visible>true</Visible>
+        <Enabled>false</Enabled>
+        <Checked>true</Checked>
+        <VarDataType>FC05</VarDataType>
+        <Functions>
+          <Function>
+            <Comment>Show ReadFirmware Warning MessageBox</Comment>
+            <Enabled>true</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <MessageBoxTexts>
+              <!-- Erstellung einer Firmware-Sicherung für die Projektierung V2 -->
+              <Name Language="DE">Info (.19v1123)</Name>
+              <Name Language="EN">Information (.19v1123)</Name>
+              <Name Language="FR">Info (.19v1123)</Name>
+              <Comment Language="DE">Bitte beachten Sie folgendes:
+
+  - Bringen Sie ihre Anlage in einen sicheren Zustand!
+  - Loggen Sie sich mit dem PLC-Editor aus!
+  - Stoppen Sie ihr IEC Programm um Inkonsistenzen zu vermeiden!</Comment>
+              <Comment Language="EN">Please note the following:
+
+  - Bring the system into a safe condition!
+  - Log out with the PLC Editor!
+  - Stop your IEC program to avoid inconsistencies!</Comment>
+              <Comment Language="FR">Important :
+
+  - Amenez votre installation dans un état sûr !
+  - Déconnectez-vous avec l'éditeur PLC !
+  - Arrêtez votre programme CEI pour éviter les inconsistances !</Comment>
+            </MessageBoxTexts>
+            <CpuSys>0</CpuSys>
+            <INumber>0</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>14</Service>
+            <Index>10020</Index>
+            <SubIndex>0</SubIndex>
+            <MessageBoxIconType>Warning</MessageBoxIconType><!-- Information (Bit 1), Warning (Bit 2), Error (Bit 3) -->
+            <ErrorMessage>
+              <Name Language="DE">Abbruch durch den Benutzer!</Name>
+              <Name Language="EN">Canceled by user!</Name>
+              <Name Language="FR">Interruption par l'utilisateur !</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Delete Backup</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <CpuSys>0</CpuSys>
+            <INumber>129</INumber><!-- FW only! -->
+            <BlockCount>0</BlockCount>
+            <Service>18</Service>
+            <ErrorMessage>
+              <Name Language="DE">Delete Backup Fehler!</Name>
+              <Name Language="EN">Delete backup error!</Name>
+              <Name Language="FR">Défaut Delete Backup !</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Create Backup</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <CpuSys>0</CpuSys>
+            <INumber>129</INumber><!-- FW only! -->
+            <BlockCount>0</BlockCount>
+            <Service>16</Service>
+            <ErrorMessage>
+              <Name Language="DE">Fehler beim Sichern der Daten! Mögliche Ursache: Nicht genügend freier Speicherplatz vorhanden. Bitte stellen Sie sicher das der Schreibschutz der SD-Karte nicht aktiv ist.</Name>
+              <Name Language="EN">Error saving data! Possible cause: Insufficient memory space. Please make sure that the SD card is not write protected.</Name>
+              <Name Language="FR">Défaut lors de la sauvegarde des données ! Cause possible : pas assez d'espace mémoire disponible. Veuillez vous assurer que la carte SD n'est pas protégée en écriture.</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Get Firmware Length</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <CpuSys>0</CpuSys>
+            <INumber>129</INumber><!-- FW only! -->
+            <StartAddress>0</StartAddress>
+            <Service>11</Service>
+            <ErrorMessage>
+              <Name Language="DE">Get Firmware Length Fehler!</Name>
+              <Name Language="EN">Get firmware length error!</Name>
+              <Name Language="FR">Défaut Get Firmware Length !</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Read Firmware (.19v1123) Data</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <Filename>FirmwarePackageV1123.vd5</Filename>
+            <CpuSys>0</CpuSys>
+            <INumber>129</INumber><!-- FW only! -->
+            <StartAddress>0</StartAddress>
+            <Service>9</Service>
+            <ErrorMessage>
+              <Name Language="DE">Read Firmware Data Fehler, evt. Fehler bei der Übertragung!</Name>
+              <Name Language="EN">Read firmware data error, probably error during transfer!</Name>
+              <Name Language="FR">Défaut Read Firmware Data, défaut lors du transfert !</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Delete Backup</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <CpuSys>0</CpuSys>
+            <INumber>129</INumber><!-- FW only! -->
+            <BlockCount>0</BlockCount>
+            <Service>18</Service>
+          </Function>
+        </Functions>
+        <StandardImage>Read</StandardImage>
+      </Group>
+    </Service>
+    <Service Type="4" Name="WriteFirmware" RebootTime="120000">
+      <Group>
+        <Names>
+          <Name Language="DE">Firmware und Bootloader ins Gerät schreiben/laden (.19v1123)</Name>
+          <Comment Language="DE">Die Firmware und der Bootloader aus dieser Version werden auf die SD-Karte geschrieben und nach dem Reboot aktiv.</Comment>
+          <Comment Language="DE">Eingestellte Passwörter bleiben erhalten.</Comment>
+          <Comment Language="DE">Die Einstellungen in der NetConfig.cfg bleiben bestehen.</Comment>
+          <Comment Language="DE">Das Applikationsverzeichnis (ApplicationDir) in der BootConfig.cfg wird auf Default gesetzt.</Comment>
+          <Name Language="EN">Write/load firmware and boot loader into unit (.19v1123)</Name>
+          <Comment Language="EN">Firmware and boot loader of this version are written to the SD card and become active after a reboot.</Comment>
+          <Comment Language="EN">Set passwords are maintained.</Comment>
+          <Comment Language="EN">The settings in the NetConfig.cfg remain maintained.</Comment>
+          <Comment Language="EN">The application directory (ApplicationDir) in the BootConfig.cfg is set to default.</Comment>
+          <Name Language="FR">Ecrire / transférer firmware et Bootloader dans l'appareil (.19v1123)</Name>
+          <Comment Language="FR">Le firmware et le Bootloader de cette version sont enregistrés sur la carte SD puis activés après réinitialisation.</Comment>
+          <Comment Language="FR">Les mots de passe définis sont conservés.</Comment>
+          <Comment Language="FR">Les réglages du fichier NetConfig.cf sont conservés.</Comment>
+          <Comment Language="FR">Le répertoire application (ApplicationDir) dans le fichier BootConfig.cfg sont remis à leur configuration par défaut.</Comment>
+        </Names>
+        <Visible>true</Visible>
+        <Enabled>false</Enabled>
+        <Checked>true</Checked>
+        <VarDataType>FC05</VarDataType>
+        <Functions>
+          <Function>
+            <Comment>Show WriteFirmware Warning MessageBox</Comment>
+            <Enabled>true</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <MessageBoxTexts>
+              <!-- Download einer Firmware -->
+              <Name Language="DE">Info (.19v1123)</Name>
+              <Name Language="EN">Information (.19v1123)</Name>
+              <Name Language="FR">Info (.19v1123)</Name>
+              <Comment Language="DE">Bitte beachten Sie folgendes:
+
+  - Bringen Sie ihre Anlage in einen sicheren Zustand!
+  - Loggen Sie sich mit dem PLC-Editor aus!
+  - Stoppen Sie ihr IEC Programm um Inkonsistenzen zu vermeiden!&#xD;  - Eine laufende Applikation wird beim Klick auf OK automatisch angehalten.</Comment>
+              <Comment Language="EN">Please note the following:
+
+  - Bring the system into a safe condition!
+  - Log out with the PLC Editor!
+  - Stop your IEC program to avoid inconsistencies!&#xD;  - A running application will automatically stop when clicking on OK.</Comment>
+              <Comment Language="FR">Important :
+
+  - Amenez votre installation dans un état sûr !
+  - Déconnectez-vous avec l'éditeur PLC !
+  - Arrêtez votre programme CEI pour éviter les inconsistances !&#xD;  - Une application en cours de fonctionnement est automatiquement arrêtée en cliquant sur OK.</Comment>
+            </MessageBoxTexts>
+            <CpuSys>0</CpuSys>
+            <INumber>0</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>14</Service>
+            <Index>10020</Index>
+            <SubIndex>0</SubIndex>
+            <MessageBoxIconType>Warning</MessageBoxIconType><!-- Information (Bit 1), Warning (Bit 2), Error (Bit 3) -->
+            <ErrorMessage>
+              <Name Language="DE">Abbruch durch den Benutzer!</Name>
+              <Name Language="EN">Canceled by user!</Name>
+              <Name Language="FR">Interruption par l'utilisateur !</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Start Firmware Update</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>1</Service>
+            <ErrorMessage>
+              <Name Language="DE">Start Firmware Update Fehler! Kann nicht im Offline-Modus gestartet werden.</Name>
+              <Name Language="EN">Start firmware update error! Cannot be started in offline mode.</Name>
+              <Name Language="FR">Défaut au démarrage de la mise à jour du firmware ! Ne peut pas être lancé en mode Offline.</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Erase</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>3</Service>
+            <ErrorMessage>
+              <Name Language="DE">Bitte stellen Sie sicher das der Schreibschutz der SD-Karte nicht aktiv ist.</Name>
+              <Name Language="EN">Please make sure that the SD card is not write protected.</Name>
+              <Name Language="FR">Veuillez vous assurer que la carte SD n'est pas protégée en écriture.</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Write Firmware (.19v1123) Data</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <Filename>FirmwarePackageV1123.vd5</Filename>
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>4</Service>
+            <ErrorMessage>
+              <Name Language="DE">Write Firmware Data Fehler, evt. Fehler bei der Übertragung oder Schreibfehler auf dem Dateisystem! Bitte stellen Sie sicher das genügend Speicherplatz auf der SD-Karte verfügbar ist.</Name>
+              <Name Language="EN">Write firmware data error, probably error during transfer or write error on file system! Please make sure that sufficient memory is available on the SD card.</Name>
+              <Name Language="FR">Défaut Write Firmware Data, défaut lors du transfert ou défaut d'écriture dans le fichier système ! Veuillez vous assurer de disposer de suffisamment d'espace mémoire sur la carte SD.</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>CheckCRC</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>5</Service>
+            <ErrorMessage>
+              <Name Language="DE">Check CRC Fehler, evt. Fehler bei der Übertragung oder fehlerhaftes Datenarchiv!</Name>
+              <Name Language="EN">Check CRC error, probably error during transfer or data archive is faulty!</Name>
+              <Name Language="FR">Défaut Check CRC, défaut lors du transfert ou archives de données erronées !</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Restore Backup</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <BlockCount>0</BlockCount>
+            <Service>17</Service>
+            <ErrorMessage>
+              <Name Language="DE">Fehler beim Wiederherstellen der Daten! Mögliche Ursache: RestoreRequirements konnten nicht erfüllt werden, z.B. Falsche Firmwareversion oder nicht unterstütztes Backupformat.</Name>
+              <Name Language="EN">Error while restoring data! Possible cause: Restore requirements not fulfilled, such as wrong firmware version or backup format not supported.</Name>
+              <Name Language="FR">Défaut lors de la restauration des données ! Cause possible : requêtes de restauration impossibles à exécuter, p. ex. mauvaise version de firmware ou format de sauvegarde non supporté</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Show MessageBox</Comment>
+            <Enabled>true</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <MessageBoxTexts>
+              <Name Language="DE">Info (.19v1123)</Name>
+              <Name Language="EN">Information (.19v1123)</Name>
+              <Name Language="FR">Info (.19v1123)</Name>
+              <Comment Language="DE">Die Firmware und der Bootloader wurden wiederhergestellt.
+Es wird nun ein Reboot durchgeführt.
+Eventuell ist ein Bootloader-Update erforderlich.
+
+Schalten Sie während des gesamten Vorgangs die Spannungsversorgung nicht ab!</Comment>
+              <Comment Language="EN">Firmware and boot loader were restored. 
+Reboot is now performed.
+
+Maybe a bootloader update is required. 
+Do not switch off the voltage supply during the entire process!</Comment>
+              <Comment Language="FR">Le firmware et le Bootloader sont restaurés.
+La réinitialisation va être lancée.
+La mise à jour du Bootloader est éventuellement nécessaire.
+
+Ne pas couper l'alimentation pendant toute la durée de la procédure !</Comment>
+            </MessageBoxTexts>
+            <CpuSys>0</CpuSys>
+            <INumber>0</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>14</Service>
+            <Index>10020</Index>
+            <SubIndex>0</SubIndex>
+            <MessageBoxIconType>Warning</MessageBoxIconType><!-- Information (Bit 1), Warning (Bit 2), Error (Bit 3) -->
+            <ErrorMessage>
+              <Name Language="DE">Abbruch durch den Benutzer!</Name>
+              <Name Language="EN">Canceled by user!</Name>
+              <Name Language="FR">Interruption par l'utilisateur !</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Reboot Device</Comment>
+            <Enabled>true</Enabled>
+            <Checked>true</Checked>
+            <Filename />
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <StartAddress>0</StartAddress>
+            <Service>6</Service>
+            <ErrorMessage>
+              <Name Language="DE">Reboot Device Fehler!</Name>
+              <Name Language="EN">Reboot device error!</Name>
+              <Name Language="FR">Défaut de réinitialisation appareil</Name>
+            </ErrorMessage>
+          </Function>
+          <Function>
+            <Comment>Delete Backup</Comment>
+            <Enabled>false</Enabled>
+            <Checked>true</Checked>
+            <CpuSys>0</CpuSys>
+            <INumber>128</INumber>
+            <BlockCount>0</BlockCount>
+            <Service>18</Service>
+            <ErrorMessage>
+              <Name Language="DE">Delete Backup Fehler!</Name>
+              <Name Language="EN">Delete backup error!</Name>
+              <Name Language="FR">Défaut Delete Backup !</Name>
+            </ErrorMessage>
+          </Function>
+        </Functions>
+        <StandardImage>Write</StandardImage>
+      </Group>
+    </Service>
+  </Services>
+</DataManagerConfig>

@@ -1,0 +1,9 @@
+﻿ES2RT linker log file created on Freitag, 6. Dezember 2019 22:55:47
+
+Linking...
+User Info - Resource Id [ NrOfTags ], caused in [ LinkerVar ]
+User Info - Resource Id [ NumberPowerTags ], caused in [ LinkerLicense ]
+0 errors, 0 warnings - succeeded.
+
+Writing "\\vmware-host\Shared Folders\Projekte\SPS Software\Ampack Lager\AmPackRa\HmiEs\PROJECT_1\PROJECT_1.SIMATIC HMI-PC"...
+Done.

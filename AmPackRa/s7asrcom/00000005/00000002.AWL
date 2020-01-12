@@ -1,0 +1,459 @@
+TYPE UDT 150
+TITLE = "Robot	UR_1_T2O_Robot "
+
+
+  STRUCT 	
+   Controller_maj_ver : BYTE ;	
+   Controller_mi_ver : BYTE ;	
+   Reserved : INT ;	
+   Robot_mode : BYTE ;	
+   Real_time_mach_sec : BYTE ;	
+   Real_time_mach_msec : INT ;	
+   Real_time_mach_minutes : BYTE ;	
+   Real_time_mach_hours : BYTE ;	
+   Real_time_mach_days : INT ;	
+   Robot_current_A : REAL ;	
+   PW_Is_power_on : BOOL ;	
+   PR_Is_program_running : BOOL ;	
+   TB_Is_teach_but_pressed : BOOL ;	
+   PB_Is_power_but_pressed : BOOL ;	
+   Reserved_4 : BOOL ;	
+   Reserved_5 : BOOL ;	
+   Reserved_6 : BOOL ;	
+   Reserved_7 : BOOL ;	
+   Reserved_8_15 : BYTE ;	
+   Reserved_16_31 : INT ;	
+   Speed_slider_fraction : REAL ;	
+  END_STRUCT ;	
+END_TYPE
+
+TYPE UDT 151
+TITLE = "Safety	UR_1_T2O_Safety "
+
+
+  STRUCT 	
+   Safety_mode : BYTE ;	
+   Reserved_1 : BYTE ;	
+   Reserved_2 : INT ;	
+   NO_Is_normal_mode : BOOL ;	
+   RD_Is_reduced_mode : BOOL ;	
+   PS_Is_protective_stopped : BOOL ;
+   RC_Is_recovery_mode	: BOOL ;
+   SS_Is_safeguard_stopped : BOOL ;	
+   SES_Is_syst_Estop : BOOL ;	
+   RES_Is_robot_Estop : BOOL ;	
+   ES_Is_EStop : BOOL ;	
+   VL_Is_violation : BOOL ;	
+   FT_Is_fault : BOOL ;	
+   ST_Is_stop_due_to_safety : BOOL ;	
+   Reserved_11 : BOOL ;	
+   Reserved_12 : BOOL ;	
+   Reserved_13 : BOOL ;	
+   Reserved_14 : BOOL ;	
+   Reserved_15 : BOOL ;	
+   Reserved_16_31 : INT ;	
+  END_STRUCT ;	
+END_TYPE
+
+TYPE UDT 152
+TITLE = "IOs	UR_2_T2O_IO "
+
+  STRUCT 	
+   Standard_digital_inputs : BYTE ;	
+   Config_digital_inputs : BYTE ;	
+   Standard_digital_outputs : BYTE ;	
+   Config_digital_outputs : BYTE ;	
+   Analog_IO_types : BYTE ;	
+   Reserved_8_15 : BYTE ;	
+   Reserved_16_31 : INT ;	
+   Standard_analog_input : ARRAY  [0 .. 1 ] OF REAL ;	
+   Standard_analog_output : ARRAY  [0 .. 1 ] OF REAL ;	
+   IO_current : REAL ;	
+   Euromap67_input_bits : ARRAY  [0 .. 31 ] OF BOOL ;	
+   Euromap67_output_bits : ARRAY  [0 .. 31 ] OF BOOL ;	
+   Euromap67_24V_voltage : REAL ;	
+   Euromap67_24V_current : REAL ;	
+  END_STRUCT ;	
+END_TYPE
+
+TYPE UDT 153
+TITLE = "Tool	UR_2_T2O_Tool "
+
+
+  STRUCT 	
+   Tool_mode : BYTE ;	
+   Reserved_7_15 : BYTE ;	
+   Reserved_16_31 : INT ;	
+   TDI_Tool_DI : BYTE ;	
+   TDO_Tool_DO : BYTE ;	
+   TAIT_Tool_AI_Types : BYTE ;	
+   Reserved_24_31 : BYTE ;	
+   Tool_analog_input : ARRAY  [0 .. 1 ] OF REAL ;	
+   Tool_output_voltage : REAL ;	
+   Tool_current : REAL ;	
+  END_STRUCT ;	
+END_TYPE
+
+TYPE UDT 154
+TITLE = "Joints	UR_3_T2O_Joints "
+
+
+  STRUCT 	
+   Joint_position_rad : ARRAY  [0 .. 5 ] OF REAL ;	
+   Joint_velocity_rad_s : ARRAY  [0 .. 5 ] OF REAL ;	
+   Joint_current : ARRAY  [0 .. 5 ] OF REAL ;	
+   Joint_temperature_B0C : ARRAY  [0 .. 5 ] OF REAL ;	
+   Joint_mode : ARRAY  [0 .. 5 ] OF BYTE ;	
+   Reserved_9 : INT ;	
+  END_STRUCT ;	
+END_TYPE
+
+TYPE UDT 155
+TITLE = "TCP	UR_4_T2O_TCP "
+
+  STRUCT 	
+   TCP_Posit_X_Y_Z_m : ARRAY  [0 .. 2 ] OF REAL ;	
+   TCP_Posit_RX_RY_RZ_rad : ARRAY  [0 .. 2 ] OF REAL ;	
+   TCP_veloc_X_Y_Z_m_s : ARRAY  [0 .. 2 ] OF REAL ;	
+   TCP_veloc_RX_RY_RZ_rad_s : ARRAY  [0 .. 2 ] OF REAL ;	
+   TCP_force_X_Y_Z_N : ARRAY  [0 .. 2 ] OF REAL ;	
+   TCP_torque_X_Y_Z_Nm : ARRAY  [0 .. 2 ] OF REAL ;	
+   TCP_force_scalar_N : REAL ;	
+  END_STRUCT ;	
+END_TYPE
+
+TYPE UDT 156
+TITLE = "Bit output	UR_5_BitRegisters "   
+
+
+  STRUCT 	
+   Register : ARRAY  [0 .. 63 ] OF BOOL ;	
+  END_STRUCT ;	
+END_TYPE
+
+TYPE UDT 157
+TITLE = "Int output	UR_6_IntRegisters " 
+
+  STRUCT 	
+   Register : ARRAY  [0 .. 23 ] OF DINT ;	
+  END_STRUCT ;	
+END_TYPE
+
+TYPE UDT 158
+TITLE = "Float output	UR_7_FloatRegisters "
+
+  STRUCT 	
+   Register : ARRAY  [0 .. 23 ] OF REAL ;	
+  END_STRUCT ;	
+END_TYPE
+
+DATA_BLOCK DB 100
+TITLE = "UR_O2T"
+VERSION : 0.1
+
+
+  STRUCT 	
+   UR_T2O_Robot : UDT 150;	//Robot
+   UR_T2O_Safety : UDT 151;	//Safety
+   UR_T2O_IO : UDT 152;	//IOs
+   UR_T2O_Tool : UDT 153;	//Tool
+   UR_T2O_Joints : UDT 154;	//Joints
+   UR_T2O_TCP : UDT 155;	//TCP
+   UR_BitRegisters : UDT 156;	//Bit output
+   UR_IntRegisters : UDT 157;	//Int output
+   UR_FloatRegisters : UDT 158;	//Float output
+  END_STRUCT ;	
+BEGIN
+   UR_T2O_Robot.Controller_maj_ver := B#16#0; 
+   UR_T2O_Robot.Controller_mi_ver := B#16#0; 
+   UR_T2O_Robot.Reserved := 0; 
+   UR_T2O_Robot.Robot_mode := B#16#0; 
+   UR_T2O_Robot.Real_time_mach_sec := B#16#0; 
+   UR_T2O_Robot.Real_time_mach_msec := 0; 
+   UR_T2O_Robot.Real_time_mach_minutes := B#16#0; 
+   UR_T2O_Robot.Real_time_mach_hours := B#16#0; 
+   UR_T2O_Robot.Real_time_mach_days := 0; 
+   UR_T2O_Robot.Robot_current_A := 0.000000e+000; 
+   UR_T2O_Robot.PW_Is_power_on := FALSE; 
+   UR_T2O_Robot.PR_Is_program_running := FALSE; 
+   UR_T2O_Robot.TB_Is_teach_but_pressed := FALSE; 
+   UR_T2O_Robot.PB_Is_power_but_pressed := FALSE; 
+   UR_T2O_Robot.Reserved_4 := FALSE; 
+   UR_T2O_Robot.Reserved_5 := FALSE; 
+   UR_T2O_Robot.Reserved_6 := FALSE; 
+   UR_T2O_Robot.Reserved_7 := FALSE; 
+   UR_T2O_Robot.Reserved_8_15 := B#16#0; 
+   UR_T2O_Robot.Reserved_16_31 := 0; 
+   UR_T2O_Robot.Speed_slider_fraction := 0.000000e+000; 
+   UR_T2O_Safety.Safety_mode := B#16#0; 
+   UR_T2O_Safety.Reserved_1 := B#16#0; 
+   UR_T2O_Safety.Reserved_2 := 0; 
+   UR_T2O_Safety.NO_Is_normal_mode := FALSE; 
+   UR_T2O_Safety.RD_Is_reduced_mode := FALSE; 
+   UR_T2O_Safety.PS_Is_protective_stopped := FALSE; 
+   UR_T2O_Safety.SS_Is_safeguard_stopped := FALSE; 
+   UR_T2O_Safety.SES_Is_syst_Estop := FALSE; 
+   UR_T2O_Safety.RES_Is_robot_Estop := FALSE; 
+   UR_T2O_Safety.ES_Is_EStop := FALSE; 
+   UR_T2O_Safety.VL_Is_violation := FALSE; 
+   UR_T2O_Safety.FT_Is_fault := FALSE; 
+   UR_T2O_Safety.ST_Is_stop_due_to_safety := FALSE; 
+   UR_T2O_Safety.Reserved_11 := FALSE; 
+   UR_T2O_Safety.Reserved_12 := FALSE; 
+   UR_T2O_Safety.Reserved_13 := FALSE; 
+   UR_T2O_Safety.Reserved_14 := FALSE; 
+   UR_T2O_Safety.Reserved_15 := FALSE; 
+   UR_T2O_Safety.Reserved_16_31 := 0; 
+   UR_T2O_IO.Standard_digital_inputs := B#16#0; 
+   UR_T2O_IO.Config_digital_inputs := B#16#0; 
+   UR_T2O_IO.Standard_digital_outputs := B#16#0; 
+   UR_T2O_IO.Config_digital_outputs := B#16#0; 
+   UR_T2O_IO.Analog_IO_types := B#16#0; 
+   UR_T2O_IO.Reserved_8_15 := B#16#0; 
+   UR_T2O_IO.Reserved_16_31 := 0; 
+   UR_T2O_IO.Standard_analog_input[0] := 0.000000e+000; 
+   UR_T2O_IO.Standard_analog_input[1] := 0.000000e+000; 
+   UR_T2O_IO.Standard_analog_output[0] := 0.000000e+000; 
+   UR_T2O_IO.Standard_analog_output[1] := 0.000000e+000; 
+   UR_T2O_IO.IO_current := 0.000000e+000; 
+   UR_T2O_IO.Euromap67_input_bits[0] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[1] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[2] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[3] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[4] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[5] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[6] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[7] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[8] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[9] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[10] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[11] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[12] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[13] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[14] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[15] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[16] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[17] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[18] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[19] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[20] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[21] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[22] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[23] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[24] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[25] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[26] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[27] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[28] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[29] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[30] := FALSE; 
+   UR_T2O_IO.Euromap67_input_bits[31] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[0] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[1] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[2] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[3] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[4] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[5] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[6] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[7] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[8] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[9] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[10] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[11] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[12] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[13] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[14] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[15] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[16] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[17] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[18] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[19] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[20] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[21] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[22] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[23] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[24] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[25] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[26] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[27] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[28] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[29] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[30] := FALSE; 
+   UR_T2O_IO.Euromap67_output_bits[31] := FALSE; 
+   UR_T2O_IO.Euromap67_24V_voltage := 0.000000e+000; 
+   UR_T2O_IO.Euromap67_24V_current := 0.000000e+000; 
+   UR_T2O_Tool.Tool_mode := B#16#0; 
+   UR_T2O_Tool.Reserved_7_15 := B#16#0; 
+   UR_T2O_Tool.Reserved_16_31 := 0; 
+   UR_T2O_Tool.TDI_Tool_DI := B#16#0; 
+   UR_T2O_Tool.TDO_Tool_DO := B#16#0; 
+   UR_T2O_Tool.TAIT_Tool_AI_Types := B#16#0; 
+   UR_T2O_Tool.Reserved_24_31 := B#16#0; 
+   UR_T2O_Tool.Tool_analog_input[0] := 0.000000e+000; 
+   UR_T2O_Tool.Tool_analog_input[1] := 0.000000e+000; 
+   UR_T2O_Tool.Tool_output_voltage := 0.000000e+000; 
+   UR_T2O_Tool.Tool_current := 0.000000e+000; 
+   UR_T2O_Joints.Joint_position_rad[0] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_position_rad[1] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_position_rad[2] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_position_rad[3] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_position_rad[4] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_position_rad[5] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_velocity_rad_s[0] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_velocity_rad_s[1] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_velocity_rad_s[2] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_velocity_rad_s[3] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_velocity_rad_s[4] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_velocity_rad_s[5] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_current[0] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_current[1] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_current[2] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_current[3] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_current[4] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_current[5] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_temperature_B0C[0] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_temperature_B0C[1] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_temperature_B0C[2] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_temperature_B0C[3] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_temperature_B0C[4] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_temperature_B0C[5] := 0.000000e+000; 
+   UR_T2O_Joints.Joint_mode[0] := B#16#0; 
+   UR_T2O_Joints.Joint_mode[1] := B#16#0; 
+   UR_T2O_Joints.Joint_mode[2] := B#16#0; 
+   UR_T2O_Joints.Joint_mode[3] := B#16#0; 
+   UR_T2O_Joints.Joint_mode[4] := B#16#0; 
+   UR_T2O_Joints.Joint_mode[5] := B#16#0; 
+   UR_T2O_Joints.Reserved_9 := 0; 
+   UR_T2O_TCP.TCP_Posit_X_Y_Z_m[0] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_Posit_X_Y_Z_m[1] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_Posit_X_Y_Z_m[2] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_Posit_RX_RY_RZ_rad[0] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_Posit_RX_RY_RZ_rad[1] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_Posit_RX_RY_RZ_rad[2] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_veloc_X_Y_Z_m_s[0] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_veloc_X_Y_Z_m_s[1] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_veloc_X_Y_Z_m_s[2] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_veloc_RX_RY_RZ_rad_s[0] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_veloc_RX_RY_RZ_rad_s[1] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_veloc_RX_RY_RZ_rad_s[2] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_force_X_Y_Z_N[0] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_force_X_Y_Z_N[1] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_force_X_Y_Z_N[2] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_torque_X_Y_Z_Nm[0] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_torque_X_Y_Z_Nm[1] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_torque_X_Y_Z_Nm[2] := 0.000000e+000; 
+   UR_T2O_TCP.TCP_force_scalar_N := 0.000000e+000; 
+   UR_BitRegisters.Register[0] := FALSE; 
+   UR_BitRegisters.Register[1] := FALSE; 
+   UR_BitRegisters.Register[2] := FALSE; 
+   UR_BitRegisters.Register[3] := FALSE; 
+   UR_BitRegisters.Register[4] := FALSE; 
+   UR_BitRegisters.Register[5] := FALSE; 
+   UR_BitRegisters.Register[6] := FALSE; 
+   UR_BitRegisters.Register[7] := FALSE; 
+   UR_BitRegisters.Register[8] := FALSE; 
+   UR_BitRegisters.Register[9] := FALSE; 
+   UR_BitRegisters.Register[10] := FALSE; 
+   UR_BitRegisters.Register[11] := FALSE; 
+   UR_BitRegisters.Register[12] := FALSE; 
+   UR_BitRegisters.Register[13] := FALSE; 
+   UR_BitRegisters.Register[14] := FALSE; 
+   UR_BitRegisters.Register[15] := FALSE; 
+   UR_BitRegisters.Register[16] := FALSE; 
+   UR_BitRegisters.Register[17] := FALSE; 
+   UR_BitRegisters.Register[18] := FALSE; 
+   UR_BitRegisters.Register[19] := FALSE; 
+   UR_BitRegisters.Register[20] := FALSE; 
+   UR_BitRegisters.Register[21] := FALSE; 
+   UR_BitRegisters.Register[22] := FALSE; 
+   UR_BitRegisters.Register[23] := FALSE; 
+   UR_BitRegisters.Register[24] := FALSE; 
+   UR_BitRegisters.Register[25] := FALSE; 
+   UR_BitRegisters.Register[26] := FALSE; 
+   UR_BitRegisters.Register[27] := FALSE; 
+   UR_BitRegisters.Register[28] := FALSE; 
+   UR_BitRegisters.Register[29] := FALSE; 
+   UR_BitRegisters.Register[30] := FALSE; 
+   UR_BitRegisters.Register[31] := FALSE; 
+   UR_BitRegisters.Register[32] := FALSE; 
+   UR_BitRegisters.Register[33] := FALSE; 
+   UR_BitRegisters.Register[34] := FALSE; 
+   UR_BitRegisters.Register[35] := FALSE; 
+   UR_BitRegisters.Register[36] := FALSE; 
+   UR_BitRegisters.Register[37] := FALSE; 
+   UR_BitRegisters.Register[38] := FALSE; 
+   UR_BitRegisters.Register[39] := FALSE; 
+   UR_BitRegisters.Register[40] := FALSE; 
+   UR_BitRegisters.Register[41] := FALSE; 
+   UR_BitRegisters.Register[42] := FALSE; 
+   UR_BitRegisters.Register[43] := FALSE; 
+   UR_BitRegisters.Register[44] := FALSE; 
+   UR_BitRegisters.Register[45] := FALSE; 
+   UR_BitRegisters.Register[46] := FALSE; 
+   UR_BitRegisters.Register[47] := FALSE; 
+   UR_BitRegisters.Register[48] := FALSE; 
+   UR_BitRegisters.Register[49] := FALSE; 
+   UR_BitRegisters.Register[50] := FALSE; 
+   UR_BitRegisters.Register[51] := FALSE; 
+   UR_BitRegisters.Register[52] := FALSE; 
+   UR_BitRegisters.Register[53] := FALSE; 
+   UR_BitRegisters.Register[54] := FALSE; 
+   UR_BitRegisters.Register[55] := FALSE; 
+   UR_BitRegisters.Register[56] := FALSE; 
+   UR_BitRegisters.Register[57] := FALSE; 
+   UR_BitRegisters.Register[58] := FALSE; 
+   UR_BitRegisters.Register[59] := FALSE; 
+   UR_BitRegisters.Register[60] := FALSE; 
+   UR_BitRegisters.Register[61] := FALSE; 
+   UR_BitRegisters.Register[62] := FALSE; 
+   UR_BitRegisters.Register[63] := FALSE; 
+   UR_IntRegisters.Register[0] := L#0; 
+   UR_IntRegisters.Register[1] := L#0; 
+   UR_IntRegisters.Register[2] := L#0; 
+   UR_IntRegisters.Register[3] := L#0; 
+   UR_IntRegisters.Register[4] := L#0; 
+   UR_IntRegisters.Register[5] := L#0; 
+   UR_IntRegisters.Register[6] := L#0; 
+   UR_IntRegisters.Register[7] := L#0; 
+   UR_IntRegisters.Register[8] := L#0; 
+   UR_IntRegisters.Register[9] := L#0; 
+   UR_IntRegisters.Register[10] := L#0; 
+   UR_IntRegisters.Register[11] := L#0; 
+   UR_IntRegisters.Register[12] := L#0; 
+   UR_IntRegisters.Register[13] := L#0; 
+   UR_IntRegisters.Register[14] := L#0; 
+   UR_IntRegisters.Register[15] := L#0; 
+   UR_IntRegisters.Register[16] := L#0; 
+   UR_IntRegisters.Register[17] := L#0; 
+   UR_IntRegisters.Register[18] := L#0; 
+   UR_IntRegisters.Register[19] := L#0; 
+   UR_IntRegisters.Register[20] := L#0; 
+   UR_IntRegisters.Register[21] := L#0; 
+   UR_IntRegisters.Register[22] := L#0; 
+   UR_IntRegisters.Register[23] := L#0; 
+   UR_FloatRegisters.Register[0] := 0.000000e+000; 
+   UR_FloatRegisters.Register[1] := 0.000000e+000; 
+   UR_FloatRegisters.Register[2] := 0.000000e+000; 
+   UR_FloatRegisters.Register[3] := 0.000000e+000; 
+   UR_FloatRegisters.Register[4] := 0.000000e+000; 
+   UR_FloatRegisters.Register[5] := 0.000000e+000; 
+   UR_FloatRegisters.Register[6] := 0.000000e+000; 
+   UR_FloatRegisters.Register[7] := 0.000000e+000; 
+   UR_FloatRegisters.Register[8] := 0.000000e+000; 
+   UR_FloatRegisters.Register[9] := 0.000000e+000; 
+   UR_FloatRegisters.Register[10] := 0.000000e+000; 
+   UR_FloatRegisters.Register[11] := 0.000000e+000; 
+   UR_FloatRegisters.Register[12] := 0.000000e+000; 
+   UR_FloatRegisters.Register[13] := 0.000000e+000; 
+   UR_FloatRegisters.Register[14] := 0.000000e+000; 
+   UR_FloatRegisters.Register[15] := 0.000000e+000; 
+   UR_FloatRegisters.Register[16] := 0.000000e+000; 
+   UR_FloatRegisters.Register[17] := 0.000000e+000; 
+   UR_FloatRegisters.Register[18] := 0.000000e+000; 
+   UR_FloatRegisters.Register[19] := 0.000000e+000; 
+   UR_FloatRegisters.Register[20] := 0.000000e+000; 
+   UR_FloatRegisters.Register[21] := 0.000000e+000; 
+   UR_FloatRegisters.Register[22] := 0.000000e+000; 
+   UR_FloatRegisters.Register[23] := 0.000000e+000; 
+END_DATA_BLOCK
+

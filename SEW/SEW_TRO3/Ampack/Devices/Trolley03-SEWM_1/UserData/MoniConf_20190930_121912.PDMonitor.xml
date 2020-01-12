@@ -1,0 +1,1309 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Config_AxisPDMonitor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <VersionNumber>170.2</VersionNumber>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>OUT_1</CaptionDE>
+    <CaptionEN>OUT_1</CaptionEN>
+    <CaptionFR>OUT_1</CaptionFR>
+    <GroupnameDE>MoviPLC</GroupnameDE>
+    <GroupnameEN>MoviPLC</GroupnameEN>
+    <GroupnameFR>MoviPLC</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>8</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Statuswort</CaptionDE>
+    <CaptionEN>OUT_2</CaptionEN>
+    <CaptionFR>OUT_2</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Binärausgänge</CaptionDE>
+    <CaptionEN>OUT_2</CaptionEN>
+    <CaptionFR>OUT_2</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>1</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Reserve</CaptionDE>
+    <CaptionEN>Reserve</CaptionEN>
+    <CaptionFR>Reserve</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>OUT_1</CaptionDE>
+    <CaptionEN>OUT_1</CaptionEN>
+    <CaptionFR>OUT_1</CaptionFR>
+    <GroupnameDE>VirtuellerMaster</GroupnameDE>
+    <GroupnameEN>VirtuellerMaster</GroupnameEN>
+    <GroupnameFR>VirtuellerMaster</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>8</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Fehler-Nr. | Status</CaptionDE>
+    <CaptionEN>OUT_2</CaptionEN>
+    <CaptionFR>OUT_2</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: Synchron, 1=Bit01: Betriebsbereit, 2=Bit02: Referenziert, 3=Bit03: In Position, 4=Bit04: Stillstand, 5=Bit05: Fehler / Warnung, 6=Bit06: Bremsentest iO, 7=Bit07: Bremsentest niO, 8=Bit08: Fehlercode Bit 0, 9=Bit09: Fehlercode Bit 1, 10=Bit10: Fehlercode Bit 2, 11=Bit11: Fehlercode Bit 3, 12=Bit12: Fehlercode Bit 4, 13=Bit13: Fehlercode Bit 5, 14=Bit14: Fehlercode Bit 6, 15=Bit15: Fehlercode Bit 7</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE>Fehler-Code 
+255: Programmfehler (FB-Error)
+254: Geber PCV80</CommentDE>
+    <CommentEN>Fehler-Code 
+255: Programmfehler (FB-Error)
+245: Geber PCV80</CommentEN>
+    <CommentFR>Fehler-Code 
+255: Programmfehler (FB-Error)
+245: Geber PCV80</CommentFR>
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>1</DataType>
+    <DataDispMode>1</DataDispMode>
+    <DataDecFactor>10.0000</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm</Unit>
+    <CaptionDE>Istposition</CaptionDE>
+    <CaptionEN>OUT_3</CaptionEN>
+    <CaptionFR>OUT_3</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm/s</Unit>
+    <CaptionDE>Istgeschwindigkeit</CaptionDE>
+    <CaptionEN>OUT_4</CaptionEN>
+    <CaptionFR>OUT_4</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>1</DataDispMode>
+    <DataDecFactor>10.0000</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm</Unit>
+    <CaptionDE>Wirkstrom</CaptionDE>
+    <CaptionEN>Wirkstrom</CaptionEN>
+    <CaptionFR>Wirkstrom</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE>Aktueller Restweg bei Offsetfahrt im Synchronbetrieb</CommentDE>
+    <CommentEN>Aktueller Restweg bei Offsetfahrt im Synchronbetrieb</CommentEN>
+    <CommentFR>Aktueller Restweg bei Offsetfahrt im Synchronbetrieb</CommentFR>
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>10.0000</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Bremsentest_StatusError</CaptionDE>
+    <CaptionEN>Bremsentest_StatusError</CaptionEN>
+    <CaptionFR>Bremsentest_StatusError</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>OUT_1</CaptionDE>
+    <CaptionEN>OUT_1</CaptionEN>
+    <CaptionFR>OUT_1</CaptionFR>
+    <GroupnameDE>Bridge</GroupnameDE>
+    <GroupnameEN>Bridge</GroupnameEN>
+    <GroupnameFR>Bridge</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>8</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Fehler-Nr. | Status</CaptionDE>
+    <CaptionEN>OUT_2</CaptionEN>
+    <CaptionFR>OUT_2</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: Synchron, 1=Bit01: Betriebsbereit, 2=Bit02: Referenziert, 3=Bit03: In Position, 4=Bit04: Stillstand, 5=Bit05: Fehler / Warnung, 6=Bit06: Bremsentest iO, 7=Bit07: Bremsentest niO, 8=Bit08: Fehlercode Bit 0, 9=Bit09: Fehlercode Bit 1, 10=Bit10: Fehlercode Bit 2, 11=Bit11: Fehlercode Bit 3, 12=Bit12: Fehlercode Bit 4, 13=Bit13: Fehlercode Bit 5, 14=Bit14: Fehlercode Bit 6, 15=Bit15: Fehlercode Bit 7</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE>Fehler-Code 
+255: Programmfehler (FB-Error)
+254: Geber PCV80</CommentDE>
+    <CommentEN>Fehler-Code 
+255: Programmfehler (FB-Error)
+245: Geber PCV80</CommentEN>
+    <CommentFR>Fehler-Code 
+255: Programmfehler (FB-Error)
+245: Geber PCV80</CommentFR>
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>1</DataType>
+    <DataDispMode>1</DataDispMode>
+    <DataDecFactor>10.0000</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm</Unit>
+    <CaptionDE>Istposition</CaptionDE>
+    <CaptionEN>OUT_3</CaptionEN>
+    <CaptionFR>OUT_3</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm/s</Unit>
+    <CaptionDE>Istgeschwindigkeit</CaptionDE>
+    <CaptionEN>OUT_4</CaptionEN>
+    <CaptionFR>OUT_4</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>1</DataDispMode>
+    <DataDecFactor>10.0000</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm</Unit>
+    <CaptionDE>Wirkstrom</CaptionDE>
+    <CaptionEN>Wirkstrom</CaptionEN>
+    <CaptionFR>Wirkstrom</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE>Aktueller Restweg bei Offsetfahrt im Synchronbetrieb</CommentDE>
+    <CommentEN>Aktueller Restweg bei Offsetfahrt im Synchronbetrieb</CommentEN>
+    <CommentFR>Aktueller Restweg bei Offsetfahrt im Synchronbetrieb</CommentFR>
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>10.0000</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Bremsentest_StatusError</CaptionDE>
+    <CaptionEN>Bremsentest_StatusError</CaptionEN>
+    <CaptionFR>Bremsentest_StatusError</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>OUT_1</CaptionDE>
+    <CaptionEN>OUT_1</CaptionEN>
+    <CaptionFR>OUT_1</CaptionFR>
+    <GroupnameDE>Lift</GroupnameDE>
+    <GroupnameEN>Lift</GroupnameEN>
+    <GroupnameFR>Lift</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>8</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Fehler-Nr. | Status</CaptionDE>
+    <CaptionEN>OUT_2</CaptionEN>
+    <CaptionFR>OUT_2</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: Synchron, 1=Bit01: Betriebsbereit, 2=Bit02: Referenziert, 3=Bit03: In Position, 4=Bit04: Stillstand, 5=Bit05: Fehler / Warnung, 6=Bit06: Bremsentest iO, 7=Bit07: Bremsentest niO, 8=Bit08: Fehlercode Bit 0, 9=Bit09: Fehlercode Bit 1, 10=Bit10: Fehlercode Bit 2, 11=Bit11: Fehlercode Bit 3, 12=Bit12: Fehlercode Bit 4, 13=Bit13: Fehlercode Bit 5, 14=Bit14: Fehlercode Bit 6, 15=Bit15: Fehlercode Bit 7</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE>Fehler-Code 
+255: Programmfehler (FB-Error)
+254: Geber PCV80</CommentDE>
+    <CommentEN>Fehler-Code 
+255: Programmfehler (FB-Error)
+245: Geber PCV80</CommentEN>
+    <CommentFR>Fehler-Code 
+255: Programmfehler (FB-Error)
+245: Geber PCV80</CommentFR>
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>1</DataType>
+    <DataDispMode>1</DataDispMode>
+    <DataDecFactor>10.0000</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm</Unit>
+    <CaptionDE>Istposition</CaptionDE>
+    <CaptionEN>OUT_3</CaptionEN>
+    <CaptionFR>OUT_3</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm/s</Unit>
+    <CaptionDE>Istgeschwindigkeit</CaptionDE>
+    <CaptionEN>OUT_4</CaptionEN>
+    <CaptionFR>OUT_4</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>1</DataDispMode>
+    <DataDecFactor>10.0000</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>%</Unit>
+    <CaptionDE>Wirkstrom</CaptionDE>
+    <CaptionEN>OUT_6</CaptionEN>
+    <CaptionFR>OUT_6</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE>bezogen auf I-Nenn FU</CommentDE>
+    <CommentEN>bezogen auf I-Nenn FU</CommentEN>
+    <CommentFR>bezogen auf I-Nenn FU</CommentFR>
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>10.0000</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Bremsentest_StatusError</CaptionDE>
+    <CaptionEN>Bremsentest_StatusError</CaptionEN>
+    <CaptionFR>Bremsentest_StatusError</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>OUT_1</CaptionDE>
+    <CaptionEN>OUT_1</CaptionEN>
+    <CaptionFR>OUT_1</CaptionFR>
+    <GroupnameDE>Width</GroupnameDE>
+    <GroupnameEN>Width</GroupnameEN>
+    <GroupnameFR>Width</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>8</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Fehler-Nr. | Status</CaptionDE>
+    <CaptionEN>OUT_2</CaptionEN>
+    <CaptionFR>OUT_2</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: Synchron, 1=Bit01: Betriebsbereit, 2=Bit02: Referenziert, 3=Bit03: In Position, 4=Bit04: Stillstand, 5=Bit05: Fehler / Warnung, 6=Bit06: Bremsentest iO, 7=Bit07: Bremsentest niO, 8=Bit08: Fehlercode Bit 0, 9=Bit09: Fehlercode Bit 1, 10=Bit10: Fehlercode Bit 2, 11=Bit11: Fehlercode Bit 3, 12=Bit12: Fehlercode Bit 4, 13=Bit13: Fehlercode Bit 5, 14=Bit14: Fehlercode Bit 6, 15=Bit15: Fehlercode Bit 7</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE>Fehler-Code 
+255: Programmfehler (FB-Error)
+254: Geber PCV80</CommentDE>
+    <CommentEN>Fehler-Code 
+255: Programmfehler (FB-Error)
+245: Geber PCV80</CommentEN>
+    <CommentFR>Fehler-Code 
+255: Programmfehler (FB-Error)
+245: Geber PCV80</CommentFR>
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>1</DataType>
+    <DataDispMode>1</DataDispMode>
+    <DataDecFactor>10.0000</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm</Unit>
+    <CaptionDE>Istposition</CaptionDE>
+    <CaptionEN>OUT_3</CaptionEN>
+    <CaptionFR>OUT_3</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm/s</Unit>
+    <CaptionDE>Istgeschwindigkeit</CaptionDE>
+    <CaptionEN>OUT_4</CaptionEN>
+    <CaptionFR>OUT_4</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>1</DataDispMode>
+    <DataDecFactor>10.0000</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>%</Unit>
+    <CaptionDE>Wirkstrom</CaptionDE>
+    <CaptionEN>OUT_6</CaptionEN>
+    <CaptionFR>OUT_6</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE>bezogen auf I-Nenn FU</CommentDE>
+    <CommentEN>bezogen auf I-Nenn FU</CommentEN>
+    <CommentFR>bezogen auf I-Nenn FU</CommentFR>
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>10.0000</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Bremsentest_StatusError</CaptionDE>
+    <CaptionEN>Bremsentest_StatusError</CaptionEN>
+    <CaptionFR>Bremsentest_StatusError</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>OUT_27</CaptionDE>
+    <CaptionEN>OUT_27</CaptionEN>
+    <CaptionFR>OUT_27</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>IN_1</CaptionDE>
+    <CaptionEN>IN_1</CaptionEN>
+    <CaptionFR>IN_1</CaptionFR>
+    <GroupnameDE>MoviPLC</GroupnameDE>
+    <GroupnameEN>MoviPLC</GroupnameEN>
+    <GroupnameFR>MoviPLC</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Steuerwort</CaptionDE>
+    <CaptionEN>IN_2</CaptionEN>
+    <CaptionFR>IN_2</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Binäreingänge</CaptionDE>
+    <CaptionEN>IN_2</CaptionEN>
+    <CaptionFR>IN_2</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>1</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Position Externer Geber</CaptionDE>
+    <CaptionEN>Position Externer Geber</CaptionEN>
+    <CaptionFR>Position Externer Geber</CaptionFR>
+    <GroupnameDE>Position Externer Geber</GroupnameDE>
+    <GroupnameEN>Position Externer Geber</GroupnameEN>
+    <GroupnameFR>Position Externer Geber</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>1</BackgroundColor>
+    <Unit />
+    <CaptionDE>IN_1</CaptionDE>
+    <CaptionEN>IN_1</CaptionEN>
+    <CaptionFR>IN_1</CaptionFR>
+    <GroupnameDE>VituellerMaster</GroupnameDE>
+    <GroupnameEN>VituellerMaster</GroupnameEN>
+    <GroupnameFR>VituellerMaster</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03:, 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Steuerwort</CaptionDE>
+    <CaptionEN>IN_1</CaptionEN>
+    <CaptionFR>IN_1</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: Reglersperre, 1=Bit01: Freigabe /Schnellstopp, 2=Bit02: Freigabe /Stopp, 3=Bit03:, 4=Bit04: , 5=Bit05: , 6=Bit06: Fehler-Reset, 7=Bit07: , 8=Bit08: Start, 9=Bit09: Tippen +, 10=Bit10: Tippen -, 11=Bit11: Mode Bit 0, 12=Bit12: Mode Bit 1, 13=Bit13: Mode Bit 2, 14=Bit14: Start Offset, 15=Bit15: SW-Limit deaktivieren</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE>Mode 0: Default
+Mode 1: Tippbetrieb
+Mode 2: Referenzieren
+Mode 3: Positionieren
+Mode 4: ind. Position.
+Mode 5: Bremsentest
+Mode 6: Synchronbetr.
+</CommentDE>
+    <CommentEN>Mode 0: Default
+Mode 1: Tippbetrieb
+Mode 2: Referenzieren
+Mode 3: Positionieren
+Mode 4: ind. Position.
+Mode 5: Bremsentest
+Mode 6: Synchronbetr.
+</CommentEN>
+    <CommentFR>Mode 0: Default
+Mode 1: Tippbetrieb
+Mode 2: Referenzieren
+Mode 3: Positionieren
+Mode 4: ind. Position.
+Mode 5: Bremsentest
+Mode 6: Synchronbetr.
+</CommentFR>
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>1</DataType>
+    <DataDispMode>1</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm</Unit>
+    <CaptionDE>Zielposition</CaptionDE>
+    <CaptionEN>IN_2</CaptionEN>
+    <CaptionFR>IN_2</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm/s</Unit>
+    <CaptionDE>Sollgeschwindigkeit</CaptionDE>
+    <CaptionEN>IN_3</CaptionEN>
+    <CaptionFR>IN_3</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm/s²</Unit>
+    <CaptionDE>Beschleunigungsrampe</CaptionDE>
+    <CaptionEN>IN_4</CaptionEN>
+    <CaptionFR>IN_4</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm/s²</Unit>
+    <CaptionDE>Bremsrampe</CaptionDE>
+    <CaptionEN>IN_5</CaptionEN>
+    <CaptionFR>IN_5</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>1</BackgroundColor>
+    <Unit />
+    <CaptionDE>IN_1</CaptionDE>
+    <CaptionEN>IN_1</CaptionEN>
+    <CaptionFR>IN_1</CaptionFR>
+    <GroupnameDE>Bridge</GroupnameDE>
+    <GroupnameEN>Bridge</GroupnameEN>
+    <GroupnameFR>Bridge</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03:, 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Steuerwort</CaptionDE>
+    <CaptionEN>IN_1</CaptionEN>
+    <CaptionFR>IN_1</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: Reglersperre, 1=Bit01: Freigabe /Schnellstopp, 2=Bit02: Freigabe /Stopp, 3=Bit03:, 4=Bit04: , 5=Bit05: , 6=Bit06: Fehler-Reset, 7=Bit07: , 8=Bit08: Start, 9=Bit09: Tippen +, 10=Bit10: Tippen -, 11=Bit11: Mode Bit 0, 12=Bit12: Mode Bit 1, 13=Bit13: Mode Bit 2, 14=Bit14: Start Offset, 15=Bit15: SW-Limit deaktivieren</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE>Mode 0: Default
+Mode 1: Tippbetrieb
+Mode 2: Referenzieren
+Mode 3: Positionieren
+Mode 4: ind. Position.
+Mode 5: Bremsentest
+Mode 6: Synchronbetr.
+</CommentDE>
+    <CommentEN>Mode 0: Default
+Mode 1: Tippbetrieb
+Mode 2: Referenzieren
+Mode 3: Positionieren
+Mode 4: ind. Position.
+Mode 5: Bremsentest
+Mode 6: Synchronbetr.
+</CommentEN>
+    <CommentFR>Mode 0: Default
+Mode 1: Tippbetrieb
+Mode 2: Referenzieren
+Mode 3: Positionieren
+Mode 4: ind. Position.
+Mode 5: Bremsentest
+Mode 6: Synchronbetr.
+</CommentFR>
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>1</DataType>
+    <DataDispMode>1</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm</Unit>
+    <CaptionDE>Zielposition</CaptionDE>
+    <CaptionEN>IN_2</CaptionEN>
+    <CaptionFR>IN_2</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm/s</Unit>
+    <CaptionDE>Sollgeschwindigkeit</CaptionDE>
+    <CaptionEN>IN_3</CaptionEN>
+    <CaptionFR>IN_3</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm/s²</Unit>
+    <CaptionDE>Beschleunigungsrampe</CaptionDE>
+    <CaptionEN>IN_4</CaptionEN>
+    <CaptionFR>IN_4</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm/s²</Unit>
+    <CaptionDE>Bremsrampe</CaptionDE>
+    <CaptionEN>IN_5</CaptionEN>
+    <CaptionFR>IN_5</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>1</BackgroundColor>
+    <Unit />
+    <CaptionDE>IN_1</CaptionDE>
+    <CaptionEN>IN_1</CaptionEN>
+    <CaptionFR>IN_1</CaptionFR>
+    <GroupnameDE>Lift</GroupnameDE>
+    <GroupnameEN>Lift</GroupnameEN>
+    <GroupnameFR>Lift</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03:, 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Steuerwort</CaptionDE>
+    <CaptionEN>IN_1</CaptionEN>
+    <CaptionFR>IN_1</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: Reglersperre, 1=Bit01: Freigabe /Schnellstopp, 2=Bit02: Freigabe /Stopp, 3=Bit03:, 4=Bit04: , 5=Bit05: , 6=Bit06: Fehler-Reset, 7=Bit07: , 8=Bit08: Start, 9=Bit09: Tippen +, 10=Bit10: Tippen -, 11=Bit11: Mode Bit 0, 12=Bit12: Mode Bit 1, 13=Bit13: Mode Bit 2, 14=Bit14: Start Offset, 15=Bit15: SW-Limit deaktivieren</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE>Mode 0: Default
+Mode 1: Tippbetrieb
+Mode 2: Referenzieren
+Mode 3: Positionieren
+Mode 4: ind. Position.
+Mode 5: Bremsentest
+Mode 6: Synchronbetr.
+</CommentDE>
+    <CommentEN>Mode 0: Default
+Mode 1: Tippbetrieb
+Mode 2: Referenzieren
+Mode 3: Positionieren
+Mode 4: ind. Position.
+Mode 5: Bremsentest
+Mode 6: Synchronbetr.
+</CommentEN>
+    <CommentFR>Mode 0: Default
+Mode 1: Tippbetrieb
+Mode 2: Referenzieren
+Mode 3: Positionieren
+Mode 4: ind. Position.
+Mode 5: Bremsentest
+Mode 6: Synchronbetr.
+</CommentFR>
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>1</DataType>
+    <DataDispMode>1</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm</Unit>
+    <CaptionDE>Zielposition</CaptionDE>
+    <CaptionEN>IN_2</CaptionEN>
+    <CaptionFR>IN_2</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm/s</Unit>
+    <CaptionDE>Sollgeschwindigkeit</CaptionDE>
+    <CaptionEN>IN_3</CaptionEN>
+    <CaptionFR>IN_3</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm/s²</Unit>
+    <CaptionDE>Beschleunigungsrampe</CaptionDE>
+    <CaptionEN>IN_4</CaptionEN>
+    <CaptionFR>IN_4</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm/s²</Unit>
+    <CaptionDE>Bremsrampe</CaptionDE>
+    <CaptionEN>IN_5</CaptionEN>
+    <CaptionFR>IN_5</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>1</BackgroundColor>
+    <Unit />
+    <CaptionDE>IN_1</CaptionDE>
+    <CaptionEN>IN_1</CaptionEN>
+    <CaptionFR>IN_1</CaptionFR>
+    <GroupnameDE>Width</GroupnameDE>
+    <GroupnameEN>Width</GroupnameEN>
+    <GroupnameFR>Width</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03:, 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Steuerwort</CaptionDE>
+    <CaptionEN>IN_1</CaptionEN>
+    <CaptionFR>IN_1</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: Reglersperre, 1=Bit01: Freigabe /Schnellstopp, 2=Bit02: Freigabe /Stopp, 3=Bit03:, 4=Bit04: , 5=Bit05: , 6=Bit06: Fehler-Reset, 7=Bit07: , 8=Bit08: Start, 9=Bit09: Tippen +, 10=Bit10: Tippen -, 11=Bit11: Mode Bit 0, 12=Bit12: Mode Bit 1, 13=Bit13: Mode Bit 2, 14=Bit14: Start Offset, 15=Bit15: SW-Limit deaktivieren</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE>Mode 0: Default
+Mode 1: Tippbetrieb
+Mode 2: Referenzieren
+Mode 3: Positionieren
+Mode 4: ind. Position.
+Mode 5: Bremsentest
+Mode 6: Synchronbetr.
+</CommentDE>
+    <CommentEN>Mode 0: Default
+Mode 1: Tippbetrieb
+Mode 2: Referenzieren
+Mode 3: Positionieren
+Mode 4: ind. Position.
+Mode 5: Bremsentest
+Mode 6: Synchronbetr.
+</CommentEN>
+    <CommentFR>Mode 0: Default
+Mode 1: Tippbetrieb
+Mode 2: Referenzieren
+Mode 3: Positionieren
+Mode 4: ind. Position.
+Mode 5: Bremsentest
+Mode 6: Synchronbetr.
+</CommentFR>
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>1</DataType>
+    <DataDispMode>1</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm</Unit>
+    <CaptionDE>Zielposition</CaptionDE>
+    <CaptionEN>IN_2</CaptionEN>
+    <CaptionFR>IN_2</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm/s</Unit>
+    <CaptionDE>Sollgeschwindigkeit</CaptionDE>
+    <CaptionEN>IN_3</CaptionEN>
+    <CaptionFR>IN_3</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm/s²</Unit>
+    <CaptionDE>Beschleunigungsrampe</CaptionDE>
+    <CaptionEN>IN_4</CaptionEN>
+    <CaptionFR>IN_4</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+  <Elements xsi:type="cPDElmnt">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>mm/s²</Unit>
+    <CaptionDE>Bremsrampe</CaptionDE>
+    <CaptionEN>IN_5</CaptionEN>
+    <CaptionFR>IN_5</CaptionFR>
+    <GroupnameDE />
+    <GroupnameEN />
+    <GroupnameFR />
+    <ExtCaptionsDE>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: , 1=Bit01: , 2=Bit02: , 3=Bit03: , 4=Bit04: , 5=Bit05: , 6=Bit06: , 7=Bit07: , 8=Bit08: , 9=Bit09: , 10=Bit10: , 11=Bit11: , 12=Bit12: , 13=Bit13: , 14=Bit14: , 15=Bit15: </ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+</Config_AxisPDMonitor>

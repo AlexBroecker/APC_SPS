@@ -1,0 +1,703 @@
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/CodeSamples\/SEWIOC' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+FUNCTION_BLOCK FB_Configuration_OCC11C
+VAR_INPUT
+	Enable: BOOL; 			(* Activate config *)
+END_VAR
+VAR_OUTPUT
+	Done: BOOL;				(* Config done *)
+END_VAR
+VAR_IN_OUT
+	ExtConfig : MC_INITIALPARAMETER_SEWIOC;
+	(*	aIndex 		: ARRAY[1..NUMOF_INITIALPARAMETER] OF WORD;		(* Target index *)
+		aSubIndex : ARRAY[1..NUMOF_INITIALPARAMETER] OF WORD;		(* Target subindex *)
+		aBytes		: ARRAY[1..NUMOF_INITIALPARAMETER] OF BYTE;		(* Number of bytes to write (1-4) *)
+		aData 		: ARRAY[1..NUMOF_INITIALPARAMETER] OF DWORD;		(* Data to write *)
+		(* IDs of the PDO telegrams. The IDs are always calculated with the following IDs as a basis + the address of the bus coppler *)
+		aTX_COBID : ARRAY[0..9] OF UINT := 16#200,16#300,16#400,16#500,16#780,16#240,16#340,16#440,16#540,16#7C0;	(* MOVI-PLC --> Bus coppler *)
+		aRX_COBID : ARRAY[0..9] OF UINT := 16#180,16#280,16#380,16#480,16#680,16#1C0,16#2C0,16#3C0,16#4C0,16#6C0;	(* Bus coppler --> MOVI-PLC *)
+		TimeOut 	: UINT :=5000;TimeOut during parameterization [ms]*)
+END_VAR
+(* @END_DECLARATION := '0' *)
+IF Enable AND NOT Done THEN
+
+	(*########################################################
+
+		Configuration of Slave (SEW OCC11C)
+		
+	#########################################################*)
+	(*
+	In this example, the following configuration is used (the modules in brackets are not addressable):
+	OCC11C / (OPV81C) / ODI81C / (OPV81C) / ODO81C / (OPV41C) / OAI41C / OAI42C / ODI43C / OAI44C / (OPM11C) / OAO42C / ODI42C / OAI45C
+	*)
+
+	(***************************************************** Additional parameters to set in the Slave  ***************************************************************)
+(*################################################################################*)
+	(*e.g. digitalinput ODI81C  *)
+	(*1. Modul without parameter*)
+(*################################################################################*)
+	(*e.g. digitaloutput ODO81C *)
+	(*2. Modul without parameter*)
+(*################################################################################*)
+	(*e.g. analoginput OAI41C 4xVoltage  (place 3)*)
+(*
+	ExtConfig.aIndex[1]			:= 16#3100;(* 1.parameter diagnostics alarm *)
+	ExtConfig.aSubIndex[1]		:= 1;(*1. Modul with parameter*)
+	ExtConfig.aBytes[1]			:= 1;
+	ExtConfig.aData[1]			:= 2#00000000;(*bit 6 / 0=off, 1=alarm on(40h)*)
+
+	ExtConfig.aIndex[2]			:= 16#3103;(* 4. parameter  Interference frequency suppression*)
+	ExtConfig.aSubIndex[2]		:= 1;(*1. Modul with parameter*)
+	ExtConfig.aBytes[2]			:= 1;
+	ExtConfig.aData[2]			:= 2#10101010;(*10101010 = 50Hz, 01010101 = 60Hz, 00000000 = off  all channels*)
+
+
+	ExtConfig.aIndex[3]			:= 16#3104;(* 5. parameter channel 1 mode *)
+	ExtConfig.aSubIndex[3]		:= 1;(*1. Modul with parameter*)
+	ExtConfig.aBytes[3]			:= 1;
+	ExtConfig.aData[3]			:= 16#10;(*function  	12h = +-10V
+															10h = 0..10V
+
+															FFh = off   
+															*)
+
+	ExtConfig.aIndex[4]			:= 16#310A;(* 9. parameter channel 2 mode *)
+	ExtConfig.aSubIndex[4]		:= 1;(*1. Modul with parameter*)
+	ExtConfig.aBytes[4]			:= 1;
+	ExtConfig.aData[4]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[5]			:= 16#3110;(* 16. parameter channel 3 mode *)
+	ExtConfig.aSubIndex[5]		:= 1;(*1. Modul with parameter*)
+	ExtConfig.aBytes[5]			:= 1;
+	ExtConfig.aData[5]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[6]			:= 16#3116;(* 20. parameter channel 4 mode *)
+	ExtConfig.aSubIndex[6]		:= 1;(*1. Modul with parameter*)
+	ExtConfig.aBytes[6]			:= 1;
+	ExtConfig.aData[6]			:= 16#FF;(*function*)
+
+(*################################################################################*)
+	(*e.g. analoginput OAI42C 4xCurrent (place 4)*)
+
+	ExtConfig.aIndex[7]			:= 16#3100;(* 1.parameter diagnostics alarm *)
+	ExtConfig.aSubIndex[7]		:= 2;(*2. Modul with parameter*)
+	ExtConfig.aBytes[7]			:= 1;
+	ExtConfig.aData[7]			:= 2#00000000;(*bit 6 / 0=off, 1=alarm on(40h)*)
+
+	ExtConfig.aIndex[8]			:= 16#3103;(* 4. parameter  Interference frequency suppression*)
+	ExtConfig.aSubIndex[8]		:= 2;(*2. Modul with parameter*)
+	ExtConfig.aBytes[8]			:= 1;
+	ExtConfig.aData[8]			:= 2#10101010;(*10101010 = 50Hz, 01010101 = 60Hz, 00000000 = off  all channels*)
+
+
+	ExtConfig.aIndex[9]			:= 16#3104;(* 5. parameter channel 1 mode *)
+	ExtConfig.aSubIndex[9]		:= 2;(*2. Modul with parameter*)
+	ExtConfig.aBytes[9]			:= 1;
+	ExtConfig.aData[9]			:= 16#30;(*function  	30h = 4..20mA
+															31h = 0..20mA 
+
+															FFh = off   
+															*)
+
+	ExtConfig.aIndex[10]			:= 16#310A;(* 9. parameter channel 2 mode *)
+	ExtConfig.aSubIndex[10]		:= 2;(*2. Modul with parameter*)
+	ExtConfig.aBytes[10]			:= 1;
+	ExtConfig.aData[10]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[11]			:= 16#3110;(* 16. parameter channel 3 mode *)
+	ExtConfig.aSubIndex[11]		:= 2;(*2. Modul with parameter*)
+	ExtConfig.aBytes[11]			:= 1;
+	ExtConfig.aData[11]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[12]			:= 16#3116;(* 20. parameter channel 4 mode *)
+	ExtConfig.aSubIndex[12]		:= 2;(*2. Modul with parameter*)
+	ExtConfig.aBytes[12]			:= 1;
+	ExtConfig.aData[12]			:= 16#FF;(*function*)
+
+(*################################################################################*)
+	(*e.g. digitalinput ODI43C  3-wire*)
+	(*5. Modul without parameter*)
+(*################################################################################*)
+	(*e.g. analoginput OAI44C    2xTC (place 6)*)
+
+	ExtConfig.aIndex[13]			:= 16#3100;(* 1.parameter diagnostics alarm *)
+	ExtConfig.aSubIndex[13]		:= 3;(*3. Modul with parameter*)
+	ExtConfig.aBytes[13]			:= 1;
+	ExtConfig.aData[13]			:= 2#00000000;(*bit 6 / 0=off, 1=alarm on(40h)*)
+
+	ExtConfig.aIndex[14]			:= 16#3101;(* 2. parameter Wire break detection *)
+	ExtConfig.aSubIndex[14]		:= 3;(*3. Modul with parameter*)
+	ExtConfig.aBytes[14]			:= 1;
+	ExtConfig.aData[14]			:= 2#00;(*00 = off, 11 = on *)
+
+	ExtConfig.aIndex[15]			:= 16#3102;(* 3. parameter Temperature system *)
+	ExtConfig.aSubIndex[15]		:= 3;(*3. Modul with parameter*)
+	ExtConfig.aBytes[15]			:= 1;
+	ExtConfig.aData[15]			:= 2#00;(*00 = 캜, 01 = 캟, 10 = K*)
+
+	ExtConfig.aIndex[16]			:= 16#3103;(* 4.parameter Interference frequency suppression *)
+	ExtConfig.aSubIndex[16]		:= 3;(*3. Modul with parameter*)
+	ExtConfig.aBytes[16]			:= 1;
+	ExtConfig.aData[16]			:= 2#1010;(*1010 = 50Hz, 0101 = 60Hz, 0000 = off  all channels*)
+
+	ExtConfig.aIndex[17]			:= 16#3104;(* 5. parameter channel 1 mode *)
+	ExtConfig.aSubIndex[17]		:= 3;(*3. Modul with parameter*)
+	ExtConfig.aBytes[17]			:= 1;
+	ExtConfig.aData[17]			:= 16#11;(*function  	11h = -80..80mV
+														other see list
+
+														FFh = off   
+														*)
+
+	ExtConfig.aIndex[18]			:= 16#3105;(*6. parameter channel 2 mode *)
+	ExtConfig.aSubIndex[18]		:= 3;(*3. Modul with parameter*)
+	ExtConfig.aBytes[18]			:= 1;
+	ExtConfig.aData[18]			:= 16#FF;(*function*)
+
+(*################################################################################*)
+	(*e.g. analoginput OAI45C    4xR/RTD (place 10)*)
+
+	ExtConfig.aIndex[19]			:= 16#3100;(* 1.parameter diagnostics alarm *)
+	ExtConfig.aSubIndex[19]		:= 7;(*7. Modul with parameter*)
+	ExtConfig.aBytes[19]			:= 1;
+	ExtConfig.aData[19]			:= 2#00000000;(*bit 6 / 0=off, 1=alarm on(40h)*)
+
+	ExtConfig.aIndex[20]			:= 16#3101;(* 2. parameter Wire break detection *)
+	ExtConfig.aSubIndex[20]		:= 7;(*7. Modul with parameter*)
+	ExtConfig.aBytes[20]			:= 1;
+	ExtConfig.aData[20]			:= 2#0000;(*0000 = off, 1111 = on *)
+
+	ExtConfig.aIndex[21]			:= 16#3102;(* 3. parameter Temperature system*)
+	ExtConfig.aSubIndex[21]		:= 7;(*7. Modul with parameter*)
+	ExtConfig.aBytes[21]			:= 1;
+	ExtConfig.aData[21]			:= 2#00;(*00 = 캜, 01 = 캟, 10 = K*)
+
+	ExtConfig.aIndex[22]			:= 16#3103;(* 4. parameter Interference frequency suppression*)
+	ExtConfig.aSubIndex[22]		:= 7;(*7. Modul with parameter*)
+	ExtConfig.aBytes[22]			:= 1;
+	ExtConfig.aData[22]			:= 2#1010;(*10101010 = 50Hz, 01010101 = 60Hz, 00000000 = off  all channels*)
+
+	ExtConfig.aIndex[23]			:= 16#3104;(*5. parameter channel 1 mode *)
+	ExtConfig.aSubIndex[23]		:= 7;(*7. Modul with parameter*)
+	ExtConfig.aBytes[23]			:= 1;
+	ExtConfig.aData[23]			:= 16#50;(*function  	50h = PT100 2-wire
+														other see list
+
+														FFh = off   
+														*)
+
+	ExtConfig.aIndex[24]			:= 16#3105;(* 6. parameter channel 2 mode *)
+	ExtConfig.aSubIndex[24]		:= 7;(*7. Modul with parameter*)
+	ExtConfig.aBytes[24]			:= 1;
+	ExtConfig.aData[24]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[25]			:= 16#3106;(* 7. parameter channel 3 mode *)
+	ExtConfig.aSubIndex[25]		:= 7;(*7. Modul with parameter*)
+	ExtConfig.aBytes[25]			:= 1;
+	ExtConfig.aData[25]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[26]			:= 16#3107;(*8. parameter channel 4 mode *)
+	ExtConfig.aSubIndex[26]		:= 7;(*7. Modul with parameter*)
+	ExtConfig.aBytes[26]			:= 1;
+	ExtConfig.aData[26]			:= 16#FF;(*function*)
+
+
+(*################################################################################*)
+	(*e.g. analogoutput OAO41C 4xVoltage*)
+
+	ExtConfig.aIndex[27]			:= 16#3101;(*2. parameter short circuit detection*)
+	ExtConfig.aSubIndex[27]		:= 4;(*4. Modul with parameter*)
+	ExtConfig.aBytes[27]			:= 1;
+	ExtConfig.aData[27]			:= 2#0000;(*0000 = off, 1111 = on *)
+
+	ExtConfig.aIndex[28]			:= 16#3102;(* 3. parameter channel 1 mode*)
+	ExtConfig.aSubIndex[28]		:= 4;(*4. Modul with parameter*)
+	ExtConfig.aBytes[28]			:= 1;
+	ExtConfig.aData[28]			:= 16#10;(*function
+														12h = +-10V
+														10h = 0..10V
+
+														FFh = off   
+														*)
+
+	ExtConfig.aIndex[29]			:= 16#3103;(* 4. parameter channel 2 mode*)
+	ExtConfig.aSubIndex[29]		:= 4;(*4. Modul with parameter*)
+	ExtConfig.aBytes[29]			:= 1;
+	ExtConfig.aData[29]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[30]			:= 16#3104;(* 5. parameter channel 3 mode*)
+	ExtConfig.aSubIndex[30]		:= 4;(*4. Modul with parameter*)
+	ExtConfig.aBytes[30]			:= 1;
+	ExtConfig.aData[30]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[31]			:= 16#3105;(* 6. parameter channel 4 mode*)
+	ExtConfig.aSubIndex[31]		:= 4;(*4. Modul with parameter*)
+	ExtConfig.aBytes[31]			:= 1;
+	ExtConfig.aData[31]			:= 16#FF;(*function*)
+
+(*################################################################################*)
+(*e.g. analogoutput  OAO42C 4xCurrent*)
+
+	ExtConfig.aIndex[32]			:= 16#3101;(*2. parameter Wire break detection *)
+	ExtConfig.aSubIndex[32]		:= 5;(*5. Modul with parameter*)
+	ExtConfig.aBytes[32]			:= 1;
+	ExtConfig.aData[32]			:= 2#0000;(*0000 = off, 1111 = on *)
+
+	ExtConfig.aIndex[33]			:= 16#3102;(* 3.parameter channel 1 mode*)
+	ExtConfig.aSubIndex[33]		:= 5;(*5. Modul with parameter*)
+	ExtConfig.aBytes[33]			:= 1;
+	ExtConfig.aData[33]			:= 16#30;(*function  	30h = 4..20mA
+														31h = 0..20mA 
+
+														FFh = off   
+														*)
+
+	ExtConfig.aIndex[34]			:= 16#3103;(* 4.parameter channel 2 mode*)
+	ExtConfig.aSubIndex[34]		:= 5;(*5. Modul with parameter*)
+	ExtConfig.aBytes[34]			:= 1;
+	ExtConfig.aData[34]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[35]			:= 16#3104;(* 5.parameter channel 3 mode*)
+	ExtConfig.aSubIndex[35]		:= 5;(*5. Modul with parameter*)
+	ExtConfig.aBytes[35]			:= 1;
+	ExtConfig.aData[35]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[36]			:= 16#3105;(* 6.parameter channel 4 mode*)
+	ExtConfig.aSubIndex[36]		:= 5;(*5. Modul with parameter*)
+	ExtConfig.aBytes[36]			:= 1;
+	ExtConfig.aData[36]			:= 16#FF;(*function*)
+
+(*################################################################################*)
+	(*e.g. digitalinput ODI42C  fast*)
+
+	ExtConfig.aIndex[37]			:= 16#3100;(* 1. parameter diagnostics alarm*)
+	ExtConfig.aSubIndex[37]		:= 6;(*6. Modul with parameter*)
+	ExtConfig.aBytes[37]			:= 1;
+	ExtConfig.aData[37]			:= 2#00000000;(*bit 6 / 0=off, 1=alarm on(40h)*)
+
+	ExtConfig.aIndex[38]			:= 16#3101;(* 2. parameter delay DI0*)
+	ExtConfig.aSubIndex[38]		:= 6;(*6. Modul with parameter*)
+	ExtConfig.aBytes[38]			:= 1;
+	ExtConfig.aData[38]			:= 16#02;(*function  	00h = 1탎
+														02h = 3탎 
+														04h = 10탎 
+														07h = 86탎 
+														09h = 342탎 
+														0Ch = 2731탎 
+														*)
+
+	ExtConfig.aIndex[39]			:= 16#3102;(*3. parameter delay DI1*)
+	ExtConfig.aSubIndex[39]		:= 6;(*6. Modul with parameter*)
+	ExtConfig.aBytes[39]			:= 1;
+	ExtConfig.aData[39]			:= 16#02;(*function*)
+
+	ExtConfig.aIndex[40]			:= 16#3103;(* 4. parameter delay DI2*)
+	ExtConfig.aSubIndex[40]		:= 6;(*6. Modul with parameter*)
+	ExtConfig.aBytes[40]			:= 1;
+	ExtConfig.aData[40]			:= 16#02;(*function*)
+
+	ExtConfig.aIndex[41]			:= 16#3104;(* 5. parameter delay DI3*)
+	ExtConfig.aSubIndex[41]		:= 6;(*6. Modul with parameter*)
+	ExtConfig.aBytes[41]			:= 1;
+	ExtConfig.aData[41]			:= 16#02;(*function*)
+
+(*################################################################################*)
+(* this parameter is necessary in order to enable all the previous parameters *)
+(*################################################################################*)
+	ExtConfig.aIndex[42]			:= 16#31FF;(* write all parameters to modules*)
+	ExtConfig.aSubIndex[42]		:= 0;
+	ExtConfig.aBytes[42]			:= 1;
+	ExtConfig.aData[42]			:= 2#1;
+
+(*################################################################################*)
+(*################################################################################*)
+*)
+	(********************************************** Additional configuration. Default values are in most cases sufficient *****************************************************)
+
+	ExtConfig.TimeOut			:= 10000;	(* [ms]. If the Init-Sequence takes longer than this TimeOut time --> Error
+														this TimeOut/50 --> Watchdog Error
+														this TimeOut/200 --> send Heartbeat *)
+	ExtConfig.Inhibit_digital		:=50; (*Repetition delay [value x 100 킪] *)
+	ExtConfig.Inhibit_analog		:=500; (*Repetition delay [value x 100 킪] *)
+
+
+	Done := TRUE;
+
+END_IF
+END_FUNCTION_BLOCK
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/CodeSamples\/SEWIOC' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+FUNCTION_BLOCK FB_Configuration_OCE11C
+VAR_INPUT
+	Enable: BOOL; 			(* Activate config *)
+END_VAR
+VAR_OUTPUT
+	Done: BOOL;				(* Config done *)
+END_VAR
+VAR_IN_OUT
+	ExtConfig : MC_INITIALPARAMETER_SEWIOC;
+	(*	aIndex 		: ARRAY[1..NUMOF_INITIALPARAMETER] OF WORD;		(* Target index *)
+		aSubIndex : ARRAY[1..NUMOF_INITIALPARAMETER] OF WORD;		(* Target subindex *)
+		aBytes		: ARRAY[1..NUMOF_INITIALPARAMETER] OF BYTE;			(* Number of bytes to write (1-4) *)
+		aData 		: ARRAY[1..NUMOF_INITIALPARAMETER] OF DWORD;		(* Data to write *)
+
+		TimeOut 	: UINT :=5000;TimeOut during parameterization [ms]*)		
+END_VAR
+(* @END_DECLARATION := '0' *)
+IF Enable AND NOT Done THEN
+
+	(*########################################################
+
+		Configuration of Slave (SEW OCE11C)
+		
+	#########################################################*)
+	(*
+	In this example, the following configuration is used (the modules in brackets are not addressable):
+	OCC11C / (OPV81C) / ODI81C / (OPV81C) / ODO81C / (OPV41C) / OAI41C / OAI42C / ODI43C / OAI44C / (OPM11C) / OAO42C / ODI42C / OAI45C / ODI24C / #OSR11C#
+	*)
+
+	(***************************************************** Additional parameters to set in the Slave  ***************************************************************)
+(*################################################################################*)
+	(*e.g. digitalinput ODI81C  *)
+	(*1. Modul without parameter*)
+(*################################################################################*)
+	(*e.g. digitaloutput ODO81C *)
+	(*2. Modul without parameter*)
+(*################################################################################*)
+	(*e.g. analoginput OAI41C 4xVoltage*)
+(*
+	ExtConfig.aIndex[1]			:= 16#3102;(* 3. Modul *)
+	ExtConfig.aSubIndex[1]		:= 1;(*diagnostics alarm*)
+	ExtConfig.aBytes[1]			:= 1;
+	ExtConfig.aData[1]			:= 2#00000000;(*bit 6 / 0=off, 1=alarm on(40h)*)
+
+	ExtConfig.aIndex[2]			:= 16#3102;(* 3. Modul *)
+	ExtConfig.aSubIndex[2]		:= 4;(*Interference frequency suppression*)
+	ExtConfig.aBytes[2]			:= 1;
+	ExtConfig.aData[2]			:= 2#10101010;(*10101010 = 50Hz, 01010101 = 60Hz, 00000000 = off  all channels*)
+
+
+	ExtConfig.aIndex[3]			:= 16#3102;(* 3. Modul *)
+	ExtConfig.aSubIndex[3]		:= 5;(*channel 1 mode*)
+	ExtConfig.aBytes[3]			:= 1;
+	ExtConfig.aData[3]			:= 16#12;(*function  	12h = +-10V
+															10h = 0..10V
+
+															FFh = off   
+															*)
+
+	ExtConfig.aIndex[4]			:= 16#3102;(* 3. Modul *)
+	ExtConfig.aSubIndex[4]		:= 9;(*channel 2 mode*)
+	ExtConfig.aBytes[4]			:= 1;
+	ExtConfig.aData[4]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[5]			:= 16#3102;(* 3. Modul *)
+	ExtConfig.aSubIndex[5]		:= 13;(*channel 3 mode*)
+	ExtConfig.aBytes[5]			:= 1;
+	ExtConfig.aData[5]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[6]			:= 16#3102;(* 3. Modul *)
+	ExtConfig.aSubIndex[6]		:= 17;(*channel 4 mode*)
+	ExtConfig.aBytes[6]			:= 1;
+	ExtConfig.aData[6]			:= 16#FF;(*function*)
+
+(*################################################################################*)
+	(*e.g. analoginput OAI42C 4xCurrent*)
+
+	ExtConfig.aIndex[7]			:= 16#3103;(* 4. Modul *)
+	ExtConfig.aSubIndex[7]		:= 1;(*diagnostics alarm*)
+	ExtConfig.aBytes[7]			:= 1;
+	ExtConfig.aData[7]			:= 2#00000000;(*bit 6 / 0=off, 1=alarm on(40h)*)
+
+	ExtConfig.aIndex[8]			:= 16#3103;(* 4. Modul *)
+	ExtConfig.aSubIndex[8]		:= 4;(*Interference frequency suppression*)
+	ExtConfig.aBytes[8]			:= 1;
+	ExtConfig.aData[8]			:= 2#10101010;(*10101010 = 50Hz, 01010101 = 60Hz, 00000000 = off  all channels*)
+
+
+	ExtConfig.aIndex[9]			:= 16#3103;(* 4. Modul *)
+	ExtConfig.aSubIndex[9]		:= 5;(*channel 1 mode*)
+	ExtConfig.aBytes[9]			:= 1;
+	ExtConfig.aData[9]			:= 16#30;(*function  	30h = 4..20mA
+															31h = 0..20mA 
+
+															FFh = off   
+															*)
+
+	ExtConfig.aIndex[10]			:= 16#3103;(* 4. Modul *)
+	ExtConfig.aSubIndex[10]		:= 9;(*channel 2 mode*)
+	ExtConfig.aBytes[10]			:= 1;
+	ExtConfig.aData[10]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[11]			:= 16#3103;(* 4. Modul *)
+	ExtConfig.aSubIndex[11]		:= 13;(*channel 3 mode*)
+	ExtConfig.aBytes[11]			:= 1;
+	ExtConfig.aData[11]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[12]			:= 16#3103;(* 4. Modul *)
+	ExtConfig.aSubIndex[12]		:= 17;(*channel 4 mode*)
+	ExtConfig.aBytes[12]			:= 1;
+	ExtConfig.aData[12]			:= 16#FF;(*function*)
+
+(*################################################################################*)
+	(*e.g. digitalinput ODI43C  3-wire*)
+	(*5. Modul without parameter*)
+(*################################################################################*)
+	(*e.g. analoginput OAI44C    2xTC*)
+
+	ExtConfig.aIndex[13]			:= 16#3105;(* 6. Modul *)
+	ExtConfig.aSubIndex[13]		:= 1;(*diagnostics alarm*)
+	ExtConfig.aBytes[13]			:= 1;
+	ExtConfig.aData[13]			:= 2#00000000;(*bit 6 / 0=off, 1=alarm on(40h)*)
+
+	ExtConfig.aIndex[14]			:= 16#3105;(* 6. Modul *)
+	ExtConfig.aSubIndex[14]		:= 2;(*Wire break detection*)
+	ExtConfig.aBytes[14]			:= 1;
+	ExtConfig.aData[14]			:= 2#00;(*00 = off, 11 = on *)
+
+	ExtConfig.aIndex[15]			:= 16#3105;(* 6. Modul *)
+	ExtConfig.aSubIndex[15]		:= 3;(*Temperature system*)
+	ExtConfig.aBytes[15]			:= 1;
+	ExtConfig.aData[15]			:= 2#00;(*00 = 캜, 01 = 캟, 10 = K*)
+
+	ExtConfig.aIndex[16]			:= 16#3105;(* 6. Modul *)
+	ExtConfig.aSubIndex[16]		:= 4;(*Interference frequency suppression*)
+	ExtConfig.aBytes[16]			:= 1;
+	ExtConfig.aData[16]			:= 2#1010;(*1010 = 50Hz, 0101 = 60Hz, 0000 = off  all channels*)
+
+	ExtConfig.aIndex[17]			:= 16#3105;(* 6. Modul *)
+	ExtConfig.aSubIndex[17]		:= 5;(*channel 1 mode*)
+	ExtConfig.aBytes[17]			:= 1;
+	ExtConfig.aData[17]			:= 16#11;(*function  	11h = -80..80mV
+														other see list
+
+														FFh = off   
+														*)
+
+	ExtConfig.aIndex[18]			:= 16#3105;(* 6. Modul *)
+	ExtConfig.aSubIndex[18]		:= 6;(*channel 2 mode*)
+	ExtConfig.aBytes[18]			:= 1;
+	ExtConfig.aData[18]			:= 16#FF;(*function*)
+
+(*################################################################################*)
+	(*e.g. analoginput OAI45C    4xR/RTD*)
+
+	ExtConfig.aIndex[19]			:= 16#3109;(* 10. Modul *)
+	ExtConfig.aSubIndex[19]		:= 1;(*diagnostics alarm*)
+	ExtConfig.aBytes[19]			:= 1;
+	ExtConfig.aData[19]			:= 2#00000000;(*bit 6 / 0=off, 1=alarm on(40h)*)
+
+	ExtConfig.aIndex[20]			:= 16#3109;(* 10. Modul *)
+	ExtConfig.aSubIndex[20]		:= 2;(*Wire break detection*)
+	ExtConfig.aBytes[20]			:= 1;
+	ExtConfig.aData[20]			:= 2#0000;(*0000 = off, 1111 = on *)
+
+	ExtConfig.aIndex[21]			:= 16#3109;(* 10. Modul *)
+	ExtConfig.aSubIndex[21]		:= 3;(*Temperature system*)
+	ExtConfig.aBytes[21]			:= 1;
+	ExtConfig.aData[21]			:= 2#00;(*00 = 캜, 01 = 캟, 10 = K*)
+
+	ExtConfig.aIndex[22]			:= 16#3109;(* 10. Modul *)
+	ExtConfig.aSubIndex[22]		:= 4;(*Interference frequency suppression*)
+	ExtConfig.aBytes[22]			:= 1;
+	ExtConfig.aData[22]			:= 2#1010;(*10101010 = 50Hz, 01010101 = 60Hz, 00000000 = off  all channels*)
+
+	ExtConfig.aIndex[23]			:= 16#3109;(* 10. Modul *)
+	ExtConfig.aSubIndex[23]		:= 5;(*channel 1 mode*)
+	ExtConfig.aBytes[23]			:= 1;
+	ExtConfig.aData[23]			:= 16#50;(*function  	50h = PT100 2-wire
+														other see list
+
+														FFh = off   
+														*)
+
+	ExtConfig.aIndex[24]			:= 16#3109;(* 10. Modul *)
+	ExtConfig.aSubIndex[24]		:= 6;(*channel 2 mode*)
+	ExtConfig.aBytes[24]			:= 1;
+	ExtConfig.aData[24]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[25]			:= 16#3109;(* 10. Modul *)
+	ExtConfig.aSubIndex[25]		:= 7;(*channel 2 mode*)
+	ExtConfig.aBytes[25]			:= 1;
+	ExtConfig.aData[25]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[26]			:= 16#3109;(* 10. Modul *)
+	ExtConfig.aSubIndex[26]		:= 8;(*channel 2 mode*)
+	ExtConfig.aBytes[26]			:= 1;
+	ExtConfig.aData[26]			:= 16#FF;(*function*)
+
+
+(*################################################################################*)
+	(*e.g. analogoutput OAO41C 4xVoltage*)
+
+	ExtConfig.aIndex[27]			:= 16#3106;(* 7. Modul *)
+	ExtConfig.aSubIndex[27]		:= 2;(*Wire break(OAO42C) or short circuit(OAO41C) detection *)
+	ExtConfig.aBytes[27]			:= 1;
+	ExtConfig.aData[27]			:= 2#0000;(*0000 = off, 1111 = on *)
+
+
+	ExtConfig.aIndex[28]			:= 16#3106;(* 7. Modul *)
+	ExtConfig.aSubIndex[28]		:= 3;(*channel 1 mode*)
+	ExtConfig.aBytes[28]			:= 1;
+	ExtConfig.aData[28]			:= 16#10;(*function
+														12h = +-10V
+														10h = 0..10V
+
+														FFh = off   
+														*)
+
+	ExtConfig.aIndex[29]			:= 16#3106;(* 7. Modul *)
+	ExtConfig.aSubIndex[29]		:= 4;(*channel 2 mode*)
+	ExtConfig.aBytes[29]			:= 1;
+	ExtConfig.aData[29]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[30]			:= 16#3106;(* 7. Modul *)
+	ExtConfig.aSubIndex[30]		:= 5;(*channel 3 mode*)
+	ExtConfig.aBytes[30]			:= 1;
+	ExtConfig.aData[30]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[31]			:= 16#3106;(* 7. Modul *)
+	ExtConfig.aSubIndex[31]		:= 6;(*channel 4 mode*)
+	ExtConfig.aBytes[31]			:= 1;
+	ExtConfig.aData[31]			:= 16#FF;(*function*)
+
+(*################################################################################*)
+(*e.g. analogoutput  OAO42C 4xCurrent*)
+
+	ExtConfig.aIndex[32]			:= 16#3107;(* 8. Modul *)
+	ExtConfig.aSubIndex[32]		:= 2;(*Wire break(OAO42C) or short circuit(OAO41C) detection *)
+	ExtConfig.aBytes[32]			:= 1;
+	ExtConfig.aData[32]			:= 2#0000;(*0000 = off, 1111 = on *)
+
+
+	ExtConfig.aIndex[33]			:= 16#3107;(* 8. Modul *)
+	ExtConfig.aSubIndex[33]		:= 3;(*channel 1 mode*)
+	ExtConfig.aBytes[33]			:= 1;
+	ExtConfig.aData[33]			:= 16#30;(*function  	30h = 4..20mA
+														31h = 0..20mA 
+
+														FFh = off   
+														*)
+
+	ExtConfig.aIndex[34]			:= 16#3107;(* 8. Modul *)
+	ExtConfig.aSubIndex[34]		:= 4;(*channel 2 mode*)
+	ExtConfig.aBytes[34]			:= 1;
+	ExtConfig.aData[34]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[35]			:= 16#3107;(* 8. Modul *)
+	ExtConfig.aSubIndex[35]		:= 5;(*channel 3 mode*)
+	ExtConfig.aBytes[35]			:= 1;
+	ExtConfig.aData[35]			:= 16#FF;(*function*)
+
+	ExtConfig.aIndex[36]			:= 16#3107;(* 8. Modul *)
+	ExtConfig.aSubIndex[36]		:= 6;(*channel 4 mode*)
+	ExtConfig.aBytes[36]			:= 1;
+	ExtConfig.aData[36]			:= 16#FF;(*function*)
+
+(*################################################################################*)
+	(*e.g. digitalinput ODI42C  fast*)
+
+	ExtConfig.aIndex[37]			:= 16#3108;(* 9. Modul *)
+	ExtConfig.aSubIndex[37]		:= 1;(*diagnostics alarm*)
+	ExtConfig.aBytes[37]			:= 1;
+	ExtConfig.aData[37]			:= 2#00000000;(*bit 6 / 0=off, 1=alarm on(40h)*)
+
+	ExtConfig.aIndex[38]			:= 16#3108;(* 9. Modul *)
+	ExtConfig.aSubIndex[38]		:= 2;(*delay DI0*)
+	ExtConfig.aBytes[38]			:= 1;
+	ExtConfig.aData[38]			:= 16#02;(*function  	00h = 1탎
+														02h = 3탎 
+														04h = 10탎 
+														07h = 86탎 
+														09h = 342탎 
+														0Ch = 2731탎 
+														*)
+
+	ExtConfig.aIndex[39]			:= 16#3108;(* 9. Modul *)
+	ExtConfig.aSubIndex[39]		:= 3;(*delay DI1*)
+	ExtConfig.aBytes[39]			:= 1;
+	ExtConfig.aData[39]			:= 16#02;(*function*)
+
+	ExtConfig.aIndex[40]			:= 16#3108;(* 9. Modul *)
+	ExtConfig.aSubIndex[40]		:= 4;(*delay DI2*)
+	ExtConfig.aBytes[40]			:= 1;
+	ExtConfig.aData[40]			:= 16#02;(*function*)
+
+	ExtConfig.aIndex[41]			:= 16#3108;(* 9. Modul *)
+	ExtConfig.aSubIndex[41]		:= 5;(*delay DI3*)
+	ExtConfig.aBytes[41]			:= 1;
+	ExtConfig.aData[41]			:= 16#02;(*function*)
+
+(*################################################################################*)
+	(*e.g. digitalinput ODI24C  Timestamp*)
+
+	ExtConfig.aIndex[42]			:= 16#310A;(* 11. Modul *)
+	ExtConfig.aSubIndex[42]		:= 3;(*delay DI0*)
+	ExtConfig.aBytes[42]			:= 1;
+	ExtConfig.aData[42]			:= 16#02;(*function  	00h = 1탎
+														02h = 3탎 
+														04h = 10탎 
+														07h = 86탎 
+														09h = 342탎 
+														0Ch = 2731탎 
+														*)
+
+	ExtConfig.aIndex[43]			:= 16#310A;(* 11. Modul *)
+	ExtConfig.aSubIndex[43]		:= 4;(*delay DI1*)
+	ExtConfig.aBytes[43]			:= 1;
+	ExtConfig.aData[43]			:= 16#02;(*function*)
+
+	ExtConfig.aIndex[44]			:= 16#310A;(* 11. Modul *)
+	ExtConfig.aSubIndex[44]		:= 5;(*rising edge*)
+	ExtConfig.aBytes[44]			:= 1;
+	ExtConfig.aData[44]			:= 2#11;(*0 = 0ff, 1 = on*)
+
+	ExtConfig.aIndex[45]			:= 16#310A;(* 11. Modul *)
+	ExtConfig.aSubIndex[45]		:= 6;(*falling edge*)
+	ExtConfig.aBytes[45]			:= 1;
+	ExtConfig.aData[45]			:= 2#00;(*0 = 0ff, 1 = on*)
+*)
+
+(*################################################################################*)
+(*################################################################################*)
+
+	(********************************************** Additional configuration. Default values are in most cases sufficient *****************************************************)
+
+	ExtConfig.TimeOut			:= 10000;	(* [ms]. If the Init-Sequence takes longer than this TimeOut time --> Error
+														this TimeOut/50 --> Watchdog Error
+														this TimeOut/200 --> send Heartbeat *)
+	ExtConfig.Inhibit_digital		:=50; (*Repetition delay [value x 100 킪] *)
+	ExtConfig.Inhibit_analog		:=500; (*Repetition delay [value x 100 킪] *)
+
+
+	Done := TRUE;
+
+END_IF
+END_FUNCTION_BLOCK
+
+LIBRARY
+05_Utilities\MPLCSEWIOSystemC.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 2
+MPLC_ConnectSEWIOC: 2048
+MPLCParamRW_SEWIOC: 2048
+NumOfGVLs: 2
+GlobalVar_SEWIOSystemC: 2048
+Version_MPLCSEWIOSystemC: 2048
+END_LIBRARY
+
+LIBRARY
+Internal\MPLCIntern_SEWIOSystemC.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 1
+FB_CheckandRegister_PDO: 2048
+NumOfGVLs: 0
+END_LIBRARY

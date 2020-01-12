@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SEWView Name="Netzwerk">
+  <Comment />
+  <CreationTime />
+  <LastWriteTime>19.09.2018 23:58:51</LastWriteTime>
+  <MMSVersion>6.2.0.1</MMSVersion>
+  <SyntaxVersion>4.0</SyntaxVersion>
+  <OSVersion>Microsoft Windows NT 6.1.7601 Service Pack 1</OSVersion>
+  <Nodes>
+    <RootNode Expand="true" Name="Netzwerk">
+      <MediumNode Expand="true" MediumType="Ethernet">
+        <DeviceNode Expand="false" Signature="Carrier02">
+          <Gateway>
+            <Value>true</Value>
+          </Gateway>
+          <RealtimeEthernet>Profinet</RealtimeEthernet>
+          <RoutingInfo Channel="UseChannel2">
+            <Address>192.168.20.17</Address>
+            <AddressType>IPAddress</AddressType>
+            <AddressData adr0="3" adr1="0" adr2="0" ch1="0" ch2="0" />
+          </RoutingInfo>
+          <Topology>
+            <Subchannels />
+            <EntryCount>0</EntryCount>
+            <Valid>false</Valid>
+            <Flat>false</Flat>
+          </Topology>
+        </DeviceNode>
+        <DeviceNode Expand="false" Signature="Carrier01">
+          <State>
+            <Flags>InitiallySelected</Flags>
+          </State>
+          <Gateway>
+            <Value>true</Value>
+          </Gateway>
+          <RealtimeEthernet>Profinet</RealtimeEthernet>
+          <RoutingInfo Channel="UseChannel2">
+            <Address>192.168.20.13</Address>
+            <AddressType>IPAddress</AddressType>
+            <AddressData adr0="0" adr1="0" adr2="0" ch1="0" ch2="0" />
+          </RoutingInfo>
+          <Topology>
+            <Subchannels />
+            <EntryCount>0</EntryCount>
+            <Valid>false</Valid>
+            <Flat>false</Flat>
+          </Topology>
+        </DeviceNode>
+        <RoutingInfo Channel="UseChannel2">
+          <Address>0</Address>
+          <AddressType>ByteAddress</AddressType>
+          <AddressData adr0="0" adr1="0" adr2="0" ch1="0" ch2="0" />
+        </RoutingInfo>
+        <BusNumber>0</BusNumber>
+      </MediumNode>
+    </RootNode>
+  </Nodes>
+  <CommunicationPlugs>
+    <Serial>
+      <Medium>etSerial</Medium>
+      <Active>false</Active>
+      <Open>true</Open>
+      <COM>1</COM>
+      <Baudrate>KB_9600</Baudrate>
+      <ParameterTimeout>100</ParameterTimeout>
+      <ParameterRetry>3</ParameterRetry>
+      <MultibyteTimeout>350</MultibyteTimeout>
+      <MultibyteRetry>3</MultibyteRetry>
+      <IsUsb>false</IsUsb>
+    </Serial>
+    <Ethernet>
+      <Medium>etEthernet</Medium>
+      <Active>true</Active>
+      <Open>false</Open>
+      <SmlpTimeout>1000</SmlpTimeout>
+      <EthercatTimeout>200</EthercatTimeout>
+    </Ethernet>
+    <None />
+    <None />
+  </CommunicationPlugs>
+  <CommunicationParams>
+    <Serial>
+      <AutoDetectionEnabled>true</AutoDetectionEnabled>
+      <PeerToPeerScan>true</PeerToPeerScan>
+    </Serial>
+    <Ethernet>
+      <SMLP>
+        <Active>true</Active>
+        <BroadcastAddress>192.168.20.255</BroadcastAddress>
+        <ServerList />
+        <ExcludeList />
+        <BroadcastDurance>1</BroadcastDurance>
+      </SMLP>
+      <ETHERCAT>
+        <Active>false</Active>
+        <Start>1001</Start>
+        <End>1010</End>
+        <ShowDurance>false</ShowDurance>
+        <MasterList />
+        <UseEcServer>false</UseEcServer>
+        <BroadcastAddress>255.255.255.255</BroadcastAddress>
+      </ETHERCAT>
+    </Ethernet>
+    <None />
+    <None />
+  </CommunicationParams>
+  <SMLPAddressTable>
+    <List>
+      <SmlpTabEntry>
+        <IP>192.168.20.17</IP>
+        <Handle>3</Handle>
+      </SmlpTabEntry>
+      <SmlpTabEntry>
+        <IP>192.168.20.13</IP>
+        <Handle>0</Handle>
+      </SmlpTabEntry>
+    </List>
+  </SMLPAddressTable>
+  <EthercatAddressTable>
+    <List />
+  </EthercatAddressTable>
+  <KLinkAddressTable>
+    <List />
+  </KLinkAddressTable>
+</SEWView>

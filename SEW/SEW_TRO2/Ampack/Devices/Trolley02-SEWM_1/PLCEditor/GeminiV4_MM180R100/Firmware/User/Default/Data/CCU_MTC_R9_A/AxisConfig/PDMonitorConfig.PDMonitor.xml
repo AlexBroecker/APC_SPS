@@ -1,0 +1,1803 @@
+<?xml version="1.0"?>
+<Config_AxisPDMonitor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<VersionNumber>0.0</VersionNumber>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>SEW Controller</GroupnameDE>
+    <GroupnameEN>SEW Controller</GroupnameEN>
+    <GroupnameFR>Contrôleur SEW</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>8</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Statuswort</CaptionDE>
+    <CaptionEN>Status word</CaptionEN>
+    <CaptionFR>Mot d'état</CaptionFR>
+    <GroupnameDE>SEW Controller</GroupnameDE>
+    <GroupnameEN>SEW Controller</GroupnameEN>
+    <GroupnameFR>Contrôleur SEW</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Wartungsschalter, 1=Bit01: Toggle, 2=Bit02: Reserviert, 3=Bit03: Reserviert, 4=Bit04: Datensatz vorhanden, 5=Bit05: Autoreload konfig., 6=Bit06: Warnung, 7=Bit07: Fehler</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Maintenace switch, 1=Bit01: Toggle, 2=Bit02: Reserved, 3=Bit03: Reserved, 4=Bit04: Dataset exists, 5=Bit05: Autoreload config., 6=Bit06: Warning, 7=Bit07: Error</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Interrupteur marche/arrêt, 1=Bit01: Toggle, 2=Bit02: Reservé, 3=Bit03: Reservé, 4=Bit04: Jeu de données disponible, 5=Bit05: Autoreload config., 6=Bit06: Avertissement, 7=Bit07: Défaut</ExtCaptionsFR>
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Binäreingänge</CaptionDE>
+    <CaptionEN>Binary inputs</CaptionEN>
+    <CaptionFR>Entrées binaires</CaptionFR>
+    <GroupnameDE>SEW Controller</GroupnameDE>
+    <GroupnameEN>SEW Controller</GroupnameEN>
+    <GroupnameFR>Contrôleur SEW</GroupnameFR>
+    <ExtCaptionsDE>0=DI0, 1=DI1, 2=DI2, 3=DI3, 4=DI4, 5=DI5, 6=DI6, 7=DI7, 8=DI8, 9=DI9, 10=DI10, 11=DI11, 12=DI12, 13=DI13, 14=DI14, 15=DI15</ExtCaptionsDE>
+    <ExtCaptionsEN>0=DI0, 1=DI1, 2=DI2, 3=DI3, 4=DI4, 5=DI5, 6=DI6, 7=DI7, 8=DI8, 9=DI9, 10=DI10, 11=DI11, 12=DI12, 13=DI13, 14=DI14, 15=DI15</ExtCaptionsEN>
+    <ExtCaptionsFR>0=DI0, 1=DI1, 2=DI2, 3=DI3, 4=DI4, 5=DI5, 6=DI6, 7=DI7, 8=DI8, 9=DI9, 10=DI10, 11=DI11, 12=DI12, 13=DI13, 14=DI14, 15=DI15</ExtCaptionsFR>
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>SEW Controller</GroupnameDE>
+    <GroupnameEN>SEW Controller</GroupnameEN>
+    <GroupnameFR>Contrôleur SEW</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Steuerwort</CaptionDE>
+    <CaptionEN>Control word</CaptionEN>
+    <CaptionFR>Mot de commande</CaptionFR>
+    <GroupnameDE>SEW Controller</GroupnameDE>
+    <GroupnameEN>SEW Controller</GroupnameEN>
+    <GroupnameFR>Contrôleur SEW</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Download Datensatz, 1=Bit01: Upload Datensatz, 2=Bit02: Upload Datensatz + AutoReload, 3=Bit03: Simulation Mode Off, 4=Bit04: Auto Konfiguration Off, 5=Bit05: Reserviert (Neustart Applikation), 6=Bit06: Neustart System, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Download dataset, 1=Bit01: Upload dataset, 2=Bit02: Upload dataset + autoreload, 3=Bit03: Simulation mode off, 4=Bit04: Auto configuration off, 5=Bit05: Reserved (Restart application), 6=Bit06: Reboot system, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: transfert PC-&gt;var. jeu de données, 1=Bit01: transfert var.-&gt;PC jeu de données, 2=Bit02: autoreload + transfert var.-&gt;PC jeu de données, 3=Bit03: Mode simulation off, 4=Bit04: Configuration autom. off, 5=Bit05: réservé(e) (Redémarrage application), 6=Bit06: Redémarrage système, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsFR>
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Binärausgänge</CaptionDE>
+    <CaptionEN>Binary outputs</CaptionEN>
+    <CaptionFR>Sorties binaires</CaptionFR>
+    <GroupnameDE>SEW Controller</GroupnameDE>
+    <GroupnameEN>SEW Controller</GroupnameEN>
+    <GroupnameFR>Contrôleur SEW</GroupnameFR>
+    <ExtCaptionsDE>0=DO0, 1=DO1, 2=DO2, 3=DO3, 4=DO4, 5=DO5, 6=DO6, 7=DO7, 8=DO8, 9=DO9, 10=DO10, 11=DO11, 12=DO12, 13=DO13, 14=DO14, 15=DO15</ExtCaptionsDE>
+    <ExtCaptionsEN>0=DO0, 1=DO1, 2=DO2, 3=DO3, 4=DO4, 5=DO5, 6=DO6, 7=DO7, 8=DO8, 9=DO9, 10=DO10, 11=DO11, 12=DO12, 13=DO13, 14=DO14, 15=DO15</ExtCaptionsEN>
+    <ExtCaptionsFR>0=DO0, 1=DO1, 2=DO2, 3=DO3, 4=DO4, 5=DO5, 6=DO6, 7=DO7, 8=DO8, 9=DO9, 10=DO10, 11=DO11, 12=DO12, 13=DO13, 14=DO14, 15=DO15</ExtCaptionsFR>
+  </Elements>
+
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_1 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_1 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_1 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>8</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Statuswort</CaptionDE>
+    <CaptionEN>Status word</CaptionEN>
+    <CaptionFR>Mot d'état</CaptionFR>
+    <GroupnameDE>Axis_1 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_1 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_1 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Motor dreht, 1=Bit01: FU betriebsbereit, 2=Bit02: Antrieb referenziert, 3=Bit03: Soll-Drehz. erreicht, 4=Bit04: Bremse offen, 5=Bit05: Warnung, 6=Bit06: Fehler FU, 7=Bit07: Fehler Applikation, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Motor turning, 1=Bit01: Inverter ready, 2=Bit02: Drive referenced, 3=Bit03: Setpoint reached, 4=Bit04: Brake released, 5=Bit05: Warning, 6=Bit06: Error FC, 7=Bit07: Error Application, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Moteur tourne, 1=Bit01: Variateur prêt, 2=Bit02: Axe référencé, 3=Bit03: Consigne de vitesse atteinte, 4=Bit04: Frein débloqué, 5=Bit05: Avertissement, 6=Bit06: Défaut variateur, 7=Bit07: Défaut application, 8=Bit08: ModApp 2^0, 9=Bit09: ModApp 2^1, 10=Bit10: ModApp 2^2, 11=Bit11: ModApp 2^3, 12=Bit12: ModApp 2^4, 13=Bit13: ModApp 2^5, 14=Bit14: ModApp 2^6, 15=Bit15: ModApp 2^7</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Ist-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Actual speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Vitesse réelle (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_1 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_1 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_1 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Ausgangsstrom</CaptionDE>
+    <CaptionEN>Output current</CaptionEN>
+    <CaptionFR>Courant de sortie</CaptionFR>
+    <GroupnameDE>Axis_1 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_1 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_1 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_1 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_1 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_1 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Steuerwort</CaptionDE>
+    <CaptionEN>Control word</CaptionEN>
+    <CaptionFR>Mot de commande</CaptionFR>
+    <GroupnameDE>Axis_1 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_1 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_1 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Reglersperre, 1=Bit01: Freigabe/Schnellstopp, 2=Bit02: Freigabe/Halt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Fehler-Reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Controller inhibit, 1=Bit01: Enable/rapid stop, 2=Bit02: Enable/stop, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Error reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Verrouillage, 1=Bit01: Marche/Arrêt rapide, 2=Bit02: Marche/Arrêt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Reset défaut, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Soll-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Setpoint speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Consigne de vitesse (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_1 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_1 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_1 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>6</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>ms</Unit>
+    <CaptionDE>Rampe</CaptionDE>
+    <CaptionEN>Ramp</CaptionEN>
+    <CaptionFR>Rampe</CaptionFR>
+    <GroupnameDE>Axis_1 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_1 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_1 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_2 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_2 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_2 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>8</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Statuswort</CaptionDE>
+    <CaptionEN>Status word</CaptionEN>
+    <CaptionFR>Mot d'état</CaptionFR>
+    <GroupnameDE>Axis_2 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_2 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_2 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Motor dreht, 1=Bit01: FU betriebsbereit, 2=Bit02: Antrieb referenziert, 3=Bit03: Soll-Drehz. erreicht, 4=Bit04: Bremse offen, 5=Bit05: Warnung, 6=Bit06: Fehler FU, 7=Bit07: Fehler Applikation, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Motor turning, 1=Bit01: Inverter ready, 2=Bit02: Drive referenced, 3=Bit03: Setpoint reached, 4=Bit04: Brake released, 5=Bit05: Warning, 6=Bit06: Error FC, 7=Bit07: Error Application, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Moteur tourne, 1=Bit01: Variateur prêt, 2=Bit02: Axe référencé, 3=Bit03: Consigne de vitesse atteinte, 4=Bit04: Frein débloqué, 5=Bit05: Avertissement, 6=Bit06: Défaut variateur, 7=Bit07: Défaut application, 8=Bit08: ModApp 2^0, 9=Bit09: ModApp 2^1, 10=Bit10: ModApp 2^2, 11=Bit11: ModApp 2^3, 12=Bit12: ModApp 2^4, 13=Bit13: ModApp 2^5, 14=Bit14: ModApp 2^6, 15=Bit15: ModApp 2^7</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Ist-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Actual speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Vitesse réelle (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_2 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_2 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_2 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Ausgangsstrom</CaptionDE>
+    <CaptionEN>Output current</CaptionEN>
+    <CaptionFR>Courant de sortie</CaptionFR>
+    <GroupnameDE>Axis_2 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_2 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_2 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_2 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_2 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_2 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Steuerwort</CaptionDE>
+    <CaptionEN>Control word</CaptionEN>
+    <CaptionFR>Mot de commande</CaptionFR>
+    <GroupnameDE>Axis_2 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_2 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_2 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Reglersperre, 1=Bit01: Freigabe/Schnellstopp, 2=Bit02: Freigabe/Halt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Fehler-Reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Controller inhibit, 1=Bit01: Enable/rapid stop, 2=Bit02: Enable/stop, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Error reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Verrouillage, 1=Bit01: Marche/Arrêt rapide, 2=Bit02: Marche/Arrêt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Reset défaut, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Soll-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Setpoint speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Consigne de vitesse (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_2 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_2 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_2 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>6</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>ms</Unit>
+    <CaptionDE>Rampe</CaptionDE>
+    <CaptionEN>Ramp</CaptionEN>
+    <CaptionFR>Rampe</CaptionFR>
+    <GroupnameDE>Axis_2 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_2 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_2 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_3 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_3 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_3 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>8</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Statuswort</CaptionDE>
+    <CaptionEN>Status word</CaptionEN>
+    <CaptionFR>Mot d'état</CaptionFR>
+    <GroupnameDE>Axis_3 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_3 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_3 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Motor dreht, 1=Bit01: FU betriebsbereit, 2=Bit02: Antrieb referenziert, 3=Bit03: Soll-Drehz. erreicht, 4=Bit04: Bremse offen, 5=Bit05: Warnung, 6=Bit06: Fehler FU, 7=Bit07: Fehler Applikation, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Motor turning, 1=Bit01: Inverter ready, 2=Bit02: Drive referenced, 3=Bit03: Setpoint reached, 4=Bit04: Brake released, 5=Bit05: Warning, 6=Bit06: Error FC, 7=Bit07: Error Application, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Moteur tourne, 1=Bit01: Variateur prêt, 2=Bit02: Axe référencé, 3=Bit03: Consigne de vitesse atteinte, 4=Bit04: Frein débloqué, 5=Bit05: Avertissement, 6=Bit06: Défaut variateur, 7=Bit07: Défaut application, 8=Bit08: ModApp 2^0, 9=Bit09: ModApp 2^1, 10=Bit10: ModApp 2^2, 11=Bit11: ModApp 2^3, 12=Bit12: ModApp 2^4, 13=Bit13: ModApp 2^5, 14=Bit14: ModApp 2^6, 15=Bit15: ModApp 2^7</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Ist-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Actual speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Vitesse réelle (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_3 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_3 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_3 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Ausgangsstrom</CaptionDE>
+    <CaptionEN>Output current</CaptionEN>
+    <CaptionFR>Courant de sortie</CaptionFR>
+    <GroupnameDE>Axis_3 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_3 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_3 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_3 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_3 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_3 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Steuerwort</CaptionDE>
+    <CaptionEN>Control word</CaptionEN>
+    <CaptionFR>Mot de commande</CaptionFR>
+    <GroupnameDE>Axis_3 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_3 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_3 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Reglersperre, 1=Bit01: Freigabe/Schnellstopp, 2=Bit02: Freigabe/Halt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Fehler-Reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Controller inhibit, 1=Bit01: Enable/rapid stop, 2=Bit02: Enable/stop, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Error reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Verrouillage, 1=Bit01: Marche/Arrêt rapide, 2=Bit02: Marche/Arrêt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Reset défaut, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Soll-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Setpoint speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Consigne de vitesse (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_3 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_3 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_3 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>6</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>ms</Unit>
+    <CaptionDE>Rampe</CaptionDE>
+    <CaptionEN>Ramp</CaptionEN>
+    <CaptionFR>Rampe</CaptionFR>
+    <GroupnameDE>Axis_3 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_3 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_3 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_4 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_4 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_4 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>8</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Statuswort</CaptionDE>
+    <CaptionEN>Status word</CaptionEN>
+    <CaptionFR>Mot d'état</CaptionFR>
+    <GroupnameDE>Axis_4 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_4 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_4 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Motor dreht, 1=Bit01: FU betriebsbereit, 2=Bit02: Antrieb referenziert, 3=Bit03: Soll-Drehz. erreicht, 4=Bit04: Bremse offen, 5=Bit05: Warnung, 6=Bit06: Fehler FU, 7=Bit07: Fehler Applikation, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Motor turning, 1=Bit01: Inverter ready, 2=Bit02: Drive referenced, 3=Bit03: Setpoint reached, 4=Bit04: Brake released, 5=Bit05: Warning, 6=Bit06: Error FC, 7=Bit07: Error Application, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Moteur tourne, 1=Bit01: Variateur prêt, 2=Bit02: Axe référencé, 3=Bit03: Consigne de vitesse atteinte, 4=Bit04: Frein débloqué, 5=Bit05: Avertissement, 6=Bit06: Défaut variateur, 7=Bit07: Défaut application, 8=Bit08: ModApp 2^0, 9=Bit09: ModApp 2^1, 10=Bit10: ModApp 2^2, 11=Bit11: ModApp 2^3, 12=Bit12: ModApp 2^4, 13=Bit13: ModApp 2^5, 14=Bit14: ModApp 2^6, 15=Bit15: ModApp 2^7</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Ist-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Actual speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Vitesse réelle (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_4 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_4 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_4 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Ausgangsstrom</CaptionDE>
+    <CaptionEN>Output current</CaptionEN>
+    <CaptionFR>Courant de sortie</CaptionFR>
+    <GroupnameDE>Axis_4 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_4 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_4 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_4 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_4 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_4 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Steuerwort</CaptionDE>
+    <CaptionEN>Control word</CaptionEN>
+    <CaptionFR>Mot de commande</CaptionFR>
+    <GroupnameDE>Axis_4 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_4 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_4 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Reglersperre, 1=Bit01: Freigabe/Schnellstopp, 2=Bit02: Freigabe/Halt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Fehler-Reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Controller inhibit, 1=Bit01: Enable/rapid stop, 2=Bit02: Enable/stop, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Error reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Verrouillage, 1=Bit01: Marche/Arrêt rapide, 2=Bit02: Marche/Arrêt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Reset défaut, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Soll-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Setpoint speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Consigne de vitesse (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_4 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_4 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_4 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>6</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>ms</Unit>
+    <CaptionDE>Rampe</CaptionDE>
+    <CaptionEN>Ramp</CaptionEN>
+    <CaptionFR>Rampe</CaptionFR>
+    <GroupnameDE>Axis_4 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_4 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_4 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_5 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_5 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_5 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>8</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Statuswort</CaptionDE>
+    <CaptionEN>Status word</CaptionEN>
+    <CaptionFR>Mot d'état</CaptionFR>
+    <GroupnameDE>Axis_5 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_5 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_5 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Motor dreht, 1=Bit01: FU betriebsbereit, 2=Bit02: Antrieb referenziert, 3=Bit03: Soll-Drehz. erreicht, 4=Bit04: Bremse offen, 5=Bit05: Warnung, 6=Bit06: Fehler FU, 7=Bit07: Fehler Applikation, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Motor turning, 1=Bit01: Inverter ready, 2=Bit02: Drive referenced, 3=Bit03: Setpoint reached, 4=Bit04: Brake released, 5=Bit05: Warning, 6=Bit06: Error FC, 7=Bit07: Error Application, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Moteur tourne, 1=Bit01: Variateur prêt, 2=Bit02: Axe référencé, 3=Bit03: Consigne de vitesse atteinte, 4=Bit04: Frein débloqué, 5=Bit05: Avertissement, 6=Bit06: Défaut variateur, 7=Bit07: Défaut application, 8=Bit08: ModApp 2^0, 9=Bit09: ModApp 2^1, 10=Bit10: ModApp 2^2, 11=Bit11: ModApp 2^3, 12=Bit12: ModApp 2^4, 13=Bit13: ModApp 2^5, 14=Bit14: ModApp 2^6, 15=Bit15: ModApp 2^7</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Ist-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Actual speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Vitesse réelle (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_5 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_5 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_5 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Ausgangsstrom</CaptionDE>
+    <CaptionEN>Output current</CaptionEN>
+    <CaptionFR>Courant de sortie</CaptionFR>
+    <GroupnameDE>Axis_5 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_5 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_5 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_5 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_5 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_5 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Steuerwort</CaptionDE>
+    <CaptionEN>Control word</CaptionEN>
+    <CaptionFR>Mot de commande</CaptionFR>
+    <GroupnameDE>Axis_5 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_5 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_5 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Reglersperre, 1=Bit01: Freigabe/Schnellstopp, 2=Bit02: Freigabe/Halt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Fehler-Reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Controller inhibit, 1=Bit01: Enable/rapid stop, 2=Bit02: Enable/stop, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Error reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Verrouillage, 1=Bit01: Marche/Arrêt rapide, 2=Bit02: Marche/Arrêt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Reset défaut, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Soll-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Setpoint speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Consigne de vitesse (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_5 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_5 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_5 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>6</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>ms</Unit>
+    <CaptionDE>Rampe</CaptionDE>
+    <CaptionEN>Ramp</CaptionEN>
+    <CaptionFR>Rampe</CaptionFR>
+    <GroupnameDE>Axis_5 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_5 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_5 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_6 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_6 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_6 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>8</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Statuswort</CaptionDE>
+    <CaptionEN>Status word</CaptionEN>
+    <CaptionFR>Mot d'état</CaptionFR>
+    <GroupnameDE>Axis_6 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_6 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_6 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Motor dreht, 1=Bit01: FU betriebsbereit, 2=Bit02: Antrieb referenziert, 3=Bit03: Soll-Drehz. erreicht, 4=Bit04: Bremse offen, 5=Bit05: Warnung, 6=Bit06: Fehler FU, 7=Bit07: Fehler Applikation, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Motor turning, 1=Bit01: Inverter ready, 2=Bit02: Drive referenced, 3=Bit03: Setpoint reached, 4=Bit04: Brake released, 5=Bit05: Warning, 6=Bit06: Error FC, 7=Bit07: Error Application, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Moteur tourne, 1=Bit01: Variateur prêt, 2=Bit02: Axe référencé, 3=Bit03: Consigne de vitesse atteinte, 4=Bit04: Frein débloqué, 5=Bit05: Avertissement, 6=Bit06: Défaut variateur, 7=Bit07: Défaut application, 8=Bit08: ModApp 2^0, 9=Bit09: ModApp 2^1, 10=Bit10: ModApp 2^2, 11=Bit11: ModApp 2^3, 12=Bit12: ModApp 2^4, 13=Bit13: ModApp 2^5, 14=Bit14: ModApp 2^6, 15=Bit15: ModApp 2^7</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Ist-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Actual speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Vitesse réelle (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_6 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_6 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_6 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Ausgangsstrom</CaptionDE>
+    <CaptionEN>Output current</CaptionEN>
+    <CaptionFR>Courant de sortie</CaptionFR>
+    <GroupnameDE>Axis_6 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_6 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_6 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_6 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_6 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_6 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Steuerwort</CaptionDE>
+    <CaptionEN>Control word</CaptionEN>
+    <CaptionFR>Mot de commande</CaptionFR>
+    <GroupnameDE>Axis_6 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_6 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_6 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Reglersperre, 1=Bit01: Freigabe/Schnellstopp, 2=Bit02: Freigabe/Halt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Fehler-Reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Controller inhibit, 1=Bit01: Enable/rapid stop, 2=Bit02: Enable/stop, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Error reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Verrouillage, 1=Bit01: Marche/Arrêt rapide, 2=Bit02: Marche/Arrêt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Reset défaut, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Soll-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Setpoint speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Consigne de vitesse (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_6 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_6 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_6 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>6</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>ms</Unit>
+    <CaptionDE>Rampe</CaptionDE>
+    <CaptionEN>Ramp</CaptionEN>
+    <CaptionFR>Rampe</CaptionFR>
+    <GroupnameDE>Axis_6 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_6 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_6 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_7 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_7 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_7 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>8</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Statuswort</CaptionDE>
+    <CaptionEN>Status word</CaptionEN>
+    <CaptionFR>Mot d'état</CaptionFR>
+    <GroupnameDE>Axis_7 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_7 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_7 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Motor dreht, 1=Bit01: FU betriebsbereit, 2=Bit02: Antrieb referenziert, 3=Bit03: Soll-Drehz. erreicht, 4=Bit04: Bremse offen, 5=Bit05: Warnung, 6=Bit06: Fehler FU, 7=Bit07: Fehler Applikation, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Motor turning, 1=Bit01: Inverter ready, 2=Bit02: Drive referenced, 3=Bit03: Setpoint reached, 4=Bit04: Brake released, 5=Bit05: Warning, 6=Bit06: Error FC, 7=Bit07: Error Application, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Moteur tourne, 1=Bit01: Variateur prêt, 2=Bit02: Axe référencé, 3=Bit03: Consigne de vitesse atteinte, 4=Bit04: Frein débloqué, 5=Bit05: Avertissement, 6=Bit06: Défaut variateur, 7=Bit07: Défaut application, 8=Bit08: ModApp 2^0, 9=Bit09: ModApp 2^1, 10=Bit10: ModApp 2^2, 11=Bit11: ModApp 2^3, 12=Bit12: ModApp 2^4, 13=Bit13: ModApp 2^5, 14=Bit14: ModApp 2^6, 15=Bit15: ModApp 2^7</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Ist-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Actual speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Vitesse réelle (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_7 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_7 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_7 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Ausgangsstrom</CaptionDE>
+    <CaptionEN>Output current</CaptionEN>
+    <CaptionFR>Courant de sortie</CaptionFR>
+    <GroupnameDE>Axis_7 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_7 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_7 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_7 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_7 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_7 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Steuerwort</CaptionDE>
+    <CaptionEN>Control word</CaptionEN>
+    <CaptionFR>Mot de commande</CaptionFR>
+    <GroupnameDE>Axis_7 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_7 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_7 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Reglersperre, 1=Bit01: Freigabe/Schnellstopp, 2=Bit02: Freigabe/Halt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Fehler-Reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Controller inhibit, 1=Bit01: Enable/rapid stop, 2=Bit02: Enable/stop, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Error reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Verrouillage, 1=Bit01: Marche/Arrêt rapide, 2=Bit02: Marche/Arrêt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Reset défaut, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Soll-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Setpoint speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Consigne de vitesse (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_7 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_7 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_7 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>6</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>ms</Unit>
+    <CaptionDE>Rampe</CaptionDE>
+    <CaptionEN>Ramp</CaptionEN>
+    <CaptionFR>Rampe</CaptionFR>
+    <GroupnameDE>Axis_7 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_7 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_7 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_8 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_8 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_8 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>8</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Statuswort</CaptionDE>
+    <CaptionEN>Status word</CaptionEN>
+    <CaptionFR>Mot d'état</CaptionFR>
+    <GroupnameDE>Axis_8 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_8 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_8 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Motor dreht, 1=Bit01: FU betriebsbereit, 2=Bit02: Antrieb referenziert, 3=Bit03: Soll-Drehz. erreicht, 4=Bit04: Bremse offen, 5=Bit05: Warnung, 6=Bit06: Fehler FU, 7=Bit07: Fehler Applikation, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Motor turning, 1=Bit01: Inverter ready, 2=Bit02: Drive referenced, 3=Bit03: Setpoint reached, 4=Bit04: Brake released, 5=Bit05: Warning, 6=Bit06: Error FC, 7=Bit07: Error Application, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Moteur tourne, 1=Bit01: Variateur prêt, 2=Bit02: Axe référencé, 3=Bit03: Consigne de vitesse atteinte, 4=Bit04: Frein débloqué, 5=Bit05: Avertissement, 6=Bit06: Défaut variateur, 7=Bit07: Défaut application, 8=Bit08: ModApp 2^0, 9=Bit09: ModApp 2^1, 10=Bit10: ModApp 2^2, 11=Bit11: ModApp 2^3, 12=Bit12: ModApp 2^4, 13=Bit13: ModApp 2^5, 14=Bit14: ModApp 2^6, 15=Bit15: ModApp 2^7</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Ist-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Actual speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Vitesse réelle (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_8 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_8 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_8 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Ausgangsstrom</CaptionDE>
+    <CaptionEN>Output current</CaptionEN>
+    <CaptionFR>Courant de sortie</CaptionFR>
+    <GroupnameDE>Axis_8 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_8 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_8 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_8 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_8 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_8 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Steuerwort</CaptionDE>
+    <CaptionEN>Control word</CaptionEN>
+    <CaptionFR>Mot de commande</CaptionFR>
+    <GroupnameDE>Axis_8 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_8 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_8 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Reglersperre, 1=Bit01: Freigabe/Schnellstopp, 2=Bit02: Freigabe/Halt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Fehler-Reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Controller inhibit, 1=Bit01: Enable/rapid stop, 2=Bit02: Enable/stop, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Error reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Verrouillage, 1=Bit01: Marche/Arrêt rapide, 2=Bit02: Marche/Arrêt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Reset défaut, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Soll-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Setpoint speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Consigne de vitesse (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_8 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_8 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_8 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>6</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>ms</Unit>
+    <CaptionDE>Rampe</CaptionDE>
+    <CaptionEN>Ramp</CaptionEN>
+    <CaptionFR>Rampe</CaptionFR>
+    <GroupnameDE>Axis_8 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_8 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_8 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_9 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_9 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_9 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>8</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Statuswort</CaptionDE>
+    <CaptionEN>Status word</CaptionEN>
+    <CaptionFR>Mot d'état</CaptionFR>
+    <GroupnameDE>Axis_9 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_9 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_9 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Motor dreht, 1=Bit01: FU betriebsbereit, 2=Bit02: Antrieb referenziert, 3=Bit03: Soll-Drehz. erreicht, 4=Bit04: Bremse offen, 5=Bit05: Warnung, 6=Bit06: Fehler FU, 7=Bit07: Fehler Applikation, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Motor turning, 1=Bit01: Inverter ready, 2=Bit02: Drive referenced, 3=Bit03: Setpoint reached, 4=Bit04: Brake released, 5=Bit05: Warning, 6=Bit06: Error FC, 7=Bit07: Error Application, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Moteur tourne, 1=Bit01: Variateur prêt, 2=Bit02: Axe référencé, 3=Bit03: Consigne de vitesse atteinte, 4=Bit04: Frein débloqué, 5=Bit05: Avertissement, 6=Bit06: Défaut variateur, 7=Bit07: Défaut application, 8=Bit08: ModApp 2^0, 9=Bit09: ModApp 2^1, 10=Bit10: ModApp 2^2, 11=Bit11: ModApp 2^3, 12=Bit12: ModApp 2^4, 13=Bit13: ModApp 2^5, 14=Bit14: ModApp 2^6, 15=Bit15: ModApp 2^7</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Ist-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Actual speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Vitesse réelle (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_9 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_9 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_9 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Ausgangsstrom</CaptionDE>
+    <CaptionEN>Output current</CaptionEN>
+    <CaptionFR>Courant de sortie</CaptionFR>
+    <GroupnameDE>Axis_9 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_9 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_9 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_9 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_9 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_9 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Steuerwort</CaptionDE>
+    <CaptionEN>Control word</CaptionEN>
+    <CaptionFR>Mot de commande</CaptionFR>
+    <GroupnameDE>Axis_9 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_9 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_9 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Reglersperre, 1=Bit01: Freigabe/Schnellstopp, 2=Bit02: Freigabe/Halt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Fehler-Reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Controller inhibit, 1=Bit01: Enable/rapid stop, 2=Bit02: Enable/stop, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Error reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Verrouillage, 1=Bit01: Marche/Arrêt rapide, 2=Bit02: Marche/Arrêt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Reset défaut, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Soll-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Setpoint speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Consigne de vitesse (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_9 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_9 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_9 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>6</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>ms</Unit>
+    <CaptionDE>Rampe</CaptionDE>
+    <CaptionEN>Ramp</CaptionEN>
+    <CaptionFR>Rampe</CaptionFR>
+    <GroupnameDE>Axis_9 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_9 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_9 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_10 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_10 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_10 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>8</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Statuswort</CaptionDE>
+    <CaptionEN>Status word</CaptionEN>
+    <CaptionFR>Mot d'état</CaptionFR>
+    <GroupnameDE>Axis_10 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_10 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_10 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Motor dreht, 1=Bit01: FU betriebsbereit, 2=Bit02: Antrieb referenziert, 3=Bit03: Soll-Drehz. erreicht, 4=Bit04: Bremse offen, 5=Bit05: Warnung, 6=Bit06: Fehler FU, 7=Bit07: Fehler Applikation, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Motor turning, 1=Bit01: Inverter ready, 2=Bit02: Drive referenced, 3=Bit03: Setpoint reached, 4=Bit04: Brake released, 5=Bit05: Warning, 6=Bit06: Error FC, 7=Bit07: Error Application, 8=Bit08: AppMod 2^0, 9=Bit09: AppMod 2^1, 10=Bit10: AppMod 2^2, 11=Bit11: AppMod 2^3, 12=Bit12: AppMod 2^4, 13=Bit13: AppMod 2^5, 14=Bit14: AppMod 2^6, 15=Bit15: AppMod 2^7</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Moteur tourne, 1=Bit01: Variateur prêt, 2=Bit02: Axe référencé, 3=Bit03: Consigne de vitesse atteinte, 4=Bit04: Frein débloqué, 5=Bit05: Avertissement, 6=Bit06: Défaut variateur, 7=Bit07: Défaut application, 8=Bit08: ModApp 2^0, 9=Bit09: ModApp 2^1, 10=Bit10: ModApp 2^2, 11=Bit11: ModApp 2^3, 12=Bit12: ModApp 2^4, 13=Bit13: ModApp 2^5, 14=Bit14: ModApp 2^6, 15=Bit15: ModApp 2^7</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Ist-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Actual speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Vitesse réelle (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_10 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_10 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_10 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>false</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Ausgangsstrom</CaptionDE>
+    <CaptionEN>Output current</CaptionEN>
+    <CaptionFR>Courant de sortie</CaptionFR>
+    <GroupnameDE>Axis_10 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_10 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_10 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>2</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>TitleLine</CaptionDE>
+    <CaptionEN>TitleLine</CaptionEN>
+    <CaptionFR>TitleLine</CaptionFR>
+    <GroupnameDE>Axis_10 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_10 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_10 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>3</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit />
+    <CaptionDE>Steuerwort</CaptionDE>
+    <CaptionEN>Control word</CaptionEN>
+    <CaptionFR>Mot de commande</CaptionFR>
+    <GroupnameDE>Axis_10 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_10 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_10 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE>0=Bit00: Reglersperre, 1=Bit01: Freigabe/Schnellstopp, 2=Bit02: Freigabe/Halt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Fehler-Reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsDE>
+    <ExtCaptionsEN>0=Bit00: Controller inhibit, 1=Bit01: Enable/rapid stop, 2=Bit02: Enable/stop, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Error reset, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsEN>
+    <ExtCaptionsFR>0=Bit00: Verrouillage, 1=Bit01: Marche/Arrêt rapide, 2=Bit02: Marche/Arrêt, 3=Bit03:, 4=Bit04:, 5=Bit05:, 6=Bit06: Reset défaut, 7=Bit07:, 8=Bit08:, 9=Bit09:, 10=Bit10:, 11=Bit11:, 12=Bit12:, 13=Bit13:, 14=Bit14:, 15=Bit15:</ExtCaptionsFR>
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>0</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>0.2*1/min</Unit>
+    <CaptionDE>Soll-Drehzahl (1 digit = 0.2 1/min)</CaptionDE>
+    <CaptionEN>Setpoint speed (1 digit = 0.2 rpm)</CaptionEN>
+    <CaptionFR>Consigne de vitesse (1 digit = 0.2 1/min)</CaptionFR>
+    <GroupnameDE>Axis_10 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_10 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_10 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+<Elements xsi:type="cPDElmnt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Input>true</Input>
+    <LineMode>0</LineMode>
+    <DataType>0</DataType>
+    <DataDispMode>6</DataDispMode>
+    <DataDecFactor>1</DataDecFactor>
+    <BackgroundColor>0</BackgroundColor>
+    <Unit>ms</Unit>
+    <CaptionDE>Rampe</CaptionDE>
+    <CaptionEN>Ramp</CaptionEN>
+    <CaptionFR>Rampe</CaptionFR>
+    <GroupnameDE>Axis_10 (VelCtrl_3PD)</GroupnameDE>
+    <GroupnameEN>Axis_10 (VelCtrl_3PD)</GroupnameEN>
+    <GroupnameFR>Axis_10 (VelCtrl_3DP)</GroupnameFR>
+    <ExtCaptionsDE />
+    <ExtCaptionsEN />
+    <ExtCaptionsFR />
+    <CommentDE />
+    <CommentEN />
+    <CommentFR />
+  </Elements>
+
+</Config_AxisPDMonitor>

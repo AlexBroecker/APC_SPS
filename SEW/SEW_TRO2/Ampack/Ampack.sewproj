@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MotionStudioProject Name="Ampack">
+  <ActiveNetworkView>Netzwerk</ActiveNetworkView>
+  <SyntaxVersion>4.0</SyntaxVersion>
+  <CreationTime>10.07.2018 09:05:11</CreationTime>
+  <LastWriteTime>05.12.2019 00:03:52</LastWriteTime>
+  <MMSVersion>6.2.0.1</MMSVersion>
+  <OSVersion>Microsoft Windows NT 6.2.9200.0</OSVersion>
+  <Author />
+  <Comment />
+  <TCI>false</TCI>
+  <ShortSig>false</ShortSig>
+  <TCISingle>false</TCISingle>
+  <Resources />
+  <Devices>
+    <Device Name="Trolley02-SEWMoviPLC" ProfinetName="" Signature="Trolley02-SEWM_1">
+      <TciDeviceRef />
+      <Type>MoviPLCRealEth</Type>
+      <FirmwarePart>1820 758 8</FirmwarePart>
+      <FirmwareStatus>19</FirmwareStatus>
+      <SubDevices />
+      <Label>MOVI-PLC DHR41B (PROFINET)</Label>
+    </Device>
+    <Device Name="Trolley" Signature="Trolley">
+      <TciDeviceRef />
+      <Type>MDX_B</Type>
+      <FirmwarePart>1822 091 6</FirmwarePart>
+      <FirmwareStatus>22</FirmwareStatus>
+      <SubDevices />
+      <Label>MDX61B0110-5A3</Label>
+    </Device>
+    <Device Name="Lift" Signature="Lift">
+      <TciDeviceRef />
+      <Type>MDX_B</Type>
+      <FirmwarePart>1822 091 6</FirmwarePart>
+      <FirmwareStatus>22</FirmwareStatus>
+      <SubDevices />
+      <Label>MDX61B0370-503</Label>
+    </Device>
+    <Device Name="Teleskop" Signature="Teleskop">
+      <TciDeviceRef />
+      <Type>DrcKPDSC</Type>
+      <FirmwarePart>1 824 416 5</FirmwarePart>
+      <FirmwareStatus>14</FirmwareStatus>
+      <SubDevices />
+      <Label>DRCx-xxx-DSC-A-00</Label>
+    </Device>
+    <Device Name="Teleskop - Leistungsteil" Signature="Teleskop - Leistun_1">
+      <TciDeviceRef />
+      <Type>DrcLT</Type>
+      <FirmwarePart>1 824 406 8</FirmwarePart>
+      <FirmwareStatus>16</FirmwareStatus>
+      <SubDevices />
+      <Label>DRC2-503-xxx-A-00</Label>
+    </Device>
+  </Devices>
+  <DeviceGroups>
+    <DeviceGroup Type="Drc" PathIDs="DSC||">
+      <MainDevice>Teleskop</MainDevice>
+      <Device>Teleskop</Device>
+      <Device>Teleskop - Leistun_1</Device>
+    </DeviceGroup>
+  </DeviceGroups>
+  <NetworkViews>
+    <NetworkView Name="Netzwerk">
+      <RelativeFilePath>Views\Netzwerk.sewview</RelativeFilePath>
+      <Comment />
+    </NetworkView>
+  </NetworkViews>
+  <ProjectView Name="Overview">
+    <RelativeFilePath>Views\Overview.sewview</RelativeFilePath>
+  </ProjectView>
+</MotionStudioProject>

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AxisConfigA8>
+  <General.AxisLimits.EnableRapidStopDeceleration>2000</General.AxisLimits.EnableRapidStopDeceleration>
+  <General.AxisLimits.EnableStopDeceleration>2000</General.AxisLimits.EnableStopDeceleration>
+  <General.AxisType>0</General.AxisType>
+  <General.CommunicationNodeAxis>0</General.CommunicationNodeAxis>
+  <General.CommunicationTimeOut>200</General.CommunicationTimeOut>
+  <General.DriveSettings.MoviDriveB.SmoothEnable>FALSE</General.DriveSettings.MoviDriveB.SmoothEnable>
+  <General.UserUnits.Denominator>1</General.UserUnits.Denominator>
+  <General.UserUnits.Numerator>65535</General.UserUnits.Numerator>
+  <General.UserUnits.UserUnitMode>1</General.UserUnits.UserUnitMode>
+  <Homing.Activate>FALSE</Homing.Activate>
+  <IO.AnalogInputMode>1</IO.AnalogInputMode>
+  <Jog.Activate>FALSE</Jog.Activate>
+  <Positioning.Activate>FALSE</Positioning.Activate>
+  <PositioningRelative.Activate>FALSE</PositioningRelative.Activate>
+  <SendObject.Activate>FALSE</SendObject.Activate>
+  <TouchProbe.Activate>FALSE</TouchProbe.Activate>
+  <Transparent.Activate>FALSE</Transparent.Activate>
+  <Velocity.Activate>TRUE</Velocity.Activate>
+</AxisConfigA8>

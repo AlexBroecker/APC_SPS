@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Versioninfo>
+  <Text Language="DE">
+    <Title>Installierte Version</Title>
+    <Line>Gerät: MOVI-PLCadvanced</Line>
+    <Line>Lib-Version: 180</Line>
+    <Line>Lib-Release: 100</Line>
+    <Line>Fw-Build: 1123</Line>
+  </Text>
+  <Text Language="EN">
+    <Title>Installed version</Title>
+   <Line>Gerät: MOVI-PLCadvanced</Line>
+    <Line>Lib-Version: 180</Line>
+    <Line>Lib-Release: 100</Line>
+    <Line>Fw-Build: 1123</Line>
+  </Text>
+  <Text Language="FR">
+    <Title>Installed version</Title>
+   <Line>Gerät: MOVI-PLCadvanced</Line>
+    <Line>Lib-Version: 180</Line>
+    <Line>Lib-Release: 100</Line>
+    <Line>Fw-Build: 1123</Line>
+  </Text>
+  <UpdateVersion>2</UpdateVersion>
+<!-- Der Eintrag TargetPath enthält den Pfad, in dem das TSP hinterlegt ist -->
+  <TargetPath />
+</Versioninfo>

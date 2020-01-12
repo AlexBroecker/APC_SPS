@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<UnitDataSync xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!-- Stand 27.09.2011 - Targetspezifische Variante für MotionStudio SewDataManager-Ordner -->
+  <OnlinePath>sync://default.sync</OnlinePath>
+  <Version>1</Version>
+  <Mode>FirmwareParameterApplication</Mode>
+  <FirmwareData>
+    <Type>SewCopy</Type>
+    <LocalPath>VersionControl.sewcopy</LocalPath>
+    <VersionCheck>
+      <!-- Diese Parameter sind in der Offline-Parameter-Datei auf diese Werte modifiziert: -->
+      <Parameter Index="8300" SubIndex="0" Value="2820758819" /><!-- 1 820 758 8.19 -->
+      <Parameter Index="8311" SubIndex="0" Value="1123" />
+    </VersionCheck>
+    <VersionMin>
+      <!-- Ab dieser Version ist ein Update möglich -->
+      <Parameter Index="8311" SubIndex="0" Value="1042" />
+    </VersionMin>
+  </FirmwareData>
+  <ParameterData>
+    <Type>FC02</Type>
+    <LocalPath>MoviPLCRealEth.vdmoviplcadvanced</LocalPath>
+  </ParameterData>
+  <ApplicationData>
+    <Type>FileApi</Type>
+    <FolderName>CardImage</FolderName>
+    <SyncList>
+      <FolderToSync Recursive="true" AllowSelfDelete="false"><Folder>/User/Default/Data</Folder></FolderToSync>
+      <FolderToSync Recursive="false" AllowSelfDelete="false"><Folder>/User/Default/Project/DHR41B</Folder></FolderToSync>
+    </SyncList>
+  </ApplicationData>
+</UnitDataSync>

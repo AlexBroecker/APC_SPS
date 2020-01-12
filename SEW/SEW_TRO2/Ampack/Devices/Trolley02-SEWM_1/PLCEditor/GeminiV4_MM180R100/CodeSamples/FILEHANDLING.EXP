@@ -1,0 +1,461 @@
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/CodeSamples\/FileHandling\/Common' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+FUNCTION DINT_TO_FILESTRING : STRING(25)
+VAR_INPUT
+	IN					: DINT;
+END_VAR
+VAR
+	temp: STRING(25);
+	j: UINT;
+END_VAR
+(* @END_DECLARATION := '0' *)
+temp :=  DINT_TO_STRING(IN);
+j := LEN(temp);
+WHILE j < 25 DO
+	temp := CONCAT(' ', temp);
+	j := j + 1;
+END_WHILE;
+DINT_TO_FILESTRING := temp;
+END_FUNCTION
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/CodeSamples\/FileHandling\/Common' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+FUNCTION DT_TO_FILESTRING : STRING(25)
+VAR_INPUT
+	IN					: DT;
+END_VAR
+VAR
+	temp: STRING(25);
+	j: UINT;
+END_VAR
+(* @END_DECLARATION := '0' *)
+temp :=  DT_TO_STRING(IN);
+temp := DELETE (temp,3,1);
+
+j := LEN(temp);
+
+WHILE j < 25 DO
+	temp := CONCAT(' ', temp);
+	j := j + 1;
+END_WHILE;
+
+DT_TO_FILESTRING := temp;
+
+
+END_FUNCTION
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/CodeSamples\/FileHandling\/Common' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+FUNCTION DWORD_TO_FILESTRING : STRING(25)
+VAR_INPUT
+	IN:DWORD;
+END_VAR
+VAR
+	temp: STRING(25);
+	j: UINT;
+END_VAR
+(* @END_DECLARATION := '0' *)
+temp :=  DWORD_TO_STRING(IN);
+j := LEN(temp);
+WHILE j < 25 DO
+	temp := CONCAT(' ', temp);
+	j := j + 1;
+END_WHILE;
+DWORD_TO_FILESTRING := temp;
+END_FUNCTION
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/CodeSamples\/FileHandling\/Common' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+FUNCTION STRING_TO_FILESTRING : STRING(25)
+VAR_INPUT
+	IN					: STRING(25);
+END_VAR
+VAR
+	temp: STRING(25);
+	j: UINT;
+END_VAR
+(* @END_DECLARATION := '0' *)
+temp :=  IN;
+j := LEN(temp);
+WHILE j < 25 DO
+	temp := CONCAT(' ', temp);
+	j := j + 1;
+END_WHILE;
+STRING_TO_FILESTRING := temp;
+END_FUNCTION
+
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/CodeSamples\/FileHandling' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+(************************************************************************************
+*
+*                 Code sample  " PRG_FileHandling_WriteCSVFormatedFile "                 
+*
+*************************************************************************************
+*
+* (c) 2009 by SEW-EURODRIVE GmbH & Co KG
+*
+************************************************************************************
+************************************************************************************
+*
+* PRG_FileHandling_WriteCSVFormatedFile
+*
+* This code sample demonstrates, how to format data into 
+* CSV (comma separated values) format and write the data to SD card.
+* you can use this sample program to store log data, process values ... 
+* on the SD card.
+* 
+* Format of the file : 
+*
+*        2009-09-04-11:31:50 ;	Actual Speed ;	1000 ;    Actual Position ;  4096;
+*        2009-09-04-11:34:13 ;   Actual Speed ;   500 ;    Actual Position ;  4096;
+*
+* Remark:
+* If the the string values are larger than 25 characters, you have to adjust the 
+* functions within the Common folder.
+*
+************************************************************************************)
+PROGRAM PRG_FileHandling_WriteCSVFormatedFile
+VAR
+	(*Control *)
+	bSetRtc				: BOOL;							(* Set the real time clock*)
+	dtDateTimeToSet		: DT;								(* Date time to set *)
+	bWriteFile				: BOOL;							(* Write data struct to SD card *)
+	FileName				: STRING(25) := 'LogFile1.txt';		(* File name *)
+
+	(* Data struct to write *)
+	aCSVData	:ARRAY[1..100] OF ST_CSVData;
+
+	(* Variables *)
+	fbMC_FileHandling: MC_FileHandling;
+	Mode: MC_MODE_FILEHANDLING_DM;
+	fbMC_RTCManager: MPLC_RealTimeClockManager;
+	dtActDateTime: DT;
+
+END_VAR
+(* @END_DECLARATION := '0' *)
+_FBD_BODY
+_NETWORKS : 7
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTIONBLOCK
+fbMC_RTCManager
+_BOX_EXPR : 3
+_OPERAND
+_EXPRESSION
+_POSITIV
+TRUE
+_OPERAND
+_EXPRESSION
+_POSITIV
+bSetRtc
+_OPERAND
+_EXPRESSION
+_POSITIV
+dtDateTimeToSet
+_EXPRESSION
+_POSITIV
+MPLC_RealTimeClockManager
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+dtActDateTime
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_ASSIGN
+_FUNCTION
+_BOX_EXPR : 1
+_OPERAND
+_EXPRESSION
+_POSITIV
+dtActDateTime
+_EXPRESSION
+_POSITIV
+DT_TO_FILESTRING
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+aCSVData[1].TimeStamp
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_ASSIGN
+_FUNCTION
+_BOX_EXPR : 1
+_OPERAND
+_EXPRESSION
+_POSITIV
+'Actual Speed'
+_EXPRESSION
+_POSITIV
+STRING_TO_FILESTRING
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+aCSVData[1].Description1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_ASSIGN
+_FUNCTION
+_BOX_EXPR : 1
+_OPERAND
+_EXPRESSION
+_POSITIV
+1000
+_EXPRESSION
+_POSITIV
+DINT_TO_FILESTRING
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+aCSVData[1].Value1
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_ASSIGN
+_FUNCTION
+_BOX_EXPR : 1
+_OPERAND
+_EXPRESSION
+_POSITIV
+'Actual Position'
+_EXPRESSION
+_POSITIV
+STRING_TO_FILESTRING
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+aCSVData[1].Description2
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_ASSIGN
+_FUNCTION
+_BOX_EXPR : 1
+_OPERAND
+_EXPRESSION
+_POSITIV
+4096
+_EXPRESSION
+_POSITIV
+DINT_TO_FILESTRING
+_EXPRESSION
+_POSITIV
+_OUTPUTS : 1
+_OUTPUT
+_POSITIV
+_NO_SET
+aCSVData[1].Value2
+_NETWORK
+
+_COMMENT
+''
+_END_COMMENT
+_FUNCTION
+_BOX_EXPR : 5
+_OPERAND
+_EXPRESSION
+_POSITIV
+bWriteFile
+_OPERAND
+_EXPRESSION
+_POSITIV
+DM_MODE3_APPEND
+_OPERAND
+_EXPRESSION
+_POSITIV
+FileName
+_OPERAND
+_EXPRESSION
+_POSITIV
+ADR(aCSVData)
+_OPERAND
+_EXPRESSION
+_POSITIV
+SIZEOF(aCSVData)
+_EXPRESSION
+_POSITIV
+MC_FileHandling
+
+END_PROGRAM
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '\/CodeSamples\/FileHandling' *)
+(* @OBJECTFLAGS := '0, 8' *)
+TYPE ST_CSVData :
+STRUCT
+	(********************)
+	TimeStamp		: STRING(25)	:='                      ';	(* Time stamp *)
+	Separator1		: BYTE			:= 16#3B; 			(* Semicolon *)
+	Description1		: STRING(25)	:='                         ';	(* Description of the log data *)
+	Separator2		: BYTE			:= 16#3B; 			(* Semicolon *)
+	Value1				: STRING(25)	:='                         ';	(* Log value *)
+	Separator3		: BYTE			:= 16#3B; 			(* Semicolon *)
+
+	(********************)
+	Description2		: STRING(25)	:='                         ';	(* Description of the log data *)
+	Separato4		: BYTE				:= 16#3B; 			(* Semicolon *)
+	Value2				: STRING(25)	:='                         ';	(* Log value *)
+	Separator5		: BYTE			:= 16#3B; 			(* Semicolon *)
+	GAP			: STRING(2)	:='  '; (*See Description*)
+	CRLF3				: WORD		:= 16#0D0A;		(*Carriage return , Line feed*)
+
+	
+	(*Attention: 
+	  The total number of bytes of the structure must be integer divisible by 4.
+	  Use the GAP variable to compensate the size of the structure.
+          !!!! STRING(25) has 26 Byte !!!
+	*)
+
+END_STRUCT
+END_TYPE
+
+(* @END_DECLARATION := '0' *)
+
+LIBRARY
+05_Utilities\MPLCUtilities.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 12
+MPLC_ClockMemoryByte: 2048
+MPLC_Connect_IP67_IOModul_EtherCAT: 2048
+MPLC_ConnectIOModul_CANopen: 2048
+MPLC_ConnectIOModul_CANopen_with_RTR: 2048
+MPLC_ConnectMOVIMOT_MxD: 2048
+MPLC_ConnectUniversalSlave_CANopen: 2048
+MPLC_ConnectUniversalSlave_EtherCAT: 2048
+MPLC_CycleTime: 2048
+MPLC_Parameter_CANopenIO: 2048
+MPLC_ParameterRW_CANopen: 2048
+MPLC_ParameterRW_CANopen64: 2048
+MPLC_RealTimeClockManager: 2048
+NumOfGVLs: 2
+GlobalVar_Utilities: 2048
+Version_MPLCUtilities: 2048
+END_LIBRARY
+
+LIBRARY
+11_System\SysLibFileAsync.lib 27.1.17 13:50:06
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 14
+SysFileCloseAllOpenAsync: 2048
+SysFileCloseAsync: 0
+SysFileCopyAsync: 0
+SysFileDeleteAsync: 0
+SysFileEOFAsync: 0
+SysFileGetLastErrorAsync: 2048
+SysFileGetPosAsync: 0
+SysFileGetSizeAsync: 0
+SysFileGetTimeAsync: 0
+SysFileOpenAsync: 0
+SysFileReadAsync: 0
+SysFileRenameAsync: 0
+SysFileSetPosAsync: 0
+SysFileWriteAsync: 0
+NumOfGVLs: 1
+GlobalVarsFileAsync: 0
+END_LIBRARY
+
+LIBRARY
+11_System\SysLibProjectInfo.lib 27.1.17 13:50:06
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 1
+SysGetProjectInfo: 0
+NumOfGVLs: 1
+Globale_Variablen: 0
+END_LIBRARY
+
+LIBRARY
+11_System\SysLibRtc.lib 27.1.17 13:50:06
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 4
+SysRtcCheckBattery: 0
+SysRtcGetHourMode: 0
+SysRtcGetTime: 0
+SysRtcSetTime: 0
+NumOfGVLs: 1
+Globale_Variablen: 0
+END_LIBRARY
+
+LIBRARY
+12_Additional\Util.lib 27.1.17 13:50:06
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 22
+BCD_TO_INT: 2048
+BLINK: 2048
+CHARCURVE: 2048
+DERIVATIVE: 2048
+EXTRACT: 2048
+GEN: 2048
+HYSTERESIS: 2048
+INT_TO_BCD: 2048
+INTEGRAL: 2048
+LIMITALARM: 2048
+PACK: 2048
+PD: 2048
+PID: 2048
+PID_FIXCYCLE: 2048
+PUTBIT: 2048
+RAMP_INT: 2048
+RAMP_REAL: 2048
+STATISTICS_INT: 2048
+STATISTICS_REAL: 2048
+UNPACK: 2048
+VARIANCE: 2048
+Version_Util: 2048
+NumOfGVLs: 1
+Globale_Variablen: 0
+END_LIBRARY
+
+LIBRARY
+Internal\MPLCIntern_Utilities.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 3
+MPLCIntern_ETC_SDORW: 2048
+MPLCIntern_Parameter_CO: 2048
+MPLCIntern_Parameter_CO64: 2048
+NumOfGVLs: 1
+Intern_Utilities: 2048
+END_LIBRARY

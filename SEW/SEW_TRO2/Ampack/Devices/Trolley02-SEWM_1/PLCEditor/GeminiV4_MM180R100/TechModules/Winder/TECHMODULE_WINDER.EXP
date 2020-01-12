@@ -1,0 +1,101 @@
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @GLOBAL_VARIABLE_LIST := 'Version_AxisGroupControl_Winder' *)
+(* @PATH := '\/AxisGroupControl_Winder' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+VAR_GLOBAL
+	VERSION_AXISGROUPCONTROL_WINDER : DWORD := 180;
+	RELEASE_AXISGROUPCONTROL_WINDER : DWORD := 100;
+END_VAR
+
+(* @OBJECT_END := 'Version_AxisGroupControl_Winder' *)
+(* @CONNECTIONS := Version_AxisGroupControl_Winder
+FILENAME : ''
+FILETIME : 0
+EXPORT : 0
+NUMOFCONNECTIONS : 0
+*)
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @GLOBAL_VARIABLE_LIST := 'GlobalVar_TechModule_Winder' *)
+(* @PATH := '\/AxisGroupControl_Winder_TechModule' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+VAR_GLOBAL
+{flag extrasymbolexport on}
+
+	AxisGroupWinder		: ST_AxisGroupWinder;
+
+{flag off}
+END_VAR
+
+VAR_GLOBAL CONSTANT
+	(* Winder axis *)
+	WINDER_MAX_NUMBER_OF_AXIS	:UINT:= 16;
+END_VAR
+
+
+(* @OBJECT_END := 'GlobalVar_TechModule_Winder' *)
+(* @CONNECTIONS := GlobalVar_TechModule_Winder
+FILENAME : ''
+FILETIME : 0
+EXPORT : 0
+NUMOFCONNECTIONS : 0
+*)
+
+
+LIBRARY
+03_ApplicationModules\MPLCAxisGroupControl_Winder.lib 30.1.17 00:00:00
+(* @LIBRARYSYMFILEINFO := '0' *)
+NumOfPOUs: 45
+AxisControl_Winder: 2048
+AxisControl_Winder.Priority: 2048
+AxisGroupControl_Winder: 2048
+AxisGroupControl_Winder.Priority: 2048
+AxisGroupControl_Winder_Priority_10ms: 2048
+AxisGroupControl_Winder_Priority_5ms: 2048
+F_GetWinderFrictionValue: 2048
+FB_ReadWinder_AxisSettings: 2048
+FB_Winder_CalcDiameter: 2048
+FB_Winder_CalcDiameterLayer: 2048
+FB_Winder_CalcDiameterLayerCounter: 2048
+FB_Winder_CalcEncoderProcessValues: 2048
+FB_Winder_DiameterAcquisition: 2048
+FB_Winder_DiameterAcquisition.CalcAndCount: 2048
+FB_Winder_FeedbackSignalAcquisition: 2048
+FB_Winder_Filter: 2048
+FB_Winder_GetGain: 2048
+FB_Winder_InertiaCompensation: 2048
+FB_Winder_InPosition: 2048
+FB_Winder_InVelocity: 2048
+FB_Winder_LineSpeedAcquisitionMainDrive: 2048
+FB_Winder_LineSpeedAcquisitionMeasWheel: 2048
+FB_Winder_ModeFrictionTable: 2048
+FB_Winder_ModeHoming: 2048
+FB_Winder_ModeJog: 2048
+FB_Winder_ModeLineSpeed: 2048
+FB_Winder_ModePositioning: 2048
+FB_Winder_ModeTensionDancer: 2048
+FB_Winder_ModeTensionLoadCell: 2048
+FB_Winder_ModeTensionTorque: 2048
+FB_Winder_ModeTensionTorque.MDX_MoveTargetSpeedTorque: 2048
+FB_Winder_ModeTensionTorque.MX_MoveTargetSpeedTorque: 2048
+FB_Winder_ModeTensionTorque.MX_SelectUserFCB07: 2048
+FB_Winder_PID: 2048
+FB_Winder_PrepareStartDancerControl: 2048
+FB_Winder_SetEnableStopDec: 2048
+FB_Winder_SetpointRamp: 2048
+FN_Winder_ConvertAccToSystemUnit: 2048
+FN_Winder_ConvertLineSpeedToSystemUnit: 2048
+FN_Winder_GetFriction: 2048
+FN_Winder_GetTaper: 2048
+FN_Winder_StringToFilestring: 2048
+InterfaceWinder: 2048
+MC_FieldbusMappingIN_Winder: 2048
+MC_FieldbusMappingOUT_Winder: 2048
+NumOfGVLs: 3
+Version_MPLCAxisGroupControl_Winder: 2048
+VersionDate_MPLCAxisGroupControl_Winder: 2048
+VersionPartNumber_MPLCAxisGroupControl_Winder: 2048
+END_LIBRARY
