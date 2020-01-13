@@ -3,7 +3,7 @@
   <ActiveNetworkView>Netzwerk</ActiveNetworkView>
   <SyntaxVersion>4.0</SyntaxVersion>
   <CreationTime>10.07.2018 09:05:11</CreationTime>
-  <LastWriteTime>11.12.2019 01:06:50</LastWriteTime>
+  <LastWriteTime>13.01.2020 00:55:00</LastWriteTime>
   <MMSVersion>6.2.0.1</MMSVersion>
   <OSVersion>Microsoft Windows NT 6.2.9200.0</OSVersion>
   <Author />
@@ -29,22 +29,6 @@
       <SubDevices />
       <Label>MDX61B0370-503</Label>
     </Device>
-    <Device Name="Teleskop" Signature="Teleskop">
-      <TciDeviceRef />
-      <Type>DrcKPDSC</Type>
-      <FirmwarePart>1 824 416 5</FirmwarePart>
-      <FirmwareStatus>14</FirmwareStatus>
-      <SubDevices />
-      <Label>DRCx-xxx-DSC-A-00</Label>
-    </Device>
-    <Device Name="Teleskop - Leistungsteil" Signature="Teleskop - Leistun_1">
-      <TciDeviceRef />
-      <Type>DrcLT</Type>
-      <FirmwarePart>1 824 406 8</FirmwarePart>
-      <FirmwareStatus>16</FirmwareStatus>
-      <SubDevices />
-      <Label>DRC2-503-xxx-A-00</Label>
-    </Device>
     <Device Name="Trolley03-SEWMoviPLC" ProfinetName="" Signature="Trolley03-SEWM_1">
       <TciDeviceRef />
       <Type>MoviPLCRealEth</Type>
@@ -53,12 +37,28 @@
       <SubDevices />
       <Label>MOVI-PLC DHR41B (PROFINET)</Label>
     </Device>
+    <Device Name="Teleskop" Signature="Default">
+      <TciDeviceRef />
+      <Type>DrcKPDSC</Type>
+      <FirmwarePart>1 824 416 5</FirmwarePart>
+      <FirmwareStatus>15</FirmwareStatus>
+      <SubDevices />
+      <Label>DRCx-xxx-DSC-A-00</Label>
+    </Device>
+    <Device Name="Teleskop - Leistungsteil" Signature="Default - Leistung_1">
+      <TciDeviceRef />
+      <Type>DrcLT</Type>
+      <FirmwarePart>1 824 406 8</FirmwarePart>
+      <FirmwareStatus>17</FirmwareStatus>
+      <SubDevices />
+      <Label>DRC3-503-xxx-A-00</Label>
+    </Device>
   </Devices>
   <DeviceGroups>
-    <DeviceGroup Type="Drc" PathIDs="DSC||">
-      <MainDevice>Teleskop</MainDevice>
-      <Device>Teleskop</Device>
-      <Device>Teleskop - Leistun_1</Device>
+    <DeviceGroup Type="Drc" PathIDs="DSC|NoOpt|DRC01-R013">
+      <MainDevice>Default</MainDevice>
+      <Device>Default</Device>
+      <Device>Default - Leistung_1</Device>
     </DeviceGroup>
   </DeviceGroups>
   <NetworkViews>

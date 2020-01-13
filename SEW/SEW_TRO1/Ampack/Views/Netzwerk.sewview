@@ -2,7 +2,7 @@
 <SEWView Name="Netzwerk">
   <Comment />
   <CreationTime>10.07.2018 09:05:11</CreationTime>
-  <LastWriteTime>11.01.2020 16:55:26</LastWriteTime>
+  <LastWriteTime>13.01.2020 01:07:38</LastWriteTime>
   <MMSVersion>6.2.0.1</MMSVersion>
   <SyntaxVersion>4.0</SyntaxVersion>
   <OSVersion>Microsoft Windows NT 6.2.9200.0</OSVersion>
@@ -67,9 +67,12 @@
             <BusNumber>1</BusNumber>
           </MediumNode>
           <MediumNode Expand="true" MediumType="SBus">
-            <DeviceNode Expand="true">
+            <DeviceNode Expand="true" Signature="Teleskop">
               <MediumNode Expand="true" MediumType="Internal">
                 <DeviceNode Expand="false" Signature="Teleskop - Leistun_1">
+                  <State>
+                    <Flags>InitiallySelected</Flags>
+                  </State>
                   <Gateway>
                     <Value>false</Value>
                   </Gateway>
@@ -86,25 +89,15 @@
                   </Topology>
                 </DeviceNode>
                 <RoutingInfo Channel="UseChannel1">
-                  <Address>2</Address>
+                  <Address>0</Address>
                   <AddressType>ByteAddress</AddressType>
                   <AddressData adr0="1" adr1="2" adr2="0" ch1="4" ch2="1" />
                 </RoutingInfo>
                 <BusNumber>0</BusNumber>
               </MediumNode>
-              <State>
-                <Flags>NotInProject</Flags>
-              </State>
               <Gateway>
                 <Value>true</Value>
               </Gateway>
-              <Device Name="" Signature="">
-                <TciDeviceRef />
-                <Type>DrcKPDSC</Type>
-                <FirmwarePart>1 824 416 5</FirmwarePart>
-                <FirmwareStatus>14</FirmwareStatus>
-                <Label>DRCx-xxx-DSC-A-00</Label>
-              </Device>
               <RoutingInfo Channel="UseChannel1">
                 <Address>2</Address>
                 <AddressType>ByteAddress</AddressType>
@@ -126,7 +119,7 @@
                 </Subchannels>
                 <EntryCount>1</EntryCount>
                 <Valid>true</Valid>
-                <Flat>false</Flat>
+                <Flat>true</Flat>
               </Topology>
             </DeviceNode>
             <RoutingInfo Channel="UseChannel1">
@@ -225,13 +218,21 @@
           <MediumNode Expand="true" MediumType="SBus">
             <DeviceNode Expand="true">
               <MediumNode Expand="true" MediumType="Internal">
-                <DeviceNode Expand="false" Signature="Teleskop - Leistun_1">
+                <DeviceNode Expand="false">
                   <State>
-                    <Flags>ForeignRouting</Flags>
+                    <Flags>NotInProject</Flags>
                   </State>
                   <Gateway>
                     <Value>false</Value>
                   </Gateway>
+                  <Device Name="" Signature="">
+                    <TciDeviceRef />
+                    <Type>DrcLT</Type>
+                    <FirmwarePart>1 824 406 8</FirmwarePart>
+                    <FirmwareStatus>17</FirmwareStatus>
+                    <SubDevices />
+                    <Label>DRC3-503-xxx-A-00</Label>
+                  </Device>
                   <RoutingInfo Channel="UseChannel1">
                     <Address>3</Address>
                     <AddressType>ByteAddress</AddressType>
@@ -257,11 +258,12 @@
               <Gateway>
                 <Value>true</Value>
               </Gateway>
-              <Device Name="" Signature="">
+              <Device Name="Teleskop" Signature="Teleskop">
                 <TciDeviceRef />
                 <Type>DrcKPDSC</Type>
                 <FirmwarePart>1 824 416 5</FirmwarePart>
-                <FirmwareStatus>14</FirmwareStatus>
+                <FirmwareStatus>15</FirmwareStatus>
+                <SubDevices />
                 <Label>DRCx-xxx-DSC-A-00</Label>
               </Device>
               <RoutingInfo Channel="UseChannel1">
@@ -304,7 +306,7 @@
             <BusNumber>0</BusNumber>
           </MediumNode>
           <State>
-            <Flags>ForeignRouting InitiallySelected</Flags>
+            <Flags>ForeignRouting</Flags>
           </State>
           <Gateway>
             <Value>true</Value>

@@ -2,7 +2,7 @@
 <SEWView Name="Netzwerk">
   <Comment />
   <CreationTime>10.07.2018 09:05:11</CreationTime>
-  <LastWriteTime>11.12.2019 01:06:50</LastWriteTime>
+  <LastWriteTime>13.01.2020 00:55:00</LastWriteTime>
   <MMSVersion>6.2.0.1</MMSVersion>
   <SyntaxVersion>4.0</SyntaxVersion>
   <OSVersion>Microsoft Windows NT 6.2.9200.0</OSVersion>
@@ -67,22 +67,12 @@
             <BusNumber>1</BusNumber>
           </MediumNode>
           <MediumNode Expand="true" MediumType="SBus">
-            <DeviceNode Expand="true">
+            <DeviceNode Expand="true" Signature="Default">
               <MediumNode Expand="true" MediumType="Internal">
-                <DeviceNode Expand="false">
-                  <State>
-                    <Flags>NotInProject InitiallySelected</Flags>
-                  </State>
+                <DeviceNode Expand="false" Signature="Default - Leistung_1">
                   <Gateway>
                     <Value>false</Value>
                   </Gateway>
-                  <Device Name="Teleskop - Leistun_1" Signature="Teleskop - Leistun_1">
-                    <TciDeviceRef />
-                    <Type>DrcLT</Type>
-                    <FirmwarePart>1 824 406 8</FirmwarePart>
-                    <FirmwareStatus>17</FirmwareStatus>
-                    <Label>DRC3-503-xxx-A-00</Label>
-                  </Device>
                   <RoutingInfo Channel="UseChannel1">
                     <Address>3</Address>
                     <AddressType>ByteAddress</AddressType>
@@ -102,19 +92,9 @@
                 </RoutingInfo>
                 <BusNumber>0</BusNumber>
               </MediumNode>
-              <State>
-                <Flags>NotInProject</Flags>
-              </State>
               <Gateway>
                 <Value>true</Value>
               </Gateway>
-              <Device Name="Teleskop" Signature="Teleskop">
-                <TciDeviceRef />
-                <Type>DrcKPDSC</Type>
-                <FirmwarePart>1 824 416 5</FirmwarePart>
-                <FirmwareStatus>15</FirmwareStatus>
-                <Label>DRCx-xxx-DSC-A-00</Label>
-              </Device>
               <RoutingInfo Channel="UseChannel1">
                 <Address>2</Address>
                 <AddressType>ByteAddress</AddressType>
@@ -237,12 +217,12 @@
               <MediumNode Expand="true" MediumType="Internal">
                 <DeviceNode Expand="false">
                   <State>
-                    <Flags>NotInProject</Flags>
+                    <Flags>NotInProject InitiallySelected</Flags>
                   </State>
                   <Gateway>
                     <Value>false</Value>
                   </Gateway>
-                  <Device Name="Teleskop - Leistun_1" Signature="Teleskop - Leistun_1">
+                  <Device Name="Teleskop - Leistungsteil" Signature="Teleskop - Leistun_1">
                     <TciDeviceRef />
                     <Type>DrcLT</Type>
                     <FirmwarePart>1 824 406 8</FirmwarePart>
